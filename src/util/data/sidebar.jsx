@@ -5,11 +5,6 @@ export const sidebarData = [
     iconClass: 'fas fa-chalkboard'
   },
   {
-    name: 'Project Entry',
-    routepath: '/project_details',
-    iconClass: 'fas fa-chalkboard'
-  },
-  {
     name: 'Project Listing',
     routepath: '/project_listing',
     iconClass: 'fas fa-chalkboard'

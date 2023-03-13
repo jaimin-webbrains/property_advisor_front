@@ -4,7 +4,7 @@ import ProjectListing from 'views/pages/property/projectListing'
 
 const dashboardRoutes = [
   { path: "/intro", component: Intro },
-  {path: "/project_details",component: ProjectEntry},
+  {path: "/project_entry",component: ProjectEntry},
   {path: "/project_listing",component: ProjectListing}
 
 ];

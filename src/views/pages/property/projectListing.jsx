@@ -7,6 +7,8 @@ import ReactTableWrapper from "../../../components/reacttable/reacttbl.style";
 import { useDispatch, useSelector } from "react-redux";
 import PropertyActions from "redux/property/action";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
+import Button from "components/button/Button";
 
 const HeaderComponent = props => {
   let classes = {
@@ -21,6 +23,8 @@ const HeaderComponent = props => {
 const ClientSideTable = props => {
   const tracks_data = useSelector(state => state.property.tracks_data)
   const [dummyData, setDummyData] = useState(tracks_data);
+      const history = useHistory();
+
   const deleteClick = useCallback(
     data => {
       // Here you can view the data and delete through API calling
@@ -273,6 +277,7 @@ const ClientSideTable = props => {
 
   return (
     <ReactTableWrapper {...props}>
+     <Button className="c-btn c-primary ma-5 align-item-right" onClick={() => history.push('/project_entry')}> <i className="fas fa-plus mr-10" />Add Proprty</Button>
       <div className="roe-card-style mt-15 mb-30">
         <div className="roe-card-header">
           <span className="hash"># </span>
