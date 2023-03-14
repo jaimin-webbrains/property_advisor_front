@@ -276,14 +276,16 @@ const ClientSideTable = props => {
 
   return (
     <ReactTableWrapper {...props}>
-      <Button
-        className="c-btn c-primary ma-5 align-item-right"
-        onClick={() => history.push("/project_entry")}
-      >
-        {" "}
-        <i className="fas fa-plus mr-10" />
-        Add Proprty
-      </Button>
+      <div className="text-right">
+        <Button
+          className="c-btn c-primary ma-5"
+          onClick={() => history.push("/project_entry")}
+        >
+          {" "}
+          <i className="fas fa-plus mr-10" />
+          Add Proprty
+        </Button>
+      </div>
       <div className="roe-card-style mt-15 mb-30">
         <div className="roe-card-header">
           <span className="hash"># </span>
