@@ -23,7 +23,7 @@ const HeaderComponent = props => {
 const ClientSideTable = props => {
   const tracks_data = useSelector(state => state.property.tracks_data)
   const [dummyData, setDummyData] = useState(tracks_data);
-      const history = useHistory();
+  const history = useHistory();
 
   const deleteClick = useCallback(
     data => {
@@ -277,7 +277,9 @@ const ClientSideTable = props => {
 
   return (
     <ReactTableWrapper {...props}>
-     <Button className="c-btn c-primary ma-5 align-item-right" onClick={() => history.push('/project_entry')}> <i className="fas fa-plus mr-10" />Add Proprty</Button>
+      <div className="text-right">
+        <Button className="c-btn c-primary ma-5" onClick={() => history.push('/project_entry')}> <i className="fas fa-plus mr-10" />Add Proprty</Button>
+      </div>
       <div className="roe-card-style mt-15 mb-30">
         <div className="roe-card-header">
           <span className="hash"># </span>
