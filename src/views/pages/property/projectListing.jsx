@@ -21,7 +21,7 @@ const HeaderComponent = props => {
 };
 
 const ClientSideTable = props => {
-  const tracks_data = useSelector(state => state.property.tracks_data)
+  const tracks_data = useSelector(state => state.property.tracks_data);
   const [dummyData, setDummyData] = useState(tracks_data);
   const history = useHistory();
 
@@ -29,7 +29,7 @@ const ClientSideTable = props => {
     data => {
       // Here you can view the data and delete through API calling
       const array = dummyData;
-      remove(array, function (n) {
+      remove(array, function(n) {
         return n.id === data.id;
       });
       setDummyData([...array]);
@@ -80,7 +80,7 @@ const ClientSideTable = props => {
         accessor: d => {
           return moment(d.lastModifiedDate)
             .local()
-            .format("DD-MM-YYYY")
+            .format("DD-MM-YYYY");
         },
         disableFilters: true
       },
@@ -99,7 +99,7 @@ const ClientSideTable = props => {
         accessor: d => {
           return moment(d.projectEndDate)
             .local()
-            .format("DD-MM-YYYY")
+            .format("DD-MM-YYYY");
         },
         disableFilters: true
       },
@@ -118,7 +118,7 @@ const ClientSideTable = props => {
         accessor: d => {
           return moment(d.reraApprovedDate)
             .local()
-            .format("DD-MM-YYYY")
+            .format("DD-MM-YYYY");
         },
         disableFilters: true
       },
@@ -135,7 +135,7 @@ const ClientSideTable = props => {
         accessor: d => {
           return moment(d.reraProjectStartDate)
             .local()
-            .format("DD-MM-YYYY")
+            .format("DD-MM-YYYY");
         },
         placeholder: "RERA project start date",
         disableFilters: true
@@ -153,7 +153,7 @@ const ClientSideTable = props => {
         placeholder: "Details URL",
         Cell: props => <a href={props.cell.value}>{props.cell.value}</a>,
         disableFilters: true
-      },
+      }
       // {
       //   Header: tableInstance => {
       //     return (
@@ -268,12 +268,11 @@ const ClientSideTable = props => {
     useSortBy,
     usePagination
   );
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(PropertyActions.getAllTSData())
-
-  }, [])
+    dispatch(PropertyActions.getAllTSData());
+  }, []);
 
   return (
     <ReactTableWrapper {...props}>
