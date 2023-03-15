@@ -210,107 +210,87 @@ const InputSizing = props => {
           </div>
         </div>
         <DatepickerWrapper {...props}>
-          <div className="row date-picker-block">
-            <div className="col-lg-6 col-md-12 col-xl-6 ptb-15">
-              <div className="roe-card-style">
-                <div className="roe-card-header"></div>
-                <div className="roe-card-body">
-                  <div className="roe-card-description">Last modified date</div>
-                  <DatePicker
-                    selected={formik.values.lastModifiedDate}
-                    onChange={value => {
-                      formik.setFieldValue("lastModifiedDate", new Date(value));
-                    }}
-                    id="lastModifiedDate"
-                    name="lastModifiedDate"
-                    className="custom-datepicker"
-                    calendarClassName="custom-calender-class"
-                  />
-                  {formik.errors.lastModifiedDate && (
-                    <p style={{ color: "red" }}>
-                      {formik.errors.lastModifiedDate}
-                    </p>
-                  )}
-                </div>
-              </div>
+          <div className="form-group row">
+            <label className="col-sm-2 col-form-label">
+              Last modified date
+            </label>
+            <div className="col-sm-10">
+              <DatePicker
+                selected={formik.values.lastModifiedDate}
+                onChange={value => {
+                  formik.setFieldValue("lastModifiedDate", new Date(value));
+                }}
+                id="lastModifiedDate"
+                name="lastModifiedDate"
+                className="custom-datepicker"
+                calendarClassName="custom-calender-class"
+              />
+              {formik.errors.lastModifiedDate && (
+                <p style={{ color: "red" }}>{formik.errors.lastModifiedDate}</p>
+              )}
             </div>
-            <div className="col-lg-6 col-md-12 col-xl-6 ptb-15">
-              <div className="roe-card-style">
-                <div className="roe-card-header"></div>
-                <div className="roe-card-body">
-                  <div className="roe-card-description">RERA approved date</div>
-                  <DatePicker
-                    selected={formik.values.reraApprovedDate}
-                    onChange={value => {
-                      formik.setFieldValue("reraApprovedDate", new Date(value));
-                    }}
-                    id="reraApprovedDate"
-                    name="reraApprovedDate"
-                    className="custom-datepicker"
-                    calendarClassName="custom-calender-class"
-                  />
-                  {formik.errors.reraApprovedDate && (
-                    <p style={{ color: "red" }}>
-                      {formik.errors.reraApprovedDate}
-                    </p>
-                  )}
-                </div>
-              </div>
+          </div>
+          <div className="form-group row">
+            <label className="col-sm-2 col-form-label">
+              RERA approved date
+            </label>
+            <div className="col-sm-10">
+              <DatePicker
+                selected={formik.values.reraApprovedDate}
+                onChange={value => {
+                  formik.setFieldValue("reraApprovedDate", new Date(value));
+                }}
+                id="reraApprovedDate"
+                name="reraApprovedDate"
+                className="custom-datepicker"
+                calendarClassName="custom-calender-class"
+              />
+              {formik.errors.reraApprovedDate && (
+                <p style={{ color: "red" }}>{formik.errors.reraApprovedDate}</p>
+              )}
             </div>
-            <div className="col-lg-6 col-md-12 col-xl-6 ptb-15">
-              <div className="roe-card-style">
-                <div className="roe-card-header"></div>
-                <div className="roe-card-body">
-                  <div className="roe-card-description">
-                    RERA project start date
-                  </div>
-                  <DatePicker
-                    selected={formik.values.reraProjectStartDate}
-                    onChange={value => {
-                      formik.setFieldValue(
-                        "reraProjectStartDate",
-                        new Date(value)
-                      );
-                    }}
-                    id="reraProjectStartDate"
-                    name="reraProjectStartDate"
-                    className="custom-datepicker"
-                    calendarClassName="custom-calender-class"
-                  />
-                  {formik.errors.reraProjectStartDate && (
-                    <p style={{ color: "red" }}>
-                      {formik.errors.reraProjectStartDate}
-                    </p>
-                  )}
-                </div>
-              </div>
+          </div>
+          <div className="form-group row">
+            <label className="col-sm-2 col-form-label">
+              RERA project start date
+            </label>
+            <div className="col-sm-10">
+              <DatePicker
+                selected={formik.values.reraProjectStartDate}
+                onChange={value => {
+                  formik.setFieldValue("reraProjectStartDate", new Date(value));
+                }}
+                id="reraProjectStartDate"
+                name="reraProjectStartDate"
+                className="custom-datepicker"
+                calendarClassName="custom-calender-class"
+              />
+              {formik.errors.reraProjectStartDate && (
+                <p style={{ color: "red" }}>
+                  {formik.errors.reraProjectStartDate}
+                </p>
+              )}
             </div>
-            <div className="col-lg-6 col-md-12 col-xl-6 ptb-15">
-              <div className="roe-card-style">
-                <div className="roe-card-header"></div>
-                <div className="roe-card-body">
-                  <div className="roe-card-description">Project end date</div>
-                  <DatePicker
-                    selected={formik.values.projectEndDate}
-                    onChange={value => {
-                      formik.setFieldValue("projectEndDate", new Date(value));
-                    }}
-                    id="projectEndDate"
-                    name="projectEndDate"
-                    className="custom-datepicker"
-                    calendarClassName="custom-calender-class"
-                  />
-                  {formik.errors.projectEndDate && (
-                    <p style={{ color: "red" }}>
-                      {formik.errors.projectEndDate}
-                    </p>
-                  )}
-                </div>
-              </div>
+          </div>
+          <div className="form-group row">
+            <label className="col-sm-2 col-form-label">Project end date</label>
+            <div className="col-sm-10">
+              <DatePicker
+                selected={formik.values.projectEndDate}
+                onChange={value => {
+                  formik.setFieldValue("projectEndDate", new Date(value));
+                }}
+                id="projectEndDate"
+                name="projectEndDate"
+                className="custom-datepicker"
+                calendarClassName="custom-calender-class"
+              />
+              {formik.errors.projectEndDate && (
+                <p style={{ color: "red" }}>{formik.errors.projectEndDate}</p>
+              )}
             </div>
           </div>
         </DatepickerWrapper>
-
         <button style={buttonBack} type="submit" className="btn form-button">
           Submit
         </button>
