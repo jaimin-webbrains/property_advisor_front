@@ -55,9 +55,9 @@ const InputSizing = props => {
       if (!values.certFileName) {
         errors.certFileName = "Required!";
       }
-      if (!values.certExtFileName) {
-        errors.certExtFileName = "Required!";
-      }
+      // if (!values.certExtFileName) {
+      //   errors.certExtFileName = "Required!";
+      // }
       if (!values.detailsFileName) {
         errors.detailsFileName = "Required!";
       }
@@ -126,86 +126,6 @@ const InputSizing = props => {
             />
             {formik.errors.reraNumber && (
               <p style={{ color: "red" }}>{formik.errors.reraNumber}</p>
-            )}
-          </div>
-        </div>
-        <div className="form-group row">
-          <label className="col-sm-2 col-form-label">
-            Certificate file name
-          </label>
-          <div className="col-sm-10">
-            <input
-              id="certFileName"
-              name="certFileName"
-              onChange={event => {
-                formik.setFieldValue(
-                  "certFileName",
-                  event.currentTarget.files[0]
-                );
-              }}
-              type="file"
-              className="form-control form-control-lg react-form-input"
-            />
-            {formik.errors.certFileName && (
-              <p style={{ color: "red" }}>{formik.errors.certFileName}</p>
-            )}
-          </div>
-        </div>
-        <div className="form-group row">
-          <label className="col-sm-2 col-form-label">
-            Certificate EXT file name
-          </label>
-          <div className="col-sm-10">
-            <input
-              id="certExtFileName"
-              name="certExtFileName"
-              onChange={e =>
-                formik.setFieldValue(
-                  "certExtFileName",
-                  e.currentTarget.files[0]
-                )
-              }
-              type="file"
-              className="form-control form-control-lg react-form-input"
-            />
-            {formik.errors.certExtFileName && (
-              <p style={{ color: "red" }}>{formik.errors.certExtFileName}</p>
-            )}
-          </div>
-        </div>
-        <div className="form-group row">
-          <label className="col-sm-2 col-form-label">Details file name</label>
-          <div className="col-sm-10">
-            <input
-              type="file"
-              className="form-control form-control-lg react-form-input"
-              onChange={e =>
-                formik.setFieldValue(
-                  "detailsFileName",
-                  e.currentTarget.files[0]
-                )
-              }
-              id="detailsFileName"
-              name="detailsFileName"
-            />
-            {formik.errors.detailsFileName && (
-              <p style={{ color: "red" }}>{formik.errors.detailsFileName}</p>
-            )}
-          </div>
-        </div>
-        <div className="form-group row">
-          <label className="col-sm-2 col-form-label">Details URL</label>
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className="form-control form-control-lg react-form-input"
-              value={formik.values.detailsURL}
-              onChange={formik.handleChange}
-              id="detailsURL"
-              name="detailsURL"
-            />
-            {formik.errors.detailsURL && (
-              <p style={{ color: "red" }}>{formik.errors.detailsURL}</p>
             )}
           </div>
         </div>
@@ -291,6 +211,90 @@ const InputSizing = props => {
             </div>
           </div>
         </DatepickerWrapper>
+        <div className="form-group row">
+          <label className="col-sm-2 col-form-label">
+            Certificate file name
+          </label>
+          <div className="col-sm-10">
+            <input
+              id="certFileName"
+              name="certFileName"
+              accept=".pdf"
+              onChange={event => {
+                formik.setFieldValue(
+                  "certFileName",
+                  event.currentTarget.files[0]
+                );
+              }}
+              type="file"
+              className="form-control form-control-lg react-form-input"
+            />
+            {formik.errors.certFileName && (
+              <p style={{ color: "red" }}>{formik.errors.certFileName}</p>
+            )}
+          </div>
+        </div>
+        <div className="form-group row">
+          <label className="col-sm-2 col-form-label">
+            Certificate EXT file name
+          </label>
+          <div className="col-sm-10">
+            <input
+              id="certExtFileName"
+              name="certExtFileName"
+              accept=".pdf"
+              onChange={e =>
+                formik.setFieldValue(
+                  "certExtFileName",
+                  e.currentTarget.files[0]
+                )
+              }
+              type="file"
+              className="form-control form-control-lg react-form-input"
+            />
+            {formik.errors.certExtFileName && (
+              <p style={{ color: "red" }}>{formik.errors.certExtFileName}</p>
+            )}
+          </div>
+        </div>
+        <div className="form-group row">
+          <label className="col-sm-2 col-form-label">Details file name</label>
+          <div className="col-sm-10">
+            <input
+              type="file"
+              accept=".xlsx"
+              className="form-control form-control-lg react-form-input"
+              onChange={e =>
+                formik.setFieldValue(
+                  "detailsFileName",
+                  e.currentTarget.files[0]
+                )
+              }
+              id="detailsFileName"
+              name="detailsFileName"
+            />
+            {formik.errors.detailsFileName && (
+              <p style={{ color: "red" }}>{formik.errors.detailsFileName}</p>
+            )}
+          </div>
+        </div>
+        <div className="form-group row">
+          <label className="col-sm-2 col-form-label">Details URL</label>
+          <div className="col-sm-10">
+            <input
+              type="text"
+              className="form-control form-control-lg react-form-input"
+              value={formik.values.detailsURL}
+              onChange={formik.handleChange}
+              id="detailsURL"
+              name="detailsURL"
+            />
+            {formik.errors.detailsURL && (
+              <p style={{ color: "red" }}>{formik.errors.detailsURL}</p>
+            )}
+          </div>
+        </div>
+
         <button style={buttonBack} type="submit" className="btn form-button">
           Submit
         </button>
