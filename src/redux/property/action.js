@@ -28,12 +28,17 @@ const PropertyActions = {
               type: constants.UPDATE_TS_DATA,
               payload: res.data.data.data
             });
-
+            toast.success(res.data.message)
             window.location.href = "/project_listing";
           }
         })
         .catch(e => {
-          toast.error(e.message);
+          if(e?.response?.data?.message){
+            toast.error(e?.response?.data?.message);
+
+          }else{
+            toast.error(e.message);
+          }
         });
     };
   },
