@@ -140,7 +140,7 @@ const InputSizing = props => {
                 onChange={value => {
                   formik.setFieldValue("lastModifiedDate", new Date(value));
                 }}
-                dateFormat="dd/MM/yyyy"
+                dateFormat="dd-MM-yyyy"
                 id="lastModifiedDate"
                 name="lastModifiedDate"
                 className="custom-datepicker"
@@ -161,7 +161,7 @@ const InputSizing = props => {
                 onChange={value => {
                   formik.setFieldValue("reraApprovedDate", new Date(value));
                 }}
-                dateFormat="dd/MM/yyyy"
+                dateFormat="dd-MM-yyyy"
                 id="reraApprovedDate"
                 name="reraApprovedDate"
                 className="custom-datepicker"
@@ -182,7 +182,7 @@ const InputSizing = props => {
                 onChange={value => {
                   formik.setFieldValue("reraProjectStartDate", new Date(value));
                 }}
-                dateFormat="dd/MM/yyyy"
+                dateFormat="dd-MM-yyyy"
                 id="reraProjectStartDate"
                 name="reraProjectStartDate"
                 className="custom-datepicker"
@@ -203,7 +203,7 @@ const InputSizing = props => {
                 onChange={value => {
                   formik.setFieldValue("projectEndDate", new Date(value));
                 }}
-                dateFormat="dd/MM/yyyy"
+                dateFormat="dd-MM-yyyy"
                 id="projectEndDate"
                 name="projectEndDate"
                 className="custom-datepicker"
