@@ -26,7 +26,8 @@ const InputSizing = props => {
       lastModifiedDate: "",
       reraApprovedDate: "",
       reraProjectStartDate: "",
-      projectEndDate: ""
+      projectEndDate: "",
+      paId:""
     },
     onSubmit: values => {
       let formData = new FormData();
@@ -40,6 +41,7 @@ const InputSizing = props => {
       formData.append("certFileName", values.certFileName);
       formData.append("certExtFileName", values.certExtFileName);
       formData.append("detailsFileName", values.detailsFileName);
+      formData.append("paId",values.paId)
 
       dispatch(PropertyActions.addTsData(formData));
     },
@@ -77,6 +79,9 @@ const InputSizing = props => {
         errors.detailsURL = "Required!";
       } else if (!URLregex.test(values.detailsURL)) {
         errors.detailsURL = "Invalid URL!";
+      }
+      if (!values.paId) {
+        errors.paId = "Required!";
       }
 
       return errors;
@@ -295,6 +300,22 @@ const InputSizing = props => {
             />
             {formik.errors.detailsURL && (
               <p style={{ color: "red" }}>{formik.errors.detailsURL}</p>
+            )}
+          </div>
+        </div>
+        <div className="form-group row">
+          <label className="col-sm-2 col-form-label">PA Id</label>
+          <div className="col-sm-10">
+            <input
+              id="paId"
+              name="paId"
+              type="number"
+              onChange={formik.handleChange}
+              value={formik.values.paId}
+              className="form-control form-control-lg react-form-input"
+            />
+            {formik.errors.paId && (
+              <p style={{ color: "red" }}>{formik.errors.paId}</p>
             )}
           </div>
         </div>
