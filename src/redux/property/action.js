@@ -26,7 +26,7 @@ const PropertyActions = {
             toast.success(res.data.message);
             dispatch({
               type: constants.UPDATE_TS_DATA,
-              payload: res.data.data.data
+              payload: res.data.track_data
             });
             toast.success(res.data.message)
             window.location.href = "/project_listing";
