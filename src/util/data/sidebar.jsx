@@ -5,7 +5,7 @@ export const sidebarData = [
     iconClass: 'fas fa-chalkboard'
   },
   {
-    name: 'Project Listing',
+    name: 'RERA project load',
     routepath: '/project_listing',
     iconClass: 'fas fa-chalkboard'
   },

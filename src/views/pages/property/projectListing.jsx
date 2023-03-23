@@ -9,6 +9,8 @@ import PropertyActions from "redux/property/action";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
 import Button from "components/button/Button";
+import constants from "redux/property/constants";
+import { Form, FormGroup, Input, Label } from "reactstrap";
 
 const HeaderComponent = props => {
   let classes = {
@@ -20,16 +22,17 @@ const HeaderComponent = props => {
   return <div className={classnames(classes)}>{props.title}</div>;
 };
 
-const ClientSideTable = props => {
+const ProjectListing = props => {
   const tracks_data = useSelector(state => state.property.tracks_data);
-  const [dummyData, setDummyData] = useState(tracks_data);
+  const [dummyData, setDummyData] = useState([]);
+  const [searchNum, setSearchNum] = useState("")
   const history = useHistory();
 
   const deleteClick = useCallback(
     data => {
       // Here you can view the data and delete through API calling
       const array = dummyData;
-      remove(array, function(n) {
+      remove(array, function (n) {
         return n.id === data.id;
       });
       setDummyData([...array]);
@@ -50,7 +53,8 @@ const ClientSideTable = props => {
         },
         Filter: FilterComponent,
         placeholder: "State",
-        accessor: "state"
+        accessor: "state",
+        disableFilters: true
       },
       {
         Header: tableInstance => {
@@ -63,7 +67,9 @@ const ClientSideTable = props => {
         },
         Filter: FilterComponent,
         placeholder: "RERA Number",
-        accessor: "reraNumber"
+        accessor: "reraNumber",
+        disableFilters: true
+
       },
       {
         id: "lastModifiedDate",
@@ -145,6 +151,19 @@ const ClientSideTable = props => {
           return (
             <HeaderComponent
               isSortedDesc={tableInstance.column.isSortedDesc}
+              title="PA Id"
+            />
+          );
+        },
+        accessor: "paId",
+        placeholder: "PA ID",
+        disableFilters: true
+      },
+      {
+        Header: tableInstance => {
+          return (
+            <HeaderComponent
+              isSortedDesc={tableInstance.column.isSortedDesc}
               title="Details URL"
             />
           );
@@ -154,84 +173,6 @@ const ClientSideTable = props => {
         Cell: props => <a href={props.cell.value}>{props.cell.value}</a>,
         disableFilters: true
       }
-      // {
-      //   Header: tableInstance => {
-      //     return (
-      //       <HeaderComponent
-      //         isSortedDesc={tableInstance.column.isSortedDesc}
-      //         title="certExtFileName"
-      //       />
-      //     );
-      //   },
-      //   accessor: "certExtFileName",
-      //   Cell: props =><Link to={props.cell.value} target={props.cell.value}  download>Download</Link>,
-      //   placeholder: "certExtFileName",
-      //   disableFilters: true
-      // },
-      // {
-      //   Header: tableInstance => {
-      //     return (
-      //       <HeaderComponent
-      //         isSortedDesc={tableInstance.column.isSortedDesc}
-      //         title="certFileName"
-      //       />
-      //     );
-      //   },
-      //   accessor: "certFileName",
-      //   placeholder: "certFileName",
-      //   disableFilters: true
-      // },
-      // {
-      //   Header: tableInstance => {
-      //     return (
-      //       <HeaderComponent
-      //         isSortedDesc={tableInstance.column.isSortedDesc}
-      //         title="detailsFileName"
-      //       />
-      //     );
-      //   },
-      //   accessor: "detailsFileName",
-      //   placeholder: "detailsFileName",
-      //   disableFilters: true
-      // },
-
-      // {
-      //   Header: tableInstance => {
-      //     return (
-      //       <HeaderComponent
-      //         isSortedDesc={tableInstance.column.isSortedDesc}
-      //         title="Action"
-      //       />
-      //     );
-      //   },
-      //   accessor: "id",
-      //   disableSortBy: true,
-      //   disableFilters: true,
-      //   Cell: tableInstance => {
-      //     return (
-      //       <div className="react-action-class wide-cell">
-      //         <button
-      //           className="react-table-view-button"
-      //           onClick={() => viewClick(tableInstance.row.original)}
-      //         >
-      //           <i className="fas fa-eye" />
-      //         </button>
-      //         <button
-      //           className="react-table-edit-button"
-      //           onClick={() => editClick(tableInstance.row.original)}
-      //         >
-      //           <i className="fas fa-edit" />
-      //         </button>
-      //         <button
-      //           className="react-table-delete-button"
-      //           onClick={() => deleteClick(tableInstance.row.original)}
-      //         >
-      //           <i className="fas fa-trash" />
-      //         </button>
-      //       </div>
-      //     );
-      //   }
-      // }
     ],
     [deleteClick]
   );
@@ -257,7 +198,7 @@ const ClientSideTable = props => {
     state: { pageIndex }
   } = useTable(
     {
-      data: dummyData,
+      data: tracks_data,
       columns: columns,
       initialState: {
         pageSize: 10,
@@ -271,83 +212,172 @@ const ClientSideTable = props => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(PropertyActions.getAllTSData());
+    dispatch({
+      type: constants.GET_ALL_TS_DATA,
+      payload: []
+    });
+    return () => {
+      dispatch({
+        type: constants.GET_ALL_TS_DATA,
+        payload: []
+      });
+    }
   }, []);
 
+
   return (
-    <ReactTableWrapper {...props}>
-      <div className="text-right">
-        <Button
-          className="c-btn c-primary ma-5"
-          onClick={() => history.push("/project_entry")}
-        >
-          {" "}
-          <i className="fas fa-plus mr-10" />
-          Add Proprty
-        </Button>
-      </div>
-      <div className="roe-card-style mt-15 mb-30">
-        <div className="roe-card-header">
-          <span className="hash"># </span>
-          {/* Client Side Table */}
-        </div>
-        <div className="table-container text-center overflow-auto">
-          <table
-            border={1}
-            className="custom-react-table-theme-class"
-            {...getTableProps()}
+    <div>
+        <div className="text-right">
+          <Button
+            className="c-btn c-primary ma-5"
+            onClick={() => history.push("/project_entry")}
           >
-            <thead>
-              {headerGroups.map(headerGroup => (
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map(header => (
-                    <th
-                      {...header.getHeaderProps(header.getSortByToggleProps())}
-                    >
-                      <div>{header.render("Header")}</div>
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-              {headerGroups.map(headerGroup => (
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map(header => {
-                    return (
-                      <td
-                        {...header.getHeaderProps(
-                          header.getSortByToggleProps()
-                        )}
-                      >
-                        <div>
-                          {header.canFilter ? header.render("Filter") : null}
-                        </div>
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-              {page.map(row => {
-                prepareRow(row);
-                return (
-                  <tr {...row.getRowProps()}>
-                    {row.cells.map(cell => (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    ))}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+            {" "}
+            <i className="fas fa-plus mr-10" />
+            Add Proprty
+          </Button>
         </div>
-        <Pagination
-          onPageChange={gotoPage}
-          pages={pageCount}
-          page={pageIndex}
-        />
+      <div className="container">
+        <div className="row">
+          <div className="col-10">
+          <Form>
+        <FormGroup>
+          {/* <Label for="exampleSearch">Enter RERA number / PA ID</Label> */}
+          <Input
+            type="search"
+            name="search"
+            id="exampleSearch"
+            onChange={(e) => setSearchNum(e.target.value)}
+            placeholder="search Property by RERA number / PA Id"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                dispatch(PropertyActions.getTsDataByReraNumberOrPaId(searchNum))              }
+            }}
+          />
+        </FormGroup>
+      </Form>
+          </div>
+          <div className="col-2">
+          <div className="text-right">
+            <Button
+              className="c-btn c-primary ma-5"
+              onClick={(e) => {
+                  dispatch(PropertyActions.getTsDataByReraNumberOrPaId(searchNum))
+              }}
+            >
+              {" "}
+              Search
+            </Button>
+          </div>
+          </div>
+        </div>
       </div>
-    </ReactTableWrapper>
+      {
+        tracks_data.length > 0 ?
+          <ReactTableWrapper {...props}>
+            <div className="roe-card-style mt-15 mb-30">
+              <div className="roe-card-header">
+                <span className="hash"># </span>
+                {/* Client Side Table */}
+              </div>
+              <div className="table-container text-center overflow-auto">
+                <table
+                  border={1}
+                  className="custom-react-table-theme-class"
+                  {...getTableProps()}
+                >
+                  <thead>
+                    {headerGroups.map(headerGroup => (
+                      <tr {...headerGroup.getHeaderGroupProps()}>
+                        {headerGroup.headers.map(header => (
+                          <th
+                            {...header.getHeaderProps(header.getSortByToggleProps())}
+                          >
+                            <div>{header.render("Header")}</div>
+                          </th>
+                        ))}
+                      </tr>
+                    ))}
+                  </thead>
+                  <tbody {...getTableBodyProps()}>
+                    {headerGroups.map(headerGroup => (
+                      <tr {...headerGroup.getHeaderGroupProps()}>
+                        {headerGroup.headers.map(header => {
+                          return (
+                            <td
+                              {...header.getHeaderProps(
+                                header.getSortByToggleProps()
+                              )}
+                            >
+                              <div>
+                                {header.canFilter ? header.render("Filter") : null}
+                              </div>
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                    {page.map(row => {
+                      prepareRow(row);
+                      return (
+                        <tr {...row.getRowProps()}>
+                          {row.cells.map(cell => (
+                            <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                          ))}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <Pagination
+                onPageChange={gotoPage}
+                pages={pageCount}
+                page={pageIndex}
+              />
+            </div>
+          </ReactTableWrapper> : <ReactTableWrapper {...props}>
+            <div className="roe-card-style mt-15 mb-30">
+              <div className="roe-card-header">
+                <span className="hash"># </span>
+                {/* Client Side Table */}
+              </div>
+              <div className="table-container text-center overflow-auto">
+                <table
+                  border={1}
+                  className="custom-react-table-theme-class"
+                  {...getTableProps()}
+                >
+                  <thead>
+                    {headerGroups.map(headerGroup => (
+                      <tr {...headerGroup.getHeaderGroupProps()}>
+                        {headerGroup.headers.map(header => (
+                          <th
+                            {...header.getHeaderProps(header.getSortByToggleProps())}
+                          >
+                            <div>{header.render("Header")}</div>
+                          </th>
+                        ))}
+                      </tr>
+                    ))}
+                  </thead>
+                  <tbody {...getTableBodyProps()}>
+                    <div>
+                      No records found
+                    </div>
+                  </tbody>
+                </table>
+              </div>
+              <Pagination
+                onPageChange={gotoPage}
+                pages={pageCount}
+                page={pageIndex}
+              />
+            </div>
+          </ReactTableWrapper>
+      }
+    </div>
   );
 };
 
@@ -367,4 +397,4 @@ const FilterComponent = tableInstance => {
   );
 };
 
-export default ClientSideTable;
+export default ProjectListing;

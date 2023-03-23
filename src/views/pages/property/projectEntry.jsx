@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import DatepickerWrapper from "components/forms/alldatepickers/datepicker.style";
 
@@ -7,10 +7,16 @@ import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import PropertyActions from "redux/property/action";
 import "react-toastify/dist/ReactToastify.css";
+import { format } from 'date-fns';
+import constants from "redux/property/constants";
+import ModalExample from "./ModalView";
 
-const InputSizing = props => {
+
+const ProjectEntery = props => {
   const dispatch = useDispatch();
   const propertyData = useSelector(store => store.property);
+  const [isSubmitButtonDisables, setIsSubmitButtonDisables] = useState(false)
+  const [bool,setBool] = useState({num:false,modal:false})
   const buttonBack = {
     backgroundColor: "#563c91",
     color: "white"
@@ -44,6 +50,7 @@ const InputSizing = props => {
       formData.append("paId",values.paId)
 
       dispatch(PropertyActions.addTsData(formData));
+      formik.resetForm()
     },
     validate: values => {
       const URLregex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
@@ -57,9 +64,6 @@ const InputSizing = props => {
       if (!values.certFileName) {
         errors.certFileName = "Required!";
       }
-      // if (!values.certExtFileName) {
-      //   errors.certExtFileName = "Required!";
-      // }
       if (!values.detailsFileName) {
         errors.detailsFileName = "Required!";
       }
@@ -80,10 +84,6 @@ const InputSizing = props => {
       } else if (!URLregex.test(values.detailsURL)) {
         errors.detailsURL = "Invalid URL!";
       }
-      if (!values.paId) {
-        errors.paId = "Required!";
-      }
-
       return errors;
     },
     validateOnChange: false
@@ -91,7 +91,21 @@ const InputSizing = props => {
 
   useEffect(() => {
     dispatch(PropertyActions.getStates());
+    dispatch(PropertyActions.getTsDataByReraNumberOrPaId("a"))
   }, []);
+  const handleIsExistByReraNumber = () => {
+    dispatch(PropertyActions.getTsDataByReraNumberOrPaId(formik.values.reraNumber))
+  }
+  useEffect(() => {
+    if(propertyData.tracks_data.length > 0){
+      setBool({...bool,num:true,modal:true})
+    }
+  }, [propertyData.tracks_data])
+  
+const handleModalChange = (e) => {
+  setBool({...bool,num:e,modal:e})
+
+}
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
@@ -125,10 +139,28 @@ const InputSizing = props => {
               id="reraNumber"
               name="reraNumber"
               type="text"
-              onChange={formik.handleChange}
+              onChange={value => {
+                 formik.setFieldValue("reraNumber", value.target.value);
+                if(value.target.value === ""){
+                  dispatch({
+                    type : constants.GET_ALL_TS_DATA,
+                    payload :[]
+                  })
+                }
+              }}              
+              onBlur={() => handleIsExistByReraNumber()}
               value={formik.values.reraNumber}
               className="form-control form-control-lg react-form-input"
             />
+            {formik.values.reraNumber && bool.num &&  propertyData.tracks_data.length > 0 && (
+              <ModalExample  
+                modal={bool.modal}
+                setModal={(e) => handleModalChange(e)}
+                data={propertyData.tracks_data}
+                isFromRRInput = {true}
+              />
+              // <p style={{ color: "red" }}>{`${propertyData.tracks_data.length} versions already exist with this RERA number and last modifieded date is ${format(new Date(propertyData.tracks_data[0].lastModifiedDate), 'dd/MM/yyyy')}`}</p>
+            )}
             {formik.errors.reraNumber && (
               <p style={{ color: "red" }}>{formik.errors.reraNumber}</p>
             )}
@@ -144,13 +176,33 @@ const InputSizing = props => {
                 selected={formik.values.lastModifiedDate}
                 onChange={value => {
                   formik.setFieldValue("lastModifiedDate", new Date(value));
+                  if(formik.values.reraNumber !== "" && propertyData.tracks_data.length > 0){
+                    let bool = false
+                    propertyData.tracks_data.forEach((e) => {
+                      if(format(new Date(e.lastModifiedDate), 'dd/MM/yyyy') === format(new Date(value), 'dd/MM/yyyy')){
+                        bool = true
+                      }
+                    })
+                    setIsSubmitButtonDisables(bool)
+                    setBool({...bool,modal:!bool.modal})
+                  }
                 }}
                 dateFormat="dd-MM-yyyy"
                 id="lastModifiedDate"
                 name="lastModifiedDate"
                 className="custom-datepicker"
+                maxDate={new Date()}
                 calendarClassName="custom-calender-class"
               />
+              {isSubmitButtonDisables && bool.modal &&  (
+                <ModalExample  
+                modal={bool.modal}
+                setModal={(e) => setBool({...bool,modal:e})}
+                data={propertyData.tracks_data}
+                isFromRRInput = {false}
+              />
+                // <p style={{ color: "red" }}>Data already present with this RERA number and last modified date.</p>
+              )}
               {formik.errors.lastModifiedDate && (
                 <p style={{ color: "red" }}>{formik.errors.lastModifiedDate}</p>
               )}
@@ -166,6 +218,7 @@ const InputSizing = props => {
                 onChange={value => {
                   formik.setFieldValue("reraApprovedDate", new Date(value));
                 }}
+                maxDate={new Date()}
                 dateFormat="dd-MM-yyyy"
                 id="reraApprovedDate"
                 name="reraApprovedDate"
@@ -191,6 +244,7 @@ const InputSizing = props => {
                 id="reraProjectStartDate"
                 name="reraProjectStartDate"
                 className="custom-datepicker"
+                maxDate={new Date()}
                 calendarClassName="custom-calender-class"
               />
               {formik.errors.reraProjectStartDate && (
@@ -211,6 +265,7 @@ const InputSizing = props => {
                 dateFormat="dd-MM-yyyy"
                 id="projectEndDate"
                 name="projectEndDate"
+                minDate={new Date()}
                 className="custom-datepicker"
                 calendarClassName="custom-calender-class"
               />
@@ -320,7 +375,7 @@ const InputSizing = props => {
           </div>
         </div>
 
-        <button style={buttonBack} type="submit" className="btn form-button">
+        <button style={buttonBack} type="submit" className="btn form-button" disabled={isSubmitButtonDisables}>
           Submit
         </button>
       </form>
@@ -328,4 +383,4 @@ const InputSizing = props => {
   );
 };
 
-export default InputSizing;
+export default ProjectEntery;
