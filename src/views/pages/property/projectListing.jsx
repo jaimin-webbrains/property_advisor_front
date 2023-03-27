@@ -17,7 +17,7 @@ const HeaderComponent = props => {
     "my-2": true,
     "mx-3": true,
     "-sort-asc": props.isSortedDesc !== undefined && !props.isSortedDesc,
-    "-sort-desc": props.isSortedDesc !== undefined && props.isSortedDesc
+    "-sort-desc": props.isSortedDesc !== undefined && props.isSortedDesc,
   };
   return <div className={classnames(classes)}>{props.title}</div>;
 };
@@ -170,7 +170,7 @@ const ProjectListing = props => {
         },
         accessor: "detailsURL",
         placeholder: "Details URL",
-        Cell: props => <a href={props.cell.value}>{props.cell.value}</a>,
+        Cell: props => <a href={props.cell.value} style={{ wordBreak: "break-word" }}>{props.cell.value}</a>,
         disableFilters: true
       }
     ],
@@ -227,49 +227,49 @@ const ProjectListing = props => {
 
   return (
     <div>
-        <div className="text-right">
-          <Button
-            className="c-btn c-primary ma-5"
-            onClick={() => history.push("/project_entry")}
-          >
-            {" "}
-            <i className="fas fa-plus mr-10" />
-            Add Proprty
-          </Button>
-        </div>
-      <div className="container">
+      <div className=" w-100">
         <div className="row">
-          <div className="col-10">
-          <Form>
-        <FormGroup>
-          {/* <Label for="exampleSearch">Enter RERA number / PA ID</Label> */}
-          <Input
-            type="search"
-            name="search"
-            id="exampleSearch"
-            onChange={(e) => setSearchNum(e.target.value)}
-            placeholder="search Property by RERA number / PA Id"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                dispatch(PropertyActions.getTsDataByReraNumberOrPaId(searchNum))              }
-            }}
-          />
-        </FormGroup>
-      </Form>
+          <div className="col pr-2">
+            <Form>
+              <FormGroup>
+                <Input
+                  type="search"
+                  name="search"
+                  id="exampleSearch"
+                  onChange={(e) => setSearchNum(e.target.value)}
+                  placeholder="Search property by rera number / PA Id"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      dispatch(PropertyActions.getTsDataByReraNumberOrPaId(searchNum))
+                    }
+                  }}
+                />
+              </FormGroup>
+            </Form>
           </div>
-          <div className="col-2">
-          <div className="text-right">
+          <div className="col-auto align-items-flex-end text-right ml-auto pl-0">
+            <div className="w-100">
+              <Button
+                className="c-btn c-primary ma-5"
+                onClick={(e) => {
+                  dispatch(PropertyActions.getTsDataByReraNumberOrPaId(searchNum))
+                }}
+              >
+                {" "}
+                <i className="fas fa-search"></i>
+              </Button>
+            </div>
+          </div>
+          <div className="text-right h-38">
             <Button
               className="c-btn c-primary ma-5"
-              onClick={(e) => {
-                  dispatch(PropertyActions.getTsDataByReraNumberOrPaId(searchNum))
-              }}
+              onClick={() => history.push("/project_entry")}
             >
               {" "}
-              Search
+              <i className="fas fa-plus mr-10" />
+              Add Proprty
             </Button>
-          </div>
           </div>
         </div>
       </div>
@@ -363,9 +363,11 @@ const ProjectListing = props => {
                     ))}
                   </thead>
                   <tbody {...getTableBodyProps()}>
-                    <div>
-                      No records found
-                    </div>
+                    <tr>
+                      <td colSpan={8} style={{ color: '#898989' }}>
+                        No records found
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>

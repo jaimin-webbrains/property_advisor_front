@@ -6,6 +6,7 @@ import scrumboard from './scrumboard/reducer';
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import property from './property/reducer'
+import NetworkCall from './networkCall/reducer';
 
 const createReducer = (asyncReducers) =>
     combineReducers({
@@ -15,6 +16,7 @@ const createReducer = (asyncReducers) =>
         themeSetting,
         scrumboard,
         property,
+        NetworkCall,
         router: routerReducer,
         ...asyncReducers
     });

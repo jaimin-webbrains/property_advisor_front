@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import constants from "./constants";
 import PropertyServices from "./services";
+import NETWORK_CONSTANTS from '../networkCall/constant'
 
 const PropertyActions = {
   getStates: () => {
@@ -20,13 +21,21 @@ const PropertyActions = {
 
   addTsData: data => {
     return (dispatch, getState) => {
+      dispatch({
+          type:NETWORK_CONSTANTS.ADD_PROPERTY_NETWORK_CALL,
+          payload:NETWORK_CONSTANTS.ADD_PROPERTY_NETWORK_CALL
+      })
       PropertyServices.ADD_TS_DATA(data)
         .then(res => {
+          dispatch({
+            type:NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
+            payload:NETWORK_CONSTANTS.ADD_PROPERTY_NETWORK_CALL
+          })
           if (res.status === 201) {
-            // dispatch({
-            //   type: constants.UPDATE_TS_DATA,
-            //   payload: res.data.track_data
-            // });
+            dispatch({
+              type: constants.UPDATE_TS_DATA,
+              payload: res.data.data.track_data
+            });
             toast.success(res.data.message)
             // window.location.href = "/project_listing";
           }
