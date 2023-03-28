@@ -41,6 +41,10 @@ const PropertyActions = {
           }
         })
         .catch(e => {
+          dispatch({
+            type:NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
+            payload:NETWORK_CONSTANTS.ADD_PROPERTY_NETWORK_CALL
+          })
           if(e?.response?.data?.message){
             toast.error(e?.response?.data?.message);
 
@@ -87,6 +91,10 @@ const PropertyActions = {
           }
         })
         .catch(e => {
+          dispatch({
+            type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
+            payload : NETWORK_CONSTANTS.ADD_TRACKS_LIST_NETWORK_CALL
+          })
           toast.error(e.message);
         });
     };

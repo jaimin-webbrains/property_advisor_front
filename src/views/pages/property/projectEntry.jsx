@@ -93,7 +93,7 @@ const ProjectEntery = props => {
   });
   useEffect(() => {
     dispatch(PropertyActions.getStates());
-    dispatch(PropertyActions.getTsDataByReraNumberOrPaId("a"))
+    // dispatch(PropertyActions.getTsDataByReraNumberOrPaId("a"))
   }, []);
   const handleIsExistByReraNumber = () => {
     dispatch(PropertyActions.getTsDataByReraNumberOrPaId(formik.values.reraNumber))
