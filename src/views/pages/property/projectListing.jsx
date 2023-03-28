@@ -10,7 +10,8 @@ import moment from "moment";
 import { useHistory } from "react-router-dom";
 import Button from "components/button/Button";
 import constants from "redux/property/constants";
-import { Form, FormGroup, Input, Label } from "reactstrap";
+import { Form, FormGroup, Input, Label, Spinner } from "reactstrap";
+import constant from "redux/networkCall/constant";
 
 const HeaderComponent = props => {
   let classes = {
@@ -24,6 +25,7 @@ const HeaderComponent = props => {
 
 const ProjectListing = props => {
   const tracks_data = useSelector(state => state.property.tracks_data);
+  const networkCalls = useSelector(store => store.NetworkCall.NETWORK_CALLS)
   const [dummyData, setDummyData] = useState([]);
   const [searchNum, setSearchNum] = useState("")
   const history = useHistory();
@@ -364,9 +366,19 @@ const ProjectListing = props => {
                   </thead>
                   <tbody {...getTableBodyProps()}>
                     <tr>
-                      <td colSpan={8} style={{ color: '#898989' }}>
-                        No records found
-                      </td>
+                      {
+                        networkCalls.indexOf(constant.ADD_TRACKS_LIST_NETWORK_CALL) > -1
+                          ?
+                          <td colSpan={8} >
+                            <div className="d-flex justify-content-center align-items-center">
+                              <Spinner color="primary" />
+                            </div>                          
+                          </td>
+                          :
+                          <td colSpan={8} style={{ color: '#898989' }}>
+                            No records found
+                          </td>
+                      }
                     </tr>
                   </tbody>
                 </table>

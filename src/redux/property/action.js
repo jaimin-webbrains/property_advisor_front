@@ -69,8 +69,16 @@ const PropertyActions = {
   },
   getTsDataByReraNumberOrPaId: (id) => {
     return (dispatch, getState) => {
+      dispatch({
+        type: NETWORK_CONSTANTS.ADD_PROPERTY_NETWORK_CALL,
+        payload : NETWORK_CONSTANTS.ADD_TRACKS_LIST_NETWORK_CALL
+      })
       PropertyServices.GET_TS_DATA_BY_RERA_NUMBER_OR_PA_ID(id)
         .then(res => {
+          dispatch({
+            type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
+            payload : NETWORK_CONSTANTS.ADD_TRACKS_LIST_NETWORK_CALL
+          })
           if (res.status === 200) {
             dispatch({
               type: constants.GET_ALL_TS_DATA,
