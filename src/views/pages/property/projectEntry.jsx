@@ -12,6 +12,7 @@ import constants from "redux/property/constants";
 import ModalExample from "./ModalView";
 import { Spinner } from "reactstrap";
 import constant from "redux/networkCall/constant";
+import PageTitle from "components/common/PageTitle";
 
 
 const ProjectEntery = props => {
@@ -110,6 +111,7 @@ const ProjectEntery = props => {
   }
   return (
     <div>
+      <PageTitle title="Project Entry" />
       {
         networkCalls.indexOf(constant.ADD_PROPERTY_NETWORK_CALL) > -1
           ?

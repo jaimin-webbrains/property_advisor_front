@@ -12,6 +12,7 @@ import Button from "components/button/Button";
 import constants from "redux/property/constants";
 import { Form, FormGroup, Input, Label, Spinner } from "reactstrap";
 import constant from "redux/networkCall/constant";
+import PageTitle from "components/common/PageTitle";
 
 const HeaderComponent = props => {
   let classes = {
@@ -229,6 +230,7 @@ const ProjectListing = props => {
 
   return (
     <div>
+      <PageTitle title="RERA Project load" />
       <div className=" w-100">
         <div className="row">
           <div className="col pr-2">
