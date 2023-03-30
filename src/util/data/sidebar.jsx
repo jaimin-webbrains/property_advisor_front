@@ -7,7 +7,7 @@ export const sidebarData = [
   {
     name: 'RERA project load',
     routepath: '/project_listing',
-    iconClass: 'fas fa-chalkboard'
+    iconClass: 'fas fa-list'
   },
 ];
 
