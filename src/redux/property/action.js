@@ -98,7 +98,37 @@ const PropertyActions = {
           toast.error(e.message);
         });
     };
-  }
+  },
+  bulkAddProperty: data => {
+    return (dispatch, getState) => {
+      dispatch({
+          type:NETWORK_CONSTANTS.ADD_PROPERTY_NETWORK_CALL,
+          payload:NETWORK_CONSTANTS.BULK_ADD_PROPERTY_NETWORK_CALL
+      })
+      PropertyServices.ADD_BULK_PROPERTIES(data)
+        .then(res => {
+          dispatch({
+            type:NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
+            payload:NETWORK_CONSTANTS.BULK_ADD_PROPERTY_NETWORK_CALL
+          })
+          if (res.status === 201) {
+            toast.success(res.data.message)
+          }
+        })
+        .catch(e => {
+          dispatch({
+            type:NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
+            payload:NETWORK_CONSTANTS.BULK_ADD_PROPERTY_NETWORK_CALL
+          })
+          if(e?.response?.data?.message){
+            toast.error(e?.response?.data?.message);
+
+          }else{
+            toast.error(e.message);
+          }
+        });
+    };
+  },
 }
 
 export default PropertyActions;

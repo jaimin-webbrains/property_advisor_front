@@ -19,7 +19,12 @@ const PropertyServices = {
     GET_TS_DATA_BY_RERA_NUMBER_OR_PA_ID: async (id) => {
         const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/property/get_tracks_by_rera_number_or_pa_id?num=${id}`)
         return response
-    }
+    },
+
+    ADD_BULK_PROPERTIES : async (data) => {
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/property/bulk_add_properties`, data)
+        return response
+    },
 
 }
 export default PropertyServices

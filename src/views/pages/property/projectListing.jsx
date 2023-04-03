@@ -13,6 +13,7 @@ import constants from "redux/property/constants";
 import { Form, FormGroup, Input, Label, Spinner } from "reactstrap";
 import constant from "redux/networkCall/constant";
 import PageTitle from "components/common/PageTitle";
+import { toast } from "react-toastify";
 
 const HeaderComponent = props => {
   let classes = {
@@ -29,8 +30,23 @@ const ProjectListing = props => {
   const networkCalls = useSelector(store => store.NetworkCall.NETWORK_CALLS)
   const [dummyData, setDummyData] = useState([]);
   const [searchNum, setSearchNum] = useState("")
+  const hiddenFileInput = React.useRef(null);
   const history = useHistory();
 
+  // Programatically click the hidden file input element
+  // when the Button component is clicked
+  const handleClick = event => {
+    hiddenFileInput.current.click();
+  };
+  // Call a function (passed as a prop from the parent component)
+  // to handle the user-selected file 
+  const handleChange = event => {
+    const fileUploaded = event.target.files[0];
+      let formData = new FormData()
+      formData.append('bulkfile', fileUploaded)
+      dispatch(PropertyActions.bulkAddProperty(formData))           
+       toast.success('Bulk upload initiated !!')
+    };
   const deleteClick = useCallback(
     data => {
       // Here you can view the data and delete through API calling
@@ -227,7 +243,7 @@ const ProjectListing = props => {
     }
   }, []);
 
-
+  
   return (
     <div>
       <PageTitle title="RERA Project load" />
@@ -274,6 +290,22 @@ const ProjectListing = props => {
               <i className="fas fa-plus mr-10" />
               Add Proprty
             </Button>
+          </div>
+           <div className="text-right h-38">
+            <Button
+              className="c-btn c-primary ma-5"
+              onClick={handleClick}
+            >
+              {" "}
+              <i className="fas fa-plus mr-10" />
+              Bulk add
+            </Button>
+            <input
+              type="file"
+              ref={hiddenFileInput}
+              onChange={handleChange}
+              style={{ display: 'none' }}
+            />
           </div>
         </div>
       </div>
@@ -374,7 +406,7 @@ const ProjectListing = props => {
                           <td colSpan={8} >
                             <div className="d-flex justify-content-center align-items-center">
                               <Spinner color="primary" />
-                            </div>                          
+                            </div>
                           </td>
                           :
                           <td colSpan={8} style={{ color: '#898989' }}>
