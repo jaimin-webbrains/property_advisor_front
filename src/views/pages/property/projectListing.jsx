@@ -297,7 +297,7 @@ const ProjectListing = props => {
               onClick={handleClick}
             >
               {" "}
-              <i className="fas fa-plus mr-10" />
+              <i className="fas fa-cloud-upload-alt mr-10" />
               Bulk add
             </Button>
             <input
