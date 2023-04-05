@@ -112,7 +112,7 @@ const PropertyActions = {
             payload:NETWORK_CONSTANTS.BULK_ADD_PROPERTY_NETWORK_CALL
           })
           if (res.status === 201) {
-            toast.success(res.data.message)
+            toast.success(`${res.data.data.uploaded} of ${res.data.data.total_properties} uploaded.`)
           }
         })
         .catch(e => {
