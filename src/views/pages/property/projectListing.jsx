@@ -36,17 +36,17 @@ const ProjectListing = props => {
   const [searchNum, setSearchNum] = useState("")
   const hiddenFileInput = React.useRef(null);
   const history = useHistory();
-  useEffect(() => {
-    const socket = io.connect(process.env.REACT_APP_BASE_URL)
-    socket.on('get', (data) => {
-      if (data !== 100) {
-        setProgressVal(data)
-      } if (data === 100) {
-        setProgressVal(0)
-      }
-    })
+  // useEffect(() => {
+  //   const socket = io.connect(process.env.REACT_APP_BASE_URL)
+  //   socket.on('get', (data) => {
+  //     if (data !== 100) {
+  //       setProgressVal(data)
+  //     } if (data === 100) {
+  //       setProgressVal(0)
+  //     }
+  //   })
 
-  },[progressVal])
+  // },[progressVal])
   // Programatically click the hidden file input element
   // when the Button component is clicked
   const handleClick = event => {
