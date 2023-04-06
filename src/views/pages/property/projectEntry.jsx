@@ -37,7 +37,12 @@ const ProjectEntery = props => {
       reraApprovedDate: "",
       reraProjectStartDate: "",
       projectEndDate: "",
-      paId: ""
+      paId: "",
+      city:"",
+      location:"",
+      subAreaName:"",
+      propertyType:"",
+      colonyName:"",
     },
     onSubmit: values => {
       let formData = new FormData();
@@ -52,6 +57,11 @@ const ProjectEntery = props => {
       formData.append("certExtFileName", values.certExtFileName);
       formData.append("detailsFileName", values.detailsFileName);
       formData.append("paId", values.paId)
+      formData.append("city", values.city)
+      formData.append("location", values.location)
+      formData.append("subAreaName", values.subAreaName)
+      formData.append("propertyType", values.propertyType)
+      formData.append("colonyName", values.colonyName)
 
       dispatch(PropertyActions.addTsData(formData));
       formik.resetForm()
@@ -353,6 +363,68 @@ const ProjectEntery = props => {
                 )}
               </div>
             </div>
+              <div>
+                <div className="form-group row">
+              <label className="col-sm-2 col-form-label">City</label>
+              <div className="col-sm-10">
+                <input
+                  id="city"
+                  name="city"
+                  onChange={formik.handleChange}
+                  value={formik.values.city}
+                  className="form-control form-control-lg react-form-input"
+                />
+              </div>
+            </div>
+            <div className="form-group row">
+              <label className="col-sm-2 col-form-label">Location</label>
+              <div className="col-sm-10">
+                <input
+                  id="location"
+                  name="location"
+                  onChange={formik.handleChange}
+                  value={formik.values.location}
+                  className="form-control form-control-lg react-form-input"
+                />
+              </div>
+            </div>
+            <div className="form-group row">
+              <label className="col-sm-2 col-form-label">Sub Area Name</label>
+              <div className="col-sm-10">
+                <input
+                  id="subAreaName"
+                  name="subAreaName"
+                  onChange={formik.handleChange}
+                  value={formik.values.subAreaName}
+                  className="form-control form-control-lg react-form-input"
+                />
+              </div>
+            </div>
+            <div className="form-group row">
+              <label className="col-sm-2 col-form-label">Property Type</label>
+              <div className="col-sm-10">
+                <input
+                  id="propertyType"
+                  name="propertyType"
+                  onChange={formik.handleChange}
+                  value={formik.values.propertyType}
+                  className="form-control form-control-lg react-form-input"
+                />
+              </div>
+            </div>
+            <div className="form-group row">
+              <label className="col-sm-2 col-form-label">Colony Name</label>
+              <div className="col-sm-10">
+                <input
+                  id="colonyName"
+                  name="colonyName"
+                  onChange={formik.handleChange}
+                  value={formik.values.colonyName}
+                  className="form-control form-control-lg react-form-input"
+                />
+              </div>
+            </div>
+              </div>
             <div className="form-group row">
               <label className="col-sm-2 col-form-label">Details URL</label>
               <div className="col-sm-10">
@@ -380,9 +452,6 @@ const ProjectEntery = props => {
                   value={formik.values.paId}
                   className="form-control form-control-lg react-form-input"
                 />
-                {formik.errors.paId && (
-                  <p style={{ color: "red" }}>{formik.errors.paId}</p>
-                )}
               </div>
             </div>
 
