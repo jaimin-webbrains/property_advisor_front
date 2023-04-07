@@ -154,7 +154,7 @@ const ProjectEntery = props => {
               </div>
             </div>
             <div className="form-group row">
-              <label className="col-sm-2 col-form-label">RERA Number</label>
+              <label className="col-sm-2 col-form-label">RERA number</label>
               <div className="col-sm-10">
                 <input
                   id="reraNumber"
@@ -321,7 +321,7 @@ const ProjectEntery = props => {
             </div>
             <div className="form-group row">
               <label className="col-sm-2 col-form-label">
-                Certificate EXT file name
+                Certificate ext file name
               </label>
               <div className="col-sm-10">
                 <input
@@ -389,7 +389,7 @@ const ProjectEntery = props => {
               </div>
             </div>
             <div className="form-group row">
-              <label className="col-sm-2 col-form-label">Sub Area Name</label>
+              <label className="col-sm-2 col-form-label">Sub area name</label>
               <div className="col-sm-10">
                 <input
                   id="subAreaName"
@@ -401,7 +401,7 @@ const ProjectEntery = props => {
               </div>
             </div>
             <div className="form-group row">
-              <label className="col-sm-2 col-form-label">Property Type</label>
+              <label className="col-sm-2 col-form-label">Property type</label>
               <div className="col-sm-10">
                 <input
                   id="propertyType"
@@ -413,7 +413,7 @@ const ProjectEntery = props => {
               </div>
             </div>
             <div className="form-group row">
-              <label className="col-sm-2 col-form-label">Colony Name</label>
+              <label className="col-sm-2 col-form-label">Colony name</label>
               <div className="col-sm-10">
                 <input
                   id="colonyName"
@@ -426,7 +426,7 @@ const ProjectEntery = props => {
             </div>
               </div>
             <div className="form-group row">
-              <label className="col-sm-2 col-form-label">Details URL</label>
+              <label className="col-sm-2 col-form-label">Details url</label>
               <div className="col-sm-10">
                 <input
                   type="text"
