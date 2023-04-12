@@ -17,6 +17,9 @@ const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFrom
                 isOpen={modal}
                 toggle={() => setModal(!modal)}
             >
+                <ModalHeader>
+                   {isFromUpdate ? "Update" : "Add"} 
+                </ModalHeader>
                 <ModalBody>
                     {
                         Object.keys(value).length > 0 ?
@@ -25,7 +28,7 @@ const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFrom
                                     return e !== 'role' ?
                                         <div className="form-group">
                                             <label>
-                                                {e.toLocaleUpperCase()}
+                                                {e.charAt(0).toUpperCase() + e.slice(1)}
                                             </label>
                                             <input
                                                 type={e === 'mobile' ? 'number' : "text"}
@@ -39,12 +42,12 @@ const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFrom
                                         :
                                         <div>
                                             <label>
-                                                {e.toLocaleUpperCase()}
+                                                {e.charAt(0).toUpperCase() + e.slice(1)}
                                             </label>
                                             <select
                                                 id={e}
                                                 name={e}
-                                                className="form-control form-control-lg react-form-input"
+                                                className="form-control form-control-lg react-form-input mb-5"
                                                 value={typeof (value[e]) === 'string' ? value[e] : value[e]['name']}
                                                 onChange={(v) => setValue(e, v.target.value)}
                                             >
@@ -61,23 +64,32 @@ const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFrom
                             })
                             : ""
                     }
+                    <div className="d-flex">
                     {
                         isFromUpdate ?
                             <Button
-                                className="btn btn-blue w-100 border-0"
+                                className="btn btn-blue w-100 border-0 mr-5"
                                 type="button"
                                 onClick={() => handleAddClick("update")}
                             >
                                 Update
                             </Button> :
                             <Button
-                                className="btn btn-blue w-100 border-0"
+                                className="btn btn-blue w-100 border-0 mr-5"
                                 type="button"
                                 onClick={() => handleAddClick("add")}
                             >
                                 Add
                             </Button>
                     }
+                <Button
+                    className="btn btn-blue w-100 border-0 mr-5"
+                    type="button"
+                    onClick={()=> setModal(!modal)}
+                >
+                 Cancel
+                </Button>
+                   </div>
                 </ModalBody>
             </Modal>
         </div >

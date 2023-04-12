@@ -9,9 +9,12 @@ const DeleteRoleModal = ({ modal, setModal,handleAddClick }) => {
                 isOpen={modal}
                 toggle={() => setModal(!modal)}
             >
+                <ModalHeader>
+                    Delete
+                </ModalHeader>
                 <ModalBody>
                     <div className="form-group">
-                        <h3>Are you sure?</h3>
+                        <b>Are you sure?</b>
                     </div>
                    <div className="d-flex">
                    <Button
@@ -26,7 +29,7 @@ const DeleteRoleModal = ({ modal, setModal,handleAddClick }) => {
                     type="button"
                     onClick={()=> setModal(!modal)}
                 >
-                 No
+                 Cancel
                 </Button>
                    </div>
                 </ModalBody>

@@ -1,14 +1,17 @@
 import React from "react";
 import { loginBack, iconDemo } from "helper/constant";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { compose } from "redux";
 import { withRouter } from "react-router-dom";
 import AuthActions from "redux/auth/actions";
 import enhancer from "./enhancer/LoginFormEnhancer";
+import constant from "redux/auth/constants";
+import { Spinner } from "reactstrap";
 
 const { login } = AuthActions;
 
 const Login = props => {
+    const networkCalls = useSelector(store => store.NetworkCall.NETWORK_CALLS)
     const handleLogin = e => {
         e.preventDefault();
         let { values, handleSubmit } = props;
@@ -53,65 +56,71 @@ const Login = props => {
 
     return (
         <div className="container-fluid" style={loginContainer}>
-            <div className="form-container">
-                <div className="login-icon">
-                    <img src={iconDemo} alt="icon" height="100px" />
-                </div>
-                <div className="login-title">Sign in to your account</div>
-                <form className="pa-24" onSubmit={handleLogin}>
-                    <div className="form-group">
-                        <label>Email</label>
-                        <input
-                            type="email"
-                            className="form-control react-form-input"
-                            id="email"
-                            onChange={handleChange}
-                            value={values.email}
-                            onBlur={handleBlur}
-                            placeholder="Email"
-                        />
-                        <Error field="email" />
-                    </div>
+            {
+                networkCalls.indexOf(constant.LOG_IN) > -1 ?
+                    <div className="d-flex justify-content-center align-items-center vh-100">
+                        <Spinner color="primary" />
+                    </div> :
+                    <div className="form-container">
+                        <div className="login-icon">
+                            <img src={iconDemo} alt="icon" height="100px" />
+                        </div>
+                        <div className="login-title">Sign in to your account</div>
+                        <form className="pa-24" onSubmit={handleLogin}>
+                            <div className="form-group">
+                                <label>Email</label>
+                                <input
+                                    type="email"
+                                    className="form-control react-form-input"
+                                    id="email"
+                                    onChange={handleChange}
+                                    value={values.email}
+                                    onBlur={handleBlur}
+                                    placeholder="Email"
+                                />
+                                <Error field="email" />
+                            </div>
 
-                    <div className="form-group">
-                        <label>Password</label>
-                        <input
-                            type="password"
-                            className="form-control react-form-input"
-                            id="password"
-                            value={values.password}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            placeholder="Password"
-                        />
-                        <Error field="password" />
-                    </div>
+                            <div className="form-group">
+                                <label>Password</label>
+                                <input
+                                    type="password"
+                                    className="form-control react-form-input"
+                                    id="password"
+                                    value={values.password}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    placeholder="Password"
+                                />
+                                <Error field="password" />
+                            </div>
 
-                    <div className="form-check text-center mtb-16">
-                        <input
-                            type="checkbox"
-                            className="form-check-input"
-                            id="exampleCheck1"
-                        />
-                        <label
-                            className="form-check-label"
-                            htmlFor="exampleCheck1"
-                        >
-                            Remember me
-                        </label>
-                    </div>
+                            <div className="form-check text-center mtb-16">
+                                <input
+                                    type="checkbox"
+                                    className="form-check-input"
+                                    id="exampleCheck1"
+                                />
+                                <label
+                                    className="form-check-label"
+                                    htmlFor="exampleCheck1"
+                                >
+                                    Remember me
+                                </label>
+                            </div>
 
-                    <button type="submit" className="btn form-button">
-                        Login
-                    </button>
-                    <div
-                        className="text-center link-label"
-                        onClick={() => props.history.push("/forgotPassword")}
-                    >
-                        Forgot Password ?
+                            <button type="submit" className="btn form-button">
+                                Login
+                            </button>
+                            <div
+                                className="text-center link-label"
+                                onClick={() => props.history.push("/forgotPassword")}
+                            >
+                                Forgot Password ?
+                            </div>
+                        </form>
                     </div>
-                </form>
-            </div>
+            }
         </div>
     );
 };

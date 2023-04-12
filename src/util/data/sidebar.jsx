@@ -7,26 +7,25 @@ export const sidebarData = [
   {
     name: 'RERA project load',
     routepath: '/project_listing',
-    iconClass: 'fas fa-list'
+    iconClass: 'fas fa-paper-plane'
+  },
+  {
+    name: 'User',
+    routepath: '/user_master',
+    iconClass: 'far fa-user'
   },
   {
     name: 'Master',
-    iconClass: 'fas fa-list',
+    iconClass: 'fas fa-user-tie',
     child: [
       {
         listname: "Role",
         routepath: "/role_master",
-        shortname: "Role",
-        module: "Role"
-      },
-      {
-        listname: "User",
-        routepath: "/user_master",
-        shortname: "User",
-        module: "User"
+        shortname: "RL",
+        module: "Role",
       },
     ]
-  },
+  }
 ];
 
 // Comments:::::::

@@ -2450,11 +2450,13 @@ element.style {
   .table-footer .text-sm-left {
     text-align: left !important;
   }
-
-  /* .modal-dialog {
-    max-width: 680px; */
-  /* } */
 }
+
+  .modal-dialog {
+    height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;}
 
 .react-datepicker-popper {
   z-index: 2 !important;
