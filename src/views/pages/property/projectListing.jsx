@@ -42,15 +42,15 @@ const ProjectListing = props => {
     })
 
     socket.on('get', data => {
-      if(data !== 100){
+      if (data !== 100) {
         setProgressVal(data)
       }
-      if(data === 100){
+      if (data === 100) {
         setProgressVal(0)
       }
     })
     return () => socket.off('get')
-}, [progressVal])
+  }, [progressVal])
   // Programatically click the hidden file input element
   // when the Button component is clicked
   const handleClick = event => {
@@ -263,9 +263,10 @@ const ProjectListing = props => {
 
 
   return (
-    <>
-      <PageTitle title="RERA Project load" />
-      {
+    <div className="container-fluid">
+      <div className="row title-sec">
+        <div className="col-sm headline">RERA project load</div>
+      </div>      {
         progressVal === 0 ?
           <div>
             <div className=" w-100">
@@ -289,10 +290,10 @@ const ProjectListing = props => {
                     </FormGroup>
                   </Form>
                 </div>
-                <div className="col-auto align-items-flex-end text-right ml-auto pl-0">
-                  <div className="w-100">
+                <div className="col-auto align-items-flex-end text-right ml-auto">
+                  <div>
                     <Button
-                      className="c-btn c-primary ma-5"
+                      className="btn btn-blue w-100 mb-3"
                       onClick={(e) => {
                         dispatch(PropertyActions.getTsDataByReraNumberOrPaId(searchNum))
                       }}
@@ -302,9 +303,9 @@ const ProjectListing = props => {
                     </Button>
                   </div>
                 </div>
-                <div className="text-right h-38">
+                <div className="col-sm-auto px-0">
                   <Button
-                    className="c-btn c-primary ma-5"
+                    className="btn btn-blue w-100 mb-3"
                     onClick={() => history.push("/project_entry")}
                   >
                     {" "}
@@ -312,9 +313,9 @@ const ProjectListing = props => {
                     Add Proprty
                   </Button>
                 </div>
-                <div className="text-right pr-12 h-38">
+                <div className="col-sm-auto">
                   <Button
-                    className="c-btn c-primary ma-5"
+                    className="btn btn-blue w-100 mb-3"
                     onClick={handleClick}
                   >
                     {" "}
@@ -332,23 +333,24 @@ const ProjectListing = props => {
             </div>
             {
               tracks_data.length > 0 ?
+              <div className="div-container">
                 <ReactTableWrapper {...props}>
-                  <div className="roe-card-style mt-15 mb-30">
-                    <div className="roe-card-header">
-                      <span className="hash"># </span>
+                  <div className="row title-sec align-items-center">
+                    <div className="col-md">
+                      {/* <span className="hash"># </span> */}
                       {/* Client Side Table */}
                     </div>
-                    <div className="table-container text-center overflow-auto">
+                    <div className="table-responsive common-table card-box grey-box mb-2">
                       <table
                         border={1}
-                        className="custom-react-table-theme-class"
-                        {...getTableProps()}
+                        className="table border-0" {...getTableProps()}
                       >
-                        <thead>
+                        <thead className="thead-color">
                           {headerGroups.map(headerGroup => (
                             <tr {...headerGroup.getHeaderGroupProps()}>
                               {headerGroup.headers.map(header => (
                                 <th
+                                className="thead-color"
                                   {...header.getHeaderProps(header.getSortByToggleProps())}
                                 >
                                   <div>{header.render("Header")}</div>
@@ -380,7 +382,7 @@ const ProjectListing = props => {
                             return (
                               <tr {...row.getRowProps()}>
                                 {row.cells.map(cell => (
-                                  <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                                  <td className="td-border"{...cell.getCellProps()}>{cell.render("Cell")}</td>
                                 ))}
                               </tr>
                             );
@@ -394,57 +396,62 @@ const ProjectListing = props => {
                       page={pageIndex}
                     />
                   </div>
-                </ReactTableWrapper> : <ReactTableWrapper {...props}>
-                  <div className="roe-card-style mt-15 mb-30">
-                    <div className="roe-card-header">
-                      <span className="hash"># </span>
-                      {/* Client Side Table */}
-                    </div>
-                    <div className="table-container text-center overflow-auto">
-                      <table
-                        border={1}
-                        className="custom-react-table-theme-class"
-                        {...getTableProps()}
-                      >
-                        <thead>
-                          {headerGroups.map(headerGroup => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                              {headerGroup.headers.map(header => (
-                                <th
-                                  {...header.getHeaderProps(header.getSortByToggleProps())}
-                                >
-                                  <div>{header.render("Header")}</div>
-                                </th>
-                              ))}
+                </ReactTableWrapper> 
+              </div>
+                :
+                <div className="div-container">
+                  <ReactTableWrapper {...props}>
+                    <div className="row title-sec align-items-center">
+                      <div className="col-md">
+                        {/* <span className="hash"># </span> */}
+                        {/* Client Side Table */}
+                      </div>
+                      <div className="table-responsive common-table card-box grey-box mb-2">
+                        <table
+                          border={1}
+                          className="table border-0" {...getTableProps()}
+                        >
+                          <thead className="thead-color">
+                            {headerGroups.map(headerGroup => (
+                              <tr {...headerGroup.getHeaderGroupProps()}>
+                                {headerGroup.headers.map(header => (
+                                  <th
+                                  className="thead-color"
+                                    {...header.getHeaderProps(header.getSortByToggleProps())}
+                                  >
+                                    <div>{header.render("Header")}</div>
+                                  </th>
+                                ))}
+                              </tr>
+                            ))}
+                          </thead>
+                          <tbody {...getTableBodyProps()}>
+                            <tr>
+                              {
+                                networkCalls.indexOf(constant.ADD_TRACKS_LIST_NETWORK_CALL) > -1
+                                  ?
+                                  <td colSpan={8} >
+                                    <div className="d-flex justify-content-center align-items-center">
+                                      <Spinner color="primary" />
+                                    </div>
+                                  </td>
+                                  :
+                                  <td colSpan={8} style={{ color: '#898989' }}>
+                                    No records found
+                                  </td>
+                              }
                             </tr>
-                          ))}
-                        </thead>
-                        <tbody {...getTableBodyProps()}>
-                          <tr>
-                            {
-                              networkCalls.indexOf(constant.ADD_TRACKS_LIST_NETWORK_CALL) > -1
-                                ?
-                                <td colSpan={8} >
-                                  <div className="d-flex justify-content-center align-items-center">
-                                    <Spinner color="primary" />
-                                  </div>
-                                </td>
-                                :
-                                <td colSpan={8} style={{ color: '#898989' }}>
-                                  No records found
-                                </td>
-                            }
-                          </tr>
-                        </tbody>
-                      </table>
+                          </tbody>
+                        </table>
+                      </div>
+                      <Pagination
+                        onPageChange={gotoPage}
+                        pages={pageCount}
+                        page={pageIndex}
+                      />
                     </div>
-                    <Pagination
-                      onPageChange={gotoPage}
-                      pages={pageCount}
-                      page={pageIndex}
-                    />
-                  </div>
-                </ReactTableWrapper>
+                  </ReactTableWrapper>
+                </div>
             }
           </div> :
           <div className="progress-block">
@@ -452,7 +459,7 @@ const ProjectListing = props => {
             <p>Bulk upload status</p>
           </div>
       }
-    </>
+    </div>
 
   );
 };

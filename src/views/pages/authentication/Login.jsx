@@ -17,11 +17,11 @@ const Login = props => {
             // console.log("Here is your form value", values);
 
             const data = {
-                token: "DEMOJWTTOKEN"
+                email: values.email,
+                password: values.password
             };
             // using this method you can store token in redux
             props.login(data);
-            props.history.push("/intro");
         }
         handleSubmit();
     };

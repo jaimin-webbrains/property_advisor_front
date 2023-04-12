@@ -15,6 +15,7 @@ import { themeConfig } from "./settings";
 import config, { getCurrentLanguage } from "./settings/languageConfig";
 import { PersistGate } from "redux-persist/integration/react";
 import "./assets/scss/app.scss";
+import "./assets/scss/custom.css";
 import "pretty-checkbox/src/pretty-checkbox.scss";
 import { ToastContainer } from "react-toastify";
 

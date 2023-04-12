@@ -34,3 +34,7 @@ export const onlyDate = date => {
 export const datesWithYear = date => {
   return moment(date).format("MMM Do YYYY");
 };
+
+export const getToken = () => {
+   const data = localStorage.getItem('persist:root')
+}

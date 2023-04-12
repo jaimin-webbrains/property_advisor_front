@@ -1,9 +1,13 @@
 import axios from 'axios'
+import { getToken } from 'helper/methods';
 
 const PropertyServices = {
 
     GET_STATES: async () => {
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/property/get_states`)
+        const headers = {
+            'Authorization': getToken()
+        }
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/geo/get_states`)
         return response;
     },
 

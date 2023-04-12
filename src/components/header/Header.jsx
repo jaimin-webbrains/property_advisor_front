@@ -15,6 +15,7 @@ import { compose } from "redux";
 import AuthActions from "redux/auth/actions";
 import { withRouter } from "react-router-dom";
 import PopoverBlock from "./PopoverBlock";
+import { Menu } from "react-feather";
 
 const { logout } = AuthActions;
 
@@ -35,14 +36,14 @@ const Header = (props) => {
                                 className="top-header-icon"
                                 onClick={() => drawerMiniMethod()}
                             >
-                                <i className="fas fa-bars"></i>
+                <Menu />
                             </button>
                         ) : (
                             <button
                                 className="top-header-icon"
                                 onClick={() => drawerMiniMethod()}
                             >
-                                <i className="fas fa-bars"></i>
+                <Menu />
                             </button>
                         )}
                     </div>
@@ -50,10 +51,8 @@ const Header = (props) => {
                         className="mini-drawer-menu-icon"
                         onClick={() => drawerMiniMethod()}
                     >
-                        <i className="fas fa-bars" />{" "}
-                        <span className="app-name fs-16 bold-text">
-                            {"Roe"}
-                        </span>
+                                   <Menu />
+
                     </div>
                     {/* <div className="pl-10">
                         <button
@@ -159,6 +158,12 @@ const Header = (props) => {
                                     My Profile
                                 </div>
                                 <div className="roy-menu-list">Settings</div>
+                                <div 
+                                    className="roy-menu-list"
+                                    onClick={() => props.history.push('/reset_known_password')}
+                                >
+                                    Change password
+                                </div>
                                 <div
                                     className="roy-menu-list"
                                     onClick={userSignout}

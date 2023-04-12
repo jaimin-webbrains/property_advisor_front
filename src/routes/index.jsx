@@ -9,6 +9,7 @@ import {
     PricingStyle1,
     PricingStyle2
 } from "./../views/pages/index";
+import ResetForgotPassword from "views/pages/authentication/ResetForgotPassword";
 
 const indexRoutes = [
     { path: "/pricing/style1", component: PricingStyle1 },
@@ -19,6 +20,7 @@ const indexRoutes = [
     { path: "/error400", component: Error400 },
     { path: "/error500", component: Error500 },
     { path: "/forgotPassword", component: ForgotPassword },
+    {path: "/reset_password",component: ResetForgotPassword},
     { path: "/", component: Layout }
 ];
 

@@ -9,6 +9,24 @@ export const sidebarData = [
     routepath: '/project_listing',
     iconClass: 'fas fa-list'
   },
+  {
+    name: 'Master',
+    iconClass: 'fas fa-list',
+    child: [
+      {
+        listname: "Role",
+        routepath: "/role_master",
+        shortname: "Role",
+        module: "Role"
+      },
+      {
+        listname: "User",
+        routepath: "/user_master",
+        shortname: "User",
+        module: "User"
+      },
+    ]
+  },
 ];
 
 // Comments:::::::

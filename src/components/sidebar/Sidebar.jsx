@@ -104,7 +104,7 @@ const Sidebar = props => {
       {!mini && <div className="sidebar-overlay" onClick={closeDrawer()}></div>}
       <div
         id="sidebar"
-        className="sidebar sideBack"
+        className="sidebar sideBack sidebar-expand"
         style={sidebar}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}

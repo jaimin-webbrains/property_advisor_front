@@ -1,7 +1,10 @@
 import { format } from "date-fns";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { push } from "react-router-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 const ModalExample = ({modal,setModal,data,isFromRRInput}) => {
+    const dispatch = useDispatch()
     // const [modal, setModal] = useState(false);
         return (
             <div>
@@ -29,7 +32,7 @@ const ModalExample = ({modal,setModal,data,isFromRRInput}) => {
                     </Button> : ""
                        }
                        {" "}
-                        <Button className="c-secondary" onClick={() => window.location.href = "/project_listing"}>
+                        <Button className="c-secondary" onClick={() => dispatch(push("/project_listing")) }>
                             Cancel
                         </Button>
                     </ModalFooter>

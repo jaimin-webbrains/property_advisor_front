@@ -13,8 +13,10 @@ class Intro extends Component {
         }
 
         return (
-            <div>
-                <PageTitle title="sidebar.intro" />
+            <div className="container-fluid">
+            <div className="row title-sec">
+                <div className="col-sm headline">Add project</div>
+            </div> 
 
                 <div className="plr-15">
                     <div className="mtb-30 theme-color">
