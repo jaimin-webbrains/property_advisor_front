@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import authActions from 'redux/auth/actions'
-import { Lock } from "react-feather";
 
 
 export default function ResetPassword() {
@@ -41,7 +40,6 @@ export default function ResetPassword() {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <Lock className="form-icons" />
                                     <label>
                                         Current password <span className="error-msg">*</span>
                                     </label>
@@ -57,7 +55,6 @@ export default function ResetPassword() {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <Lock className="form-icons" />
                                     <label>
                                         Confirm Password <span className="error-msg">*</span>
                                     </label>

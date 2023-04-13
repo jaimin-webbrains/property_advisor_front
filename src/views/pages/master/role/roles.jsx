@@ -7,12 +7,11 @@ import ReactTableWrapper from "../../../../components/reacttable/reacttbl.style"
 import { useDispatch, useSelector } from "react-redux";
 import RoleActionconstants from "redux/master/Role/constants";
 import constant from "redux/networkCall/constant";
-import { toast } from "react-toastify";
 import { Button, Spinner } from "reactstrap";
 import { Edit3, Key, Trash } from "react-feather";
 import RoleActios from "redux/master/Role/action";
-import DeleteRoleModal from "./deleteRoleModal";
-import AddRoleModal from "./addRoleModal";
+import DeleteRoleModal from "../masterModals/deleteModal";
+import AddRoleModal from "../masterModals/addOrUpdateModal";
 import RoleActions from "redux/master/Role/action";
 import { useFormik } from "formik";
 
