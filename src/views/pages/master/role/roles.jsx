@@ -154,12 +154,15 @@ const Roles = props => {
     setVal({ ...val, [e]: v })
   }
   const handleAddClick = (type) => {
-    if (type === "add") {
-      dispatch(RoleActions.addRole({ name: val.name }))
-    } else if (type === "update") {
-      dispatch(RoleActions.updateRole({ id: val._id, name: val.name }))
-    } else {
-      dispatch(RoleActions.deleteRole({ id: val._id }))
+    if(val.name !== ""){
+      if (type === "add") {
+        dispatch(RoleActions.addRole({ name: val.name }))
+      } else if (type === "update") {
+        dispatch(RoleActions.updateRole({ id: val._id, name: val.name }))
+      }
+    }
+    if(type === "delete"){
+        dispatch(RoleActions.deleteRole({ id: val._id }))
     }
     setModal(!modal)
 
@@ -320,6 +323,7 @@ const Roles = props => {
         setValue={(e, v) => handleAddChange(e, v)}
         handleAddClick={(type) => handleAddClick(type)}
         isFromUpdate={true}
+        error={{}}
       />
       <DeleteRoleModal
         modal={modal.delete}
@@ -333,6 +337,7 @@ const Roles = props => {
         setValue={(e, v) => handleAddChange(e, v)}
         handleAddClick={(type) => handleAddClick(type)}
         isFromUpdate={false}
+        error={{}}
       />
     </div>
 

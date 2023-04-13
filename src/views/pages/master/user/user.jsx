@@ -13,6 +13,7 @@ import DeleteRoleModal from "../role/deleteRoleModal";
 import AddRoleModal from "../role/addRoleModal";
 import RoleActions from "redux/master/Role/action";
 import UserActions from "redux/master/user/action";
+import { useFormik } from "formik";
 
 
 
@@ -29,7 +30,7 @@ const HeaderComponent = props => {
 const User = props => {
   const networkCalls = useSelector(store => store.NetworkCall.NETWORK_CALLS)
   const [modal, setModal] = useState({ add: false, update: false, delete: false })
-  const initial = { name: "",mobile:"",email:"",role:"User" }
+  const initial = { name: "",mobile:"",email:"",role:"user" }
   const [val, setVal] = useState(initial)
   const users = useSelector(store => store.master.user.users)
   const [dummyData, setDummyData] = useState([]);
@@ -128,7 +129,7 @@ const User = props => {
               <button
                 className="table-action action-edit"
                 onClick={() => {
-                  setVal(tableInstance.row.original);
+                  formik.setValues(tableInstance.row.original);
                   setModal({ ...modal, update: true });
                 }}
                 data-bs-toggle="tooltip"
@@ -141,7 +142,7 @@ const User = props => {
               <button
                 className="table-action action-delete"
                 onClick={() => {
-                  setVal(tableInstance.row.original);
+                  formik.setValues(tableInstance.row.original);
                   setModal({ ...modal, delete: true });
                 }}
                 data-bs-toggle="tooltip"
@@ -193,15 +194,15 @@ const User = props => {
     }
   }
   const handleAddChange = (e, v) => {
-    setVal({ ...val, [e]: v })
+    formik.setValues({ ...formik.values, [e]: v })
   }
   const handleAddClick = (type) => {
     if (type === "add") {
-        dispatch(UserActions.addUser(val))
+        dispatch(UserActions.addUser(formik.values))
     } else if (type === "update") {
-        dispatch(UserActions.updateUser(val))
+        dispatch(UserActions.updateUser(formik.values))
     } else {
-      dispatch(UserActions.deleteUser({ _id: val._id }))
+      dispatch(UserActions.deleteUser({ _id: formik.values._id }))
     }
     setModal(!modal)
 
@@ -212,6 +213,32 @@ const User = props => {
     UserActionconstants.GET_USER,
     UserActionconstants.UPDATE_USER
   ]
+  const formik = useFormik({
+    initialValues: { name: "",mobile:"",email:"",role:"user" },
+    validate: values => {
+      let errors = {};
+      if (!values.name) {
+        errors.name = "Required!";
+      }
+      if (!values.mobile) {
+        errors.mobile = "Required!";
+      }
+      if (!values.email) {
+        errors.email = "Required!";
+      }
+      if (!values.role) {
+        errors.role = "Required!";
+      }
+      if(values.mobile && values.mobile.toString().length !== 10){
+        errors.mobile = "10 digits required"
+      }
+       if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email) && values.email) {
+        errors.email = 'Invalid email address'
+      }
+      return errors;
+    },
+    validateOnChange: true
+  });
   return (
     <div className="container-fluid">
       <div className="row title-sec">
@@ -221,7 +248,7 @@ const User = props => {
             className="btn btn-blue w-100 mb-3"
             onClick={(e) => {
               setModal({ ...modal, add: e })
-              setVal(initial)
+              formik.setValues(initial)
             }}
           >
             {" "}
@@ -358,10 +385,11 @@ const User = props => {
       <AddRoleModal
         modal={modal.update}
         setModal={(e) => handleModalChange(e, 'update')}
-        value={val}
+        value={formik.values}
         setValue={(e, v) => handleAddChange(e, v)}
         handleAddClick={(type) => handleAddClick(type)}
         isFromUpdate={true}
+        error = {formik.errors}
       />
       <DeleteRoleModal
         modal={modal.delete}
@@ -371,10 +399,11 @@ const User = props => {
       <AddRoleModal
         modal={modal.add}
         setModal={(e) => handleModalChange(e, 'add')}
-        value={val}
+        value={formik.values}
         setValue={(e, v) => handleAddChange(e, v)}
         handleAddClick={(type) => handleAddClick(type)}
         isFromUpdate={false}
+        error = {formik.errors}
       />
     </div>
 

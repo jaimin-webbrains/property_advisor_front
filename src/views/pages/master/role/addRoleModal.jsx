@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFromUpdate }) => {
+const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFromUpdate, error }) => {
     const roles = useSelector(store => store.master.role.roles)
     const filtered = [
         '_id',
@@ -11,6 +11,15 @@ const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFrom
         'createdAt',
         '__v'
     ]
+    const numberField = [
+        'mobile'
+    ]
+    const selectField = [
+        'role'
+    ]
+    const errorField = [
+        'mobile'
+    ]
     return (
         <div>
             <Modal
@@ -18,31 +27,34 @@ const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFrom
                 toggle={() => setModal(!modal)}
             >
                 <ModalHeader>
-                   {isFromUpdate ? "Update" : "Add"} 
+                    {isFromUpdate ? "Update" : "Add"}
                 </ModalHeader>
                 <ModalBody>
                     {
                         Object.keys(value).length > 0 ?
                             Object.keys(value).map((e) => {
                                 if (!filtered.includes(e)) {
-                                    return e !== 'role' ?
+                                    return !selectField.includes(e) ?
                                         <div className="form-group">
                                             <label>
-                                                {e.charAt(0).toUpperCase() + e.slice(1)}
+                                                {e.charAt(0).toUpperCase() + e.slice(1)}<span className="error-msg">*</span>
                                             </label>
                                             <input
-                                                type={e === 'mobile' ? 'number' : "text"}
+                                                type={numberField.includes(e) ? 'number' : "text"}
                                                 className="form-control react-form-input"
                                                 placeholder={e}
                                                 id={e}
                                                 onChange={(v) => setValue(e, v.target.value)}
                                                 value={value[e]}
                                             />
+                                            {errorField.includes(e) && value[e].length > 0 && (
+                                                <p style={{ color: "red" }}>{error[e]}</p>
+                                            )}
                                         </div>
                                         :
                                         <div>
                                             <label>
-                                                {e.charAt(0).toUpperCase() + e.slice(1)}
+                                                {e.charAt(0).toUpperCase() + e.slice(1)}<span className="error-msg">*</span>
                                             </label>
                                             <select
                                                 id={e}
@@ -52,7 +64,7 @@ const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFrom
                                                 onChange={(v) => setValue(e, v.target.value)}
                                             >
                                                 {roles.length > 0 ? (
-                                                   roles.map(opt => (
+                                                    roles.map(opt => (
                                                         <option>{opt.name}</option>
                                                     ))
                                                 ) : (
@@ -65,31 +77,33 @@ const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFrom
                             : ""
                     }
                     <div className="d-flex">
-                    {
-                        isFromUpdate ?
-                            <Button
-                                className="btn btn-blue w-100 border-0 mr-5"
-                                type="button"
-                                onClick={() => handleAddClick("update")}
-                            >
-                                Update
-                            </Button> :
-                            <Button
-                                className="btn btn-blue w-100 border-0 mr-5"
-                                type="button"
-                                onClick={() => handleAddClick("add")}
-                            >
-                                Add
-                            </Button>
-                    }
-                <Button
-                    className="btn btn-blue w-100 border-0 mr-5"
-                    type="button"
-                    onClick={()=> setModal(!modal)}
-                >
-                 Cancel
-                </Button>
-                   </div>
+                        {
+                            isFromUpdate ?
+                                <Button
+                                    className="btn btn-blue w-100 border-0 mr-5"
+                                    type="button"
+                                    onClick={() => handleAddClick("update")}
+                                    disabled={Object.keys(error).length > 0}
+                                >
+                                    Update
+                                </Button> :
+                                <Button
+                                    className="btn btn-blue w-100 border-0 mr-5"
+                                    type="button"
+                                    onClick={() => handleAddClick("add")}
+                                    disabled={Object.keys(error).length > 0}
+                                >
+                                    Add
+                                </Button>
+                        }
+                        <Button
+                            className="btn btn-blue w-100 border-0 mr-5"
+                            type="button"
+                            onClick={() => setModal(!modal)}
+                        >
+                            Cancel
+                        </Button>
+                    </div>
                 </ModalBody>
             </Modal>
         </div >

@@ -59,11 +59,11 @@ img.form-icons-right {
   top: 30px;
 }
 
-.form-container .form-control,
+/* .form-container .form-control,
 .edit-profile-main .form-control,
 .form-with-icons .form-control {
   padding-left: 45px;
-}
+} */
 
 .form-control::placeholder {
   color: #999;

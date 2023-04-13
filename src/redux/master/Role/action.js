@@ -53,7 +53,11 @@ const RoleActions = {
           })
         })
         .catch(e => {
-          toast.error(e.message);
+          if(e.response){
+            toast.error(e.response.data.message);
+          }else{
+            toast.error(e.message);
+          }
           dispatch({
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.ADD_ROLE

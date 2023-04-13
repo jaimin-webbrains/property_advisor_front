@@ -49,7 +49,16 @@ const UserActions = {
           })
         })
         .catch(e => {
-          toast.error(e.message);
+          if(e.response){
+            let err = ""
+            let keys = Object.keys(e.response.data.message)
+            for(let k of keys){
+              err += `${e.response.data.message[k]} `
+            }
+            toast.error(err)
+          }else{
+            toast.error(e.message);
+          }
           dispatch({
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.ADD_USER
