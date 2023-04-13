@@ -14,6 +14,7 @@ import RoleActios from "redux/master/Role/action";
 import DeleteRoleModal from "./deleteRoleModal";
 import AddRoleModal from "./addRoleModal";
 import RoleActions from "redux/master/Role/action";
+import { useFormik } from "formik";
 
 
 
@@ -31,8 +32,17 @@ const Roles = props => {
   const networkCalls = useSelector(store => store.NetworkCall.NETWORK_CALLS)
   const [modal, setModal] = useState({ add: false, update: false, delete: false })
   const initial = { name: "" }
-  const [val, setVal] = useState(initial)
-  const roles = useSelector(store => store.master.role.roles)
+  const formik = useFormik({
+    initialValues: { name: "" },
+    validate: values => {
+      let errors = {};
+      if (!values.name) {
+        errors.name = "Required!";
+      }
+      return errors;
+    },
+    validateOnChange: true
+  });  const roles = useSelector(store => store.master.role.roles)
   const [dummyData, setDummyData] = useState([]);
   const dispatch = useDispatch()
   useEffect(() => {
@@ -86,7 +96,7 @@ const Roles = props => {
               <button
                 className="table-action action-edit"
                 onClick={() => {
-                  setVal(tableInstance.row.original);
+                  formik.setValues(tableInstance.row.original);
                   setModal({ ...modal, update: true });
                 }}
                 data-bs-toggle="tooltip"
@@ -99,7 +109,7 @@ const Roles = props => {
               <button
                 className="table-action action-delete"
                 onClick={() => {
-                  setVal(tableInstance.row.original);
+                  formik.setValues(tableInstance.row.original);
                   setModal({ ...modal, delete: true });
                 }}
                 data-bs-toggle="tooltip"
@@ -151,18 +161,18 @@ const Roles = props => {
     }
   }
   const handleAddChange = (e, v) => {
-    setVal({ ...val, [e]: v })
+    formik.setValues({ ...formik.values, [e]: v })
   }
   const handleAddClick = (type) => {
-    if(val.name !== ""){
+    if(formik.values.name !== ""){
       if (type === "add") {
-        dispatch(RoleActions.addRole({ name: val.name }))
+        dispatch(RoleActions.addRole({ name: formik.values.name }))
       } else if (type === "update") {
-        dispatch(RoleActions.updateRole({ id: val._id, name: val.name }))
+        dispatch(RoleActions.updateRole({ id: formik.values._id, name: formik.values.name }))
       }
     }
     if(type === "delete"){
-        dispatch(RoleActions.deleteRole({ id: val._id }))
+        dispatch(RoleActions.deleteRole({ id: formik.values._id }))
     }
     setModal(!modal)
 
@@ -182,7 +192,7 @@ const Roles = props => {
             className="btn btn-blue w-100 mb-3"
             onClick={(e) => {
               setModal({ ...modal, add: e })
-              setVal(initial)
+              formik.setValues(initial)
             }}
           >
             {" "}
@@ -319,11 +329,11 @@ const Roles = props => {
       <AddRoleModal
         modal={modal.update}
         setModal={(e) => handleModalChange(e, 'update')}
-        value={val}
+        value={formik.values}
         setValue={(e, v) => handleAddChange(e, v)}
         handleAddClick={(type) => handleAddClick(type)}
         isFromUpdate={true}
-        error={{}}
+        error={formik.errors}
       />
       <DeleteRoleModal
         modal={modal.delete}
@@ -333,11 +343,11 @@ const Roles = props => {
       <AddRoleModal
         modal={modal.add}
         setModal={(e) => handleModalChange(e, 'add')}
-        value={val}
+        value={formik.values}
         setValue={(e, v) => handleAddChange(e, v)}
         handleAddClick={(type) => handleAddClick(type)}
         isFromUpdate={false}
-        error={{}}
+        error={formik.errors}
       />
     </div>
 
