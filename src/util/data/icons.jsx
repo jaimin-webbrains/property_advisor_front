@@ -742,5 +742,9 @@ export const iconData = [
     {
         iconClass: "fas fa-grin-wink",
         text: "grin-wink"
+    },
+    {
+        iconClass: "fas fa-home",
+        text: "home"
     }
 ];

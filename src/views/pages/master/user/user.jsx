@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import UserActionconstants from "redux/master/user/constants";
 import constant from "redux/networkCall/constant";
 import { Button, Spinner } from "reactstrap";
-import { Edit3, Key, Trash } from "react-feather";
 import DeleteRoleModal from "../masterModals/deleteModal";
 import AddRoleModal from "../masterModals/addOrUpdateModal";
 import RoleActions from "redux/master/Role/action";
@@ -136,7 +135,7 @@ const User = props => {
                 data-bs-placement="top"
                 title="Edit"
               >
-                <Edit3 className="table-icon-edit" />
+                <i className="fas fa-edit" />
               </button>
 
               <button
@@ -149,7 +148,7 @@ const User = props => {
                 data-bs-placement="top"
                 title="Delete"
               >
-                <Trash className="table-icon-edit" />
+                <i className="fas fa-trash" />
               </button>
             </div>
           );

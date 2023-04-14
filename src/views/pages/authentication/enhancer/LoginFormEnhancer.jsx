@@ -8,10 +8,7 @@ const formikEnhancer = withFormik({
         email: Yup.string().required('Please Enter Any Email'),
         password: Yup.string().required('Please Enter Any Password'),
     }),
-    mapPropsToValues: props => ({
-        email: 'roe@gmail.com',
-        password: 'roe',
-    }),
+    mapPropsToValues: props => ({}),
     handleSubmit: (values) => {},
     displayName: 'CustomValidationForm',
     enableReinitialize:true,

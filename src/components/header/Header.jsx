@@ -14,8 +14,6 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import AuthActions from "redux/auth/actions";
 import { withRouter } from "react-router-dom";
-import PopoverBlock from "./PopoverBlock";
-import { Menu } from "react-feather";
 
 const { logout } = AuthActions;
 
@@ -36,14 +34,12 @@ const Header = (props) => {
                                 className="top-header-icon"
                                 onClick={() => drawerMiniMethod()}
                             >
-                <Menu />
                             </button>
                         ) : (
                             <button
                                 className="top-header-icon"
                                 onClick={() => drawerMiniMethod()}
                             >
-                <Menu />
                             </button>
                         )}
                     </div>
@@ -51,7 +47,6 @@ const Header = (props) => {
                         className="mini-drawer-menu-icon"
                         onClick={() => drawerMiniMethod()}
                     >
-                                   <Menu />
 
                     </div>
                     {/* <div className="pl-10">
