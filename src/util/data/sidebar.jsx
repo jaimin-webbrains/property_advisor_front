@@ -1,9 +1,9 @@
 export const sidebarData = [
-  {
-    name: 'sidebar.intro',
-    routepath: '/Intro',
-    iconClass: 'fas fa-chalkboard'
-  },
+  // {
+  //   name: 'sidebar.intro',
+  //   routepath: '/Intro',
+  //   iconClass: 'fas fa-chalkboard'
+  // },
   {
     name: 'RERA project load',
     routepath: '/project_listing',

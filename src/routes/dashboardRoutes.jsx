@@ -7,7 +7,7 @@ import Roles from 'views/pages/master/role/roles'
 import User from "views/pages/master/user/user";
 
 const dashboardRoutes = [
-  { path: "/intro", component: Intro },
+  // { path: "/intro", component: Intro },
   { path: "/project_entry", component: ProjectEntry },
   { path: "/project_listing", component: ProjectListing },
   { path: "/reset_known_password", component: ResetPassword },
