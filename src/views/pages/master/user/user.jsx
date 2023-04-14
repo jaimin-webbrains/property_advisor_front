@@ -242,7 +242,7 @@ const User = props => {
   return (
     <div className="container-fluid">
       <div className="row title-sec">
-        <div className="col-sm headline">User</div>
+        <div className="col-sm headline">Users</div>
         <div className="col-sm-auto px-0">
           <Button
             className="btn btn-blue w-100 mb-3"

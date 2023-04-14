@@ -10,7 +10,7 @@ export const sidebarData = [
     iconClass: 'fas fa-city'
   },
   {
-    name: 'User',
+    name: 'Users',
     routepath: '/user_master',
     iconClass: 'far fa-user'
   },
@@ -19,7 +19,7 @@ export const sidebarData = [
     iconClass: 'fas fa-user-tie',
     child: [
       {
-        listname: "Role",
+        listname: "Roles",
         routepath: "/role_master",
         shortname: "RL",
         module: "Role",
