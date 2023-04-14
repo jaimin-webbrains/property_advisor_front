@@ -39,10 +39,12 @@ const UserActions = {
       UserServices.ADD_USER(data)
         .then(res => {
           toast.success(res.data.message)
-          dispatch({
-            type: constants.ADD_USER,
-            payload: res.data.data
-          });
+          if(res.data.data.role.name !== 'admin'){
+            dispatch({
+              type: constants.ADD_USER,
+              payload: res.data.data
+            });
+          }
           dispatch({
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.ADD_USER

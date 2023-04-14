@@ -288,19 +288,6 @@ const User = props => {
                         <tbody {...getTableBodyProps()}>
                           {headerGroups.map(headerGroup => (
                             <tr {...headerGroup.getHeaderGroupProps()}>
-                              {headerGroup.headers.map(header => {
-                                return (
-                                  <td
-                                    {...header.getHeaderProps(
-                                      header.getSortByToggleProps()
-                                    )}
-                                  >
-                                    <div>
-                                      {header.canFilter ? header.render("Filter") : null}
-                                    </div>
-                                  </td>
-                                );
-                              })}
                             </tr>
                           ))}
                           {page.map(row => {
