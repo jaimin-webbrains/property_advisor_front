@@ -10,7 +10,7 @@ export const sidebarData = [
     iconClass: 'fas fa-users'
   },
   {
-    name: 'Master',
+    name: 'Masters',
     iconClass: 'fas fa-server',
     child: [
       {
