@@ -42,7 +42,7 @@ const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFrom
                                             <input
                                                 type={numberField.includes(e) ? 'number' : "text"}
                                                 className="form-control react-form-input"
-                                                placeholder={e}
+                                                placeholder={e.charAt(0).toUpperCase() + e.slice(1)}
                                                 id={e}
                                                 onChange={(v) => setValue(e, v.target.value)}
                                                 value={value[e]}

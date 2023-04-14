@@ -114,7 +114,7 @@ const Roles = props => {
                 data-bs-placement="top"
                 title="Delete"
               >
-                <i className="fas-fa trash" />
+                <i className="fas fa-trash" />
               </button>
             </div>
           );

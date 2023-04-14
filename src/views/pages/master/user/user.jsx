@@ -29,7 +29,8 @@ const HeaderComponent = props => {
 const User = props => {
   const networkCalls = useSelector(store => store.NetworkCall.NETWORK_CALLS)
   const [modal, setModal] = useState({ add: false, update: false, delete: false })
-  const initial = { name: "",mobile:"",email:"",role:"user" }
+  const roles = useSelector(store => store.master.role.roles)
+  const initial = { name: "",mobile:"",email:"",role:roles[0].name }
   const [val, setVal] = useState(initial)
   const users = useSelector(store => store.master.user.users)
   const [dummyData, setDummyData] = useState([]);
@@ -197,6 +198,7 @@ const User = props => {
   }
   const handleAddClick = (type) => {
     if (type === "add") {
+      debugger
         dispatch(UserActions.addUser(formik.values))
     } else if (type === "update") {
         dispatch(UserActions.updateUser(formik.values))
