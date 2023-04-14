@@ -20,6 +20,9 @@ const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFrom
     const errorField = [
         'mobile'
     ]
+    const disabledField = [
+        'email'
+    ]
     return (
         <div>
             <Modal
@@ -46,6 +49,7 @@ const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFrom
                                                 id={e}
                                                 onChange={(v) => setValue(e, v.target.value)}
                                                 value={value[e]}
+                                                disabled = {isFromUpdate && disabledField.includes(e)}
                                             />
                                             {errorField.includes(e) && value[e].length > 0 && (
                                                 <p style={{ color: "red" }}>{error[e]}</p>
