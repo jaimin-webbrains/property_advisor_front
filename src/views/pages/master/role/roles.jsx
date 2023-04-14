@@ -332,11 +332,13 @@ const Roles = props => {
         handleAddClick={(type) => handleAddClick(type)}
         isFromUpdate={true}
         error={formik.errors}
+        name = "Role"
       />
       <DeleteRoleModal
         modal={modal.delete}
         setModal={(e) => handleModalChange(e, 'delete')}
         handleAddClick={(type) => handleAddClick(type)}
+        name = "Role"
       />
       <AddRoleModal
         modal={modal.add}
@@ -346,6 +348,7 @@ const Roles = props => {
         handleAddClick={(type) => handleAddClick(type)}
         isFromUpdate={false}
         error={formik.errors}
+        name = "Role"
       />
     </div>
 

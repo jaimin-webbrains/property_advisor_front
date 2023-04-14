@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import React, { useState } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-const DeleteRoleModal = ({ modal, setModal,handleAddClick }) => {
+const DeleteRoleModal = ({ modal, setModal,handleAddClick,name }) => {
     return (
         <div>
 
@@ -10,7 +10,7 @@ const DeleteRoleModal = ({ modal, setModal,handleAddClick }) => {
                 toggle={() => setModal(!modal)}
             >
                 <ModalHeader>
-                    Delete
+                    {`Delete ${name}`}
                 </ModalHeader>
                 <ModalBody>
                     <div className="form-group">

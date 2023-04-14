@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFromUpdate, error }) => {
+const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFromUpdate, error ,name}) => {
     const roles = useSelector(store => store.master.role.roles)
     const filtered = [
         '_id',
@@ -27,7 +27,7 @@ const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFrom
                 toggle={() => setModal(!modal)}
             >
                 <ModalHeader>
-                    {isFromUpdate ? "Update" : "Add"}
+                    {isFromUpdate ? `Update ${name}` : `Add ${name}`}
                 </ModalHeader>
                 <ModalBody>
                     {
