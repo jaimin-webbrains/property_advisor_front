@@ -1,9 +1,6 @@
-import { format } from "date-fns";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFromUpdate, error ,name}) => {
-    const roles = useSelector(store => store.master.role.roles)
+import React from "react";
+import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
+const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFromUpdate, error ,name,states}) => {
     const filtered = [
         '_id',
         'status',
@@ -15,7 +12,9 @@ const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFrom
         'mobile'
     ]
     const selectField = [
-        'role'
+        'role',
+        'state',
+        'city'
     ]
     const errorField = [
         'mobile'
@@ -25,7 +24,9 @@ const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFrom
     ]
     return (
         <div>
-            <Modal
+           {
+            states && (
+                <Modal
                 isOpen={modal}
                 toggle={() => setModal(!modal)}
             >
@@ -64,11 +65,11 @@ const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFrom
                                                 id={e}
                                                 name={e}
                                                 className="form-control form-control-lg react-form-input mb-5"
-                                                value={typeof (value[e]) === 'string' ? value[e] : value[e]['name']}
+                                                value={typeof (value[e]) === 'string' ? value[e] :value[e].length && value[e].length   > 0 ? value[e][0]['name'] :value[e]['name'] }
                                                 onChange={(v) => setValue(e, v.target.value)}
                                             >
-                                                {roles.length > 0 ? (
-                                                    roles.map(opt => (
+                                                {states[e].length > 0 ? (
+                                                    states[e].map(opt => (
                                                         <option>{opt.name}</option>
                                                     ))
                                                 ) : (
@@ -110,6 +111,8 @@ const AddRoleModal = ({ modal, setModal, value, setValue, handleAddClick, isFrom
                     </div>
                 </ModalBody>
             </Modal>
+            )
+           }
         </div >
     );
 }

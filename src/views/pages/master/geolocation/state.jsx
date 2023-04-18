@@ -5,14 +5,14 @@ import classnames from "classnames";
 import Pagination from "components/common/Pagination";
 import ReactTableWrapper from "../../../../components/reacttable/reacttbl.style";
 import { useDispatch, useSelector } from "react-redux";
-import UserActionconstants from "redux/master/user/constants";
+import Geolocationconstants from "redux/master/geolocation/constants";
 import constant from "redux/networkCall/constant";
 import { Button, Spinner } from "reactstrap";
 import DeleteRoleModal from "../masterModals/deleteModal";
 import AddRoleModal from "../masterModals/addOrUpdateModal";
 import RoleActions from "redux/master/Role/action";
-import UserActions from "redux/master/user/action";
 import { useFormik } from "formik";
+import GeolocationActions from "redux/master/geolocation/action";
 
 
 
@@ -26,17 +26,26 @@ const HeaderComponent = props => {
   return <div className={classnames(classes)}>{props.title}</div>;
 };
 
-const User = props => {
+const State = props => {
   const networkCalls = useSelector(store => store.NetworkCall.NETWORK_CALLS)
   const [modal, setModal] = useState({ add: false, update: false, delete: false })
-  const roles = useSelector(store => store.master.role.roles)
-  const initial = { name: "",mobile:"",email:"",role:roles.length > 0 ? roles[0].name : "" }
-  const users = useSelector(store => store.master.user.users)
+  const initial = { name: "" }
+  const formik = useFormik({
+    initialValues: { name: "" },
+    validate: values => {
+      let errors = {};
+      if (!values.name) {
+        errors.name = "Required!";
+      }
+      return errors;
+    },
+    validateOnChange: true
+  });  
+  const states = useSelector(store => store.master.geolocation.states)
   const [dummyData, setDummyData] = useState([]);
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(UserActions.getUser())
-    dispatch(RoleActions.getRoles())
+    dispatch(GeolocationActions.getStates())
   }, [])
 
 
@@ -59,55 +68,13 @@ const User = props => {
           return (
             <HeaderComponent
               isSortedDesc={tableInstance.column.isSortedDesc}
-              title="Name"
+              title="State name"
             />
           );
         },
         Filter: FilterComponent,
-        placeholder: "Name",
+        placeholder: "State name",
         accessor: "name",
-        disableFilters: true
-      },
-      {
-        Header: tableInstance => {
-          return (
-            <HeaderComponent
-              isSortedDesc={tableInstance.column.isSortedDesc}
-              title="Mobile"
-            />
-          );
-        },
-        Filter: FilterComponent,
-        placeholder: "Mobile",
-        accessor: "mobile",
-        disableFilters: true
-      },
-      {
-        Header: tableInstance => {
-          return (
-            <HeaderComponent
-              isSortedDesc={tableInstance.column.isSortedDesc}
-              title="Email"
-            />
-          );
-        },
-        Filter: FilterComponent,
-        placeholder: "Email",
-        accessor: "email",
-        disableFilters: true
-      },
-      {
-        Header: tableInstance => {
-          return (
-            <HeaderComponent
-              isSortedDesc={tableInstance.column.isSortedDesc}
-              title="Role"
-            />
-          );
-        },
-        Filter: FilterComponent,
-        placeholder: "Role",
-        accessor: "role.name",
         disableFilters: true
       },
       {
@@ -170,7 +137,7 @@ const User = props => {
     state: { pageIndex }
   } = useTable(
     {
-      data: users,
+      data: states,
       columns: columns,
       initialState: {
         pageSize: 10,
@@ -196,52 +163,29 @@ const User = props => {
     formik.setValues({ ...formik.values, [e]: v })
   }
   const handleAddClick = (type) => {
-    if (type === "add") {
-        dispatch(UserActions.addUser(formik.values))
-    } else if (type === "update") {
-        dispatch(UserActions.updateUser(formik.values))
-    } else {
-      dispatch(UserActions.deleteUser({ _id: formik.values._id }))
+    if(formik.values.name !== ""){
+      if (type === "add") {
+        dispatch(GeolocationActions.addState({ name: formik.values.name }))
+      } else if (type === "update") {
+        dispatch(GeolocationActions.updateState({ id: formik.values._id, name: formik.values.name }))
+      }
+    }
+    if(type === "delete"){
+        dispatch(GeolocationActions.deleteState({ id: formik.values._id }))
     }
     setModal(!modal)
 
   }
   const networkRoleConstants = [
-    UserActionconstants.ADD_USER,
-    UserActionconstants.DELETE_USER,
-    UserActionconstants.GET_USER,
-    UserActionconstants.UPDATE_USER
+    Geolocationconstants.GET_STATES,
+    Geolocationconstants.DELETE_STATE,
+    Geolocationconstants.ADD_STATE,
+    Geolocationconstants.UPDATE_STATE
   ]
-  const formik = useFormik({
-    initialValues: { name: "",mobile:"",email:"",role:"user" },
-    validate: values => {
-      let errors = {};
-      if (!values.name) {
-        errors.name = "Required!";
-      }
-      if (!values.mobile) {
-        errors.mobile = "Required!";
-      }
-      if (!values.email) {
-        errors.email = "Required!";
-      }
-      if (!values.role) {
-        errors.role = "Required!";
-      }
-      if(values.mobile && values.mobile.toString().length !== 10){
-        errors.mobile = "10 digits required"
-      }
-       if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email) && values.email) {
-        errors.email = 'Invalid email address'
-      }
-      return errors;
-    },
-    validateOnChange: true
-  });
   return (
     <div className="container-fluid">
       <div className="row title-sec">
-        <div className="col-sm headline">Users</div>
+        <div className="col-sm headline">States</div>
         <div className="col-sm-auto px-0">
           <Button
             className="btn btn-blue w-100 mb-3"
@@ -252,7 +196,7 @@ const User = props => {
           >
             {" "}
             <i className="fas fa-plus mr-10" />
-            Add user
+            Add state
           </Button>
         </div>
       </div>
@@ -262,7 +206,7 @@ const User = props => {
           <div className="d-flex justify-content-center align-items-center vh-100">
             <Spinner color="primary" />
           </div>          :
-            users.length > 0 ?
+            states.length > 0 ?
               <div className="div-container">
                 <ReactTableWrapper {...props}>
                   <div className="row title-sec align-items-center">
@@ -375,15 +319,16 @@ const User = props => {
         setValue={(e, v) => handleAddChange(e, v)}
         handleAddClick={(type) => handleAddClick(type)}
         isFromUpdate={true}
-        error = {formik.errors}
-        name = "User"
-        states={{role:roles}}
+        error={formik.errors}
+        name = "State"
+        states={[]}
       />
       <DeleteRoleModal
         modal={modal.delete}
         setModal={(e) => handleModalChange(e, 'delete')}
         handleAddClick={(type) => handleAddClick(type)}
-        name = "User"
+        name = "State"
+        states={[]}
       />
       <AddRoleModal
         modal={modal.add}
@@ -392,9 +337,9 @@ const User = props => {
         setValue={(e, v) => handleAddChange(e, v)}
         handleAddClick={(type) => handleAddClick(type)}
         isFromUpdate={false}
-        error = {formik.errors}
-        name = "User"
-        states={{role:roles}}
+        error={formik.errors}
+        name = "State"
+        states={[]}
       />
     </div>
 
@@ -417,4 +362,4 @@ const FilterComponent = tableInstance => {
   );
 };
 
-export default User;
+export default State;

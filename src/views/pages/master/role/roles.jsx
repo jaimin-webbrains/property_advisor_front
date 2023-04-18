@@ -320,6 +320,7 @@ const Roles = props => {
         isFromUpdate={true}
         error={formik.errors}
         name = "Role"
+        states={[]}
       />
       <DeleteRoleModal
         modal={modal.delete}
@@ -336,6 +337,7 @@ const Roles = props => {
         isFromUpdate={false}
         error={formik.errors}
         name = "Role"
+        states={[]}
       />
     </div>
 

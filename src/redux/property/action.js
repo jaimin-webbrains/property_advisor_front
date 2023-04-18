@@ -4,21 +4,6 @@ import PropertyServices from "./services";
 import NETWORK_CONSTANTS from '../networkCall/constant'
 
 const PropertyActions = {
-  getStates: () => {
-    return (dispatch, getState) => {
-      PropertyServices.GET_STATES()
-        .then(res => {
-          dispatch({
-            type: constants.GET_STATES,
-            payload: res.data.data
-          });
-        })
-        .catch(e => {
-          toast.error(e.message);
-        });
-    };
-  },
-
   addTsData: data => {
     return (dispatch, getState) => {
       dispatch({

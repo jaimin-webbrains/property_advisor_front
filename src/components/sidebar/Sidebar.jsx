@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import SidebarWrapper from "./sidebar.style";
 import Radium from "radium";
 import NavList from "components/sidebar/NavList";
-import { sidebarData } from "util/data/sidebar";
+// import { sidebarData } from "util/data/sidebar";
 import { iconDemo, AppName } from "helper/constant";
 import { Scrollbars } from "react-custom-scrollbars";
 import { NavLink } from "react-router-dom";
@@ -91,7 +91,78 @@ const Sidebar = props => {
       transform: !mini ? "translateZ(0)" : "translate3d(-25px,0,0)"
     };
   }
-
+  const sidebarData = [
+    {
+      name: 'RERA project load',
+      routepath: '/project_listing',
+      iconClass: 'fas fa-home'
+    },
+    {
+      name: 'Users',
+      routepath: '/user_master',
+      iconClass: 'fas fa-users'
+    },
+    {
+      name: 'Masters',
+      iconClass: 'fas fa-server',
+      child: [
+        {
+          listname: "Roles",
+          routepath: "/role_master",
+          shortname: "RL",
+          module: "Role",
+        },
+      ]
+    },
+    {
+      name: 'Geolocation',
+      iconClass: "fas fa-location-arrow",
+      child: [
+        {
+          listname: "States",
+          routepath: "/state_master",
+          shortname: "ST",
+          module: "state",
+        },
+        {
+          listname: "Cities",
+          routepath: "/city_master",
+          shortname: "CT",
+          module: "city",
+        },
+        {
+          listname: "Zones",
+          routepath: "/zone_master",
+          shortname: "ZN",
+          module: "zone",
+        },
+        // {
+        //   listname: "Districts",
+        //   routepath: "/district_master",
+        //   shortname: "DT",
+        //   module: "district",
+        // },
+        // {
+        //   listname: "Sub districts",
+        //   routepath: "/sub_district_master",
+        //   shortname: "SD",
+        //   module: "sub district",
+        // },
+        // {
+        //   listname: "Locations",
+        //   routepath: "/location_master",
+        //   shortname: "LC",
+        //   module: "location",
+        // },
+        // {
+        //   listname: "Sub locations",
+        //   routepath: "/sub_location_master",
+        //   shortname: "SL",
+        //   module: "sublocation",
+        // },
+      ]
+    }
+  ];
   return (
     <SidebarWrapper
       themeSetting={themeSetting}

@@ -2,15 +2,6 @@ import axios from 'axios'
 import { getToken } from 'helper/methods';
 
 const PropertyServices = {
-
-    GET_STATES: async () => {
-        const headers = {
-            'Authorization': getToken()
-        }
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/geo/get_states`)
-        return response;
-    },
-
     ADD_TS_DATA: async (data) => {
         const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/property/add_all_ts_data`, data)
         return response
