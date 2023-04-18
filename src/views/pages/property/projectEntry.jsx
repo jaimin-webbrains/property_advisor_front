@@ -155,7 +155,7 @@ const ProjectEntery = props => {
                               >
                                 {states && states.length > 0 ? (
                                   states.map(opt => (
-                                    <option>{opt.state_name}</option>
+                                    <option>{opt.name}</option>
                                   ))
                                 ) : (
                                   <option>No data</option>
