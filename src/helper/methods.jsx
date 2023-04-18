@@ -36,5 +36,17 @@ export const datesWithYear = date => {
 };
 
 export const getToken = () => {
-   const data = localStorage.getItem('persist:root')
+  let access_token
+  const data = JSON.parse(localStorage.getItem('persist:root'))
+  if(data){
+    const authData = JSON.parse(data && data.auth)
+    access_token = `Bearer ${authData.accessToken}`
+  }
+  return access_token
+}
+export const config_header = {
+  headers: {
+    'Authorization': getToken(),
+    'Content-Type': 'application/json'
+  }
 }

@@ -100,6 +100,7 @@ const Roles = props => {
                 data-bs-toggle="tooltip"
                 data-bs-placement="top"
                 title="Edit"
+                disabled={tableInstance.row.original.name === 'admin'}
               >
                 <i className="fas fa-edit" />
               </button>
@@ -113,6 +114,8 @@ const Roles = props => {
                 data-bs-toggle="tooltip"
                 data-bs-placement="top"
                 title="Delete"
+                disabled={tableInstance.row.original.name === 'admin'}
+
               >
                 <i className="fas fa-trash" />
               </button>

@@ -136,30 +136,30 @@ const Sidebar = props => {
           shortname: "ZN",
           module: "zone",
         },
-        // {
-        //   listname: "Districts",
-        //   routepath: "/district_master",
-        //   shortname: "DT",
-        //   module: "district",
-        // },
-        // {
-        //   listname: "Sub districts",
-        //   routepath: "/sub_district_master",
-        //   shortname: "SD",
-        //   module: "sub district",
-        // },
-        // {
-        //   listname: "Locations",
-        //   routepath: "/location_master",
-        //   shortname: "LC",
-        //   module: "location",
-        // },
-        // {
-        //   listname: "Sub locations",
-        //   routepath: "/sub_location_master",
-        //   shortname: "SL",
-        //   module: "sublocation",
-        // },
+        {
+          listname: "Districts",
+          routepath: "/district_master",
+          shortname: "DT",
+          module: "district",
+        },
+        {
+          listname: "Sub districts",
+          routepath: "/sub_district_master",
+          shortname: "SD",
+          module: "sub district",
+        },
+        {
+          listname: "Locations",
+          routepath: "/location_master",
+          shortname: "LC",
+          module: "location",
+        },
+        {
+          listname: "Sub locations",
+          routepath: "/sub_location_master",
+          shortname: "SL",
+          module: "sublocation",
+        },
       ]
     }
   ];
