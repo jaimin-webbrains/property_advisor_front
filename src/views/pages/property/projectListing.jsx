@@ -14,11 +14,10 @@ import { Form, FormGroup, Input, Label, Spinner } from "reactstrap";
 import constant from "redux/networkCall/constant";
 import PageTitle from "components/common/PageTitle";
 import { toast } from "react-toastify";
-import io from 'socket.io-client'
+import io from "socket.io-client";
 import { Progress } from "reactstrap";
 
-
-const HeaderComponent = props => {
+const HeaderComponent = (props) => {
   let classes = {
     "my-2": true,
     "mx-3": true,
@@ -28,48 +27,47 @@ const HeaderComponent = props => {
   return <div className={classnames(classes)}>{props.title}</div>;
 };
 
-const ProjectListing = props => {
-  const tracks_data = useSelector(state => state.property.tracks_data);
-  const networkCalls = useSelector(store => store.NetworkCall.NETWORK_CALLS)
+const ProjectListing = (props) => {
+  const tracks_data = useSelector((state) => state.property.tracks_data);
+  const networkCalls = useSelector((store) => store.NetworkCall.NETWORK_CALLS);
   const [dummyData, setDummyData] = useState([]);
-  const [progressVal, setProgressVal] = useState(0)
-  const [searchNum, setSearchNum] = useState("")
+  const [progressVal, setProgressVal] = useState(0);
+  const [searchNum, setSearchNum] = useState("");
   const hiddenFileInput = React.useRef(null);
   const history = useHistory();
   useEffect(() => {
-    const socket = io.connect(process.env.REACT_APP_BASE_URL)
-    socket.on('connect', socket => {
-    })
+    const socket = io.connect(process.env.REACT_APP_BASE_URL);
+    socket.on("connect", (socket) => {});
 
-    socket.on('get', data => {
+    socket.on("get", (data) => {
       if (data !== 100) {
-        setProgressVal(data)
+        setProgressVal(data);
       }
       if (data === 100) {
-        setProgressVal(0)
+        setProgressVal(0);
       }
-    })
-    return () => socket.off('get')
-  }, [progressVal])
+    });
+    return () => socket.off("get");
+  }, [progressVal]);
   // Programatically click the hidden file input element
   // when the Button component is clicked
-  const handleClick = event => {
+  const handleClick = (event) => {
     hiddenFileInput.current.click();
   };
   // Call a function (passed as a prop from the parent component)
-  // to handle the user-selected file 
-  const handleChange = event => {
+  // to handle the user-selected file
+  const handleChange = (event) => {
     const fileUploaded = event.target.files[0];
-    let formData = new FormData()
-    formData.append('bulkfile', fileUploaded)
-    dispatch(PropertyActions.bulkAddProperty(formData))
-    toast.success('Bulk upload initiated !!')
+    let formData = new FormData();
+    formData.append("bulkfile", fileUploaded);
+    dispatch(PropertyActions.bulkAddProperty(formData));
+    toast.success("Bulk upload initiated !!");
   };
   const deleteClick = useCallback(
-    data => {
+    (data) => {
       // Here you can view the data and delete through API calling
       const array = dummyData;
-      remove(array, function (n) {
+      remove(array, function(n) {
         return n.id === data.id;
       });
       setDummyData([...array]);
@@ -80,7 +78,7 @@ const ProjectListing = props => {
   const columns = useMemo(
     () => [
       {
-        Header: tableInstance => {
+        Header: (tableInstance) => {
           return (
             <HeaderComponent
               isSortedDesc={tableInstance.column.isSortedDesc}
@@ -91,10 +89,10 @@ const ProjectListing = props => {
         Filter: FilterComponent,
         placeholder: "State",
         accessor: "state",
-        disableFilters: true
+        disableFilters: true,
       },
       {
-        Header: tableInstance => {
+        Header: (tableInstance) => {
           return (
             <HeaderComponent
               isSortedDesc={tableInstance.column.isSortedDesc}
@@ -105,12 +103,11 @@ const ProjectListing = props => {
         Filter: FilterComponent,
         placeholder: "RERA Number",
         accessor: "reraNumber",
-        disableFilters: true
-
+        disableFilters: true,
       },
       {
         id: "lastModifiedDate",
-        Header: tableInstance => {
+        Header: (tableInstance) => {
           return (
             <HeaderComponent
               isSortedDesc={tableInstance.column.isSortedDesc}
@@ -120,16 +117,16 @@ const ProjectListing = props => {
         },
         Filter: FilterComponent,
         placeholder: "Last Modified Date",
-        accessor: d => {
+        accessor: (d) => {
           return moment(d.lastModifiedDate)
             .local()
             .format("DD-MM-YYYY");
         },
-        disableFilters: true
+        disableFilters: true,
       },
       {
         id: "projectEndDate",
-        Header: tableInstance => {
+        Header: (tableInstance) => {
           return (
             <HeaderComponent
               isSortedDesc={tableInstance.column.isSortedDesc}
@@ -139,16 +136,16 @@ const ProjectListing = props => {
         },
         Filter: FilterComponent,
         placeholder: "Project End Date",
-        accessor: d => {
+        accessor: (d) => {
           return moment(d.projectEndDate)
             .local()
             .format("DD-MM-YYYY");
         },
-        disableFilters: true
+        disableFilters: true,
       },
       {
         id: "reraApprovedDate",
-        Header: tableInstance => {
+        Header: (tableInstance) => {
           return (
             <HeaderComponent
               isSortedDesc={tableInstance.column.isSortedDesc}
@@ -158,16 +155,16 @@ const ProjectListing = props => {
         },
         Filter: FilterComponent,
         placeholder: "RERA Approved Date",
-        accessor: d => {
+        accessor: (d) => {
           return moment(d.reraApprovedDate)
             .local()
             .format("DD-MM-YYYY");
         },
-        disableFilters: true
+        disableFilters: true,
       },
       {
         id: "reraProjectStartDate",
-        Header: tableInstance => {
+        Header: (tableInstance) => {
           return (
             <HeaderComponent
               isSortedDesc={tableInstance.column.isSortedDesc}
@@ -175,16 +172,16 @@ const ProjectListing = props => {
             />
           );
         },
-        accessor: d => {
+        accessor: (d) => {
           return moment(d.reraProjectStartDate)
             .local()
             .format("DD-MM-YYYY");
         },
         placeholder: "RERA project start date",
-        disableFilters: true
+        disableFilters: true,
       },
       {
-        Header: tableInstance => {
+        Header: (tableInstance) => {
           return (
             <HeaderComponent
               isSortedDesc={tableInstance.column.isSortedDesc}
@@ -194,10 +191,10 @@ const ProjectListing = props => {
         },
         accessor: "paId",
         placeholder: "PA ID",
-        disableFilters: true
+        disableFilters: true,
       },
       {
-        Header: tableInstance => {
+        Header: (tableInstance) => {
           return (
             <HeaderComponent
               isSortedDesc={tableInstance.column.isSortedDesc}
@@ -207,19 +204,23 @@ const ProjectListing = props => {
         },
         accessor: "detailsURL",
         placeholder: "Details URL",
-        Cell: props => <a href={props.cell.value} style={{ wordBreak: "break-word" }}>{props.cell.value}</a>,
-        disableFilters: true
-      }
+        Cell: (props) => (
+          <a href={props.cell.value} style={{ wordBreak: "break-word" }}>
+            {props.cell.value}
+          </a>
+        ),
+        disableFilters: true,
+      },
     ],
     [deleteClick]
   );
 
-  const viewClick = data => {
+  const viewClick = (data) => {
     // Here you can view the data and make forward action for view data
     alert(JSON.stringify(data));
   };
 
-  const editClick = data => {
+  const editClick = (data) => {
     // Here you can view the data and make forward action for edit data
     alert(JSON.stringify(data));
   };
@@ -232,15 +233,15 @@ const ProjectListing = props => {
     headerGroups,
     pageCount,
     gotoPage,
-    state: { pageIndex }
+    state: { pageIndex },
   } = useTable(
     {
       data: tracks_data,
       columns: columns,
       initialState: {
         pageSize: 10,
-        pageIndex: 0
-      }
+        pageIndex: 0,
+      },
     },
     useFilters,
     useSortBy,
@@ -251,231 +252,255 @@ const ProjectListing = props => {
   useEffect(() => {
     dispatch({
       type: constants.GET_ALL_TS_DATA,
-      payload: []
+      payload: [],
     });
     return () => {
       dispatch({
         type: constants.GET_ALL_TS_DATA,
-        payload: []
+        payload: [],
       });
-    }
+    };
   }, []);
-
 
   return (
     <div className="container-fluid">
       <div className="row title-sec">
         <div className="col-sm headline">RERA project load</div>
-      </div>      {
-        progressVal === 0 ?
-          <div>
-            <div className=" w-100">
-              <div className="row">
-                <div className="col pr-2">
-                  <Form>
-                    <FormGroup>
-                      <Input
-                        type="search"
-                        name="search"
-                        id="exampleSearch"
-                        onChange={(e) => setSearchNum(e.target.value)}
-                        placeholder="Search property by rera number / PA Id"
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            e.preventDefault();
-                            dispatch(PropertyActions.getTsDataByReraNumberOrPaId(searchNum))
+      </div>{" "}
+      {progressVal === 0 ? (
+        <div>
+          <div className=" w-100">
+            <div className="row">
+              <div className="col pr-2">
+                <Form>
+                  <FormGroup>
+                    <Input
+                      type="search"
+                      name="search"
+                      id="exampleSearch"
+                      onChange={(e) => setSearchNum(e.target.value)}
+                      placeholder="Search property by rera number / PA Id"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          if (searchNum !== "") {
+                            dispatch(
+                              PropertyActions.getTsDataByReraNumberOrPaId(
+                                searchNum
+                              )
+                            );
                           }
-                        }}
-                      />
-                    </FormGroup>
-                  </Form>
-                </div>
-                <div className="col-auto align-items-flex-end text-right ml-auto">
-                  <div>
-                    <Button
-                      className="btn btn-blue w-100 mb-3"
-                      onClick={(e) => {
-                        dispatch(PropertyActions.getTsDataByReraNumberOrPaId(searchNum))
+                        }
                       }}
-                    >
-                      {" "}
-                      <i className="fas fa-search"></i>
-                    </Button>
-                  </div>
-                </div>
-                <div className="col-sm-auto px-0">
+                    />
+                  </FormGroup>
+                </Form>
+              </div>
+              <div className="col-auto align-items-flex-end text-right ml-auto">
+                <div>
                   <Button
                     className="btn btn-blue w-100 mb-3"
-                    onClick={() => history.push("/project_entry")}
+                    disabled={searchNum === ""}
+                    onClick={(e) => {
+                      if (searchNum !== "") {
+                        dispatch(
+                          PropertyActions.getTsDataByReraNumberOrPaId(searchNum)
+                        );
+                      }
+                    }}
                   >
                     {" "}
-                    <i className="fas fa-plus mr-10" />
-                    Add Proprty
+                    <i className="fas fa-search"></i>
                   </Button>
                 </div>
-                <div className="col-sm-auto">
-                  <Button
-                    className="btn btn-blue w-100 mb-3"
-                    onClick={handleClick}
-                  >
-                    {" "}
-                    <i className="fas fa-cloud-upload-alt mr-10" />
-                    Bulk add
-                  </Button>
-                  <input
-                    type="file"
-                    ref={hiddenFileInput}
-                    onChange={handleChange}
-                    style={{ display: 'none' }}
-                  />
-                </div>
+              </div>
+              <div className="col-sm-auto px-0">
+                <Button
+                  className="btn btn-blue w-100 mb-3"
+                  onClick={() => history.push("/project_entry")}
+                >
+                  {" "}
+                  <i className="fas fa-plus mr-10" />
+                  Add Proprty
+                </Button>
+              </div>
+              <div className="col-sm-auto">
+                <Button
+                  className="btn btn-blue w-100 mb-3"
+                  onClick={handleClick}
+                >
+                  {" "}
+                  <i className="fas fa-cloud-upload-alt mr-10" />
+                  Bulk add
+                </Button>
+                <input
+                  type="file"
+                  ref={hiddenFileInput}
+                  onChange={handleChange}
+                  style={{ display: "none" }}
+                />
               </div>
             </div>
-            {
-              tracks_data.length > 0 ?
-              <div className="div-container">
-                <ReactTableWrapper {...props}>
-                  <div className="row title-sec align-items-center">
-                    <div className="col-md">
-                      {/* <span className="hash"># </span> */}
-                      {/* Client Side Table */}
-                    </div>
-                    <div className="table-responsive common-table card-box grey-box mb-2">
-                      <table
-                        border={1}
-                        className="table border-0" {...getTableProps()}
-                      >
-                        <thead className="thead-color">
-                          {headerGroups.map(headerGroup => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                              {headerGroup.headers.map(header => (
-                                <th
+          </div>
+          {tracks_data.length > 0 ? (
+            <div className="div-container">
+              <ReactTableWrapper {...props}>
+                <div className="row title-sec align-items-center">
+                  <div className="col-md">
+                    {/* <span className="hash"># </span> */}
+                    {/* Client Side Table */}
+                  </div>
+                  <div className="table-responsive common-table card-box grey-box mb-2">
+                    <table
+                      border={1}
+                      className="table border-0"
+                      {...getTableProps()}
+                    >
+                      <thead className="thead-color">
+                        {headerGroups.map((headerGroup) => (
+                          <tr {...headerGroup.getHeaderGroupProps()}>
+                            {headerGroup.headers.map((header) => (
+                              <th
                                 className="thead-color"
-                                  {...header.getHeaderProps(header.getSortByToggleProps())}
+                                {...header.getHeaderProps(
+                                  header.getSortByToggleProps()
+                                )}
+                              >
+                                <div>{header.render("Header")}</div>
+                              </th>
+                            ))}
+                          </tr>
+                        ))}
+                      </thead>
+                      <tbody {...getTableBodyProps()}>
+                        {headerGroups.map((headerGroup) => (
+                          <tr {...headerGroup.getHeaderGroupProps()}>
+                            {headerGroup.headers.map((header) => {
+                              return (
+                                <td
+                                  {...header.getHeaderProps(
+                                    header.getSortByToggleProps()
+                                  )}
                                 >
-                                  <div>{header.render("Header")}</div>
-                                </th>
+                                  <div>
+                                    {header.canFilter
+                                      ? header.render("Filter")
+                                      : null}
+                                  </div>
+                                </td>
+                              );
+                            })}
+                          </tr>
+                        ))}
+                        {page.map((row) => {
+                          prepareRow(row);
+                          return (
+                            <tr {...row.getRowProps()}>
+                              {row.cells.map((cell) => (
+                                <td
+                                  className="td-border"
+                                  {...cell.getCellProps()}
+                                >
+                                  {cell.render("Cell")}
+                                </td>
                               ))}
                             </tr>
-                          ))}
-                        </thead>
-                        <tbody {...getTableBodyProps()}>
-                          {headerGroups.map(headerGroup => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                              {headerGroup.headers.map(header => {
-                                return (
-                                  <td
-                                    {...header.getHeaderProps(
-                                      header.getSortByToggleProps()
-                                    )}
-                                  >
-                                    <div>
-                                      {header.canFilter ? header.render("Filter") : null}
-                                    </div>
-                                  </td>
-                                );
-                              })}
-                            </tr>
-                          ))}
-                          {page.map(row => {
-                            prepareRow(row);
-                            return (
-                              <tr {...row.getRowProps()}>
-                                {row.cells.map(cell => (
-                                  <td className="td-border"{...cell.getCellProps()}>{cell.render("Cell")}</td>
-                                ))}
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
-                    </div>
-                    <Pagination
-                      onPageChange={gotoPage}
-                      pages={pageCount}
-                      page={pageIndex}
-                    />
+                          );
+                        })}
+                      </tbody>
+                    </table>
                   </div>
-                </ReactTableWrapper> 
-              </div>
-                :
-                <div className="div-container">
-                  <ReactTableWrapper {...props}>
-                    <div className="row title-sec align-items-center">
-                      <div className="col-md">
-                        {/* <span className="hash"># </span> */}
-                        {/* Client Side Table */}
-                      </div>
-                      <div className="table-responsive common-table card-box grey-box mb-2">
-                        <table
-                          border={1}
-                          className="table border-0" {...getTableProps()}
-                        >
-                          <thead className="thead-color">
-                            {headerGroups.map(headerGroup => (
-                              <tr {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map(header => (
-                                  <th
-                                  className="thead-color"
-                                    {...header.getHeaderProps(header.getSortByToggleProps())}
-                                  >
-                                    <div>{header.render("Header")}</div>
-                                  </th>
-                                ))}
-                              </tr>
-                            ))}
-                          </thead>
-                          <tbody {...getTableBodyProps()}>
-                            <tr>
-                              {
-                                networkCalls.indexOf(constant.ADD_TRACKS_LIST_NETWORK_CALL) > -1
-                                  ?
-                                  <td colSpan={8} >
-                                    <div className="d-flex justify-content-center align-items-center">
-                                      <Spinner color="primary" />
-                                    </div>
-                                  </td>
-                                  :
-                                  <td colSpan={8} style={{ color: '#898989' }}>
-                                    No records found
-                                  </td>
-                              }
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <Pagination
-                        onPageChange={gotoPage}
-                        pages={pageCount}
-                        page={pageIndex}
-                      />
-                    </div>
-                  </ReactTableWrapper>
+                  <Pagination
+                    onPageChange={gotoPage}
+                    pages={pageCount}
+                    page={pageIndex}
+                  />
                 </div>
-            }
-          </div> :
-          <div className="progress-block">
-            <Progress bar striped value={progressVal}>{Math.floor(progressVal)} %</Progress>
-            <p>Bulk upload status</p>
-          </div>
-      }
+              </ReactTableWrapper>
+            </div>
+          ) : (
+            <div className="div-container">
+              <ReactTableWrapper {...props}>
+                <div className="row title-sec align-items-center">
+                  <div className="col-md">
+                    {/* <span className="hash"># </span> */}
+                    {/* Client Side Table */}
+                  </div>
+                  <div className="table-responsive common-table card-box grey-box mb-2">
+                    <table
+                      border={1}
+                      className="table border-0"
+                      {...getTableProps()}
+                    >
+                      <thead className="thead-color">
+                        {headerGroups.map((headerGroup) => (
+                          <tr {...headerGroup.getHeaderGroupProps()}>
+                            {headerGroup.headers.map((header) => (
+                              <th
+                                className="thead-color"
+                                {...header.getHeaderProps(
+                                  header.getSortByToggleProps()
+                                )}
+                              >
+                                <div>{header.render("Header")}</div>
+                              </th>
+                            ))}
+                          </tr>
+                        ))}
+                      </thead>
+                      <tbody {...getTableBodyProps()}>
+                        <tr>
+                          {networkCalls.indexOf(
+                            constant.ADD_TRACKS_LIST_NETWORK_CALL
+                          ) > -1 ? (
+                            <td colSpan={8}>
+                              <div className="d-flex justify-content-center align-items-center">
+                                <Spinner color="primary" />
+                              </div>
+                            </td>
+                          ) : (
+                            <td colSpan={8} style={{ color: "#898989" }}>
+                              No records found
+                            </td>
+                          )}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <Pagination
+                    onPageChange={gotoPage}
+                    pages={pageCount}
+                    page={pageIndex}
+                  />
+                </div>
+              </ReactTableWrapper>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="progress-block">
+          <Progress bar striped value={progressVal}>
+            {Math.floor(progressVal)} %
+          </Progress>
+          <p>Bulk upload status</p>
+        </div>
+      )}
     </div>
-
   );
 };
 
-const FilterComponent = tableInstance => {
+const FilterComponent = (tableInstance) => {
   const { filterValue, setFilter } = tableInstance.column;
   return (
     <input
       type="text"
       value={filterValue || ""}
-      onChange={e => {
+      onChange={(e) => {
         setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
       }}
       className="tabl-search react-form-input"
       placeholder={`Search ${tableInstance.column.placeholder}`}
-      onClick={e => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
     />
   );
 };
