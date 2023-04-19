@@ -216,6 +216,7 @@ const GeolocationActions = {
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.ADD_ZONE,
           });
+          dispatch(GeolocationActions.getZones(res.data.data.city.name));
         })
         .catch((e) => {
           toast.error(e.message);
@@ -239,7 +240,7 @@ const GeolocationActions = {
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.DELETE_ZONE,
           });
-          dispatch(GeolocationActions.getZones());
+          dispatch(GeolocationActions.getZones(res.data.data.city.name));
         })
         .catch((e) => {
           toast.error(e.message);

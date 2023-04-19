@@ -28,27 +28,29 @@ const Header = (props) => {
         <HeaderWrapper {...props}>
             <div className="headerBack">
                 <div className="flex-x align-center">
-                    <div className="drawer-handle-arrow">
-                        {mini ? (
-                            <button
-                                className="top-header-icon"
-                                onClick={() => drawerMiniMethod()}
-                            >
-                            </button>
-                        ) : (
-                            <button
-                                className="top-header-icon"
-                                onClick={() => drawerMiniMethod()}
-                            >
-                            </button>
-                        )}
-                    </div>
-                    <div
-                        className="mini-drawer-menu-icon"
-                        onClick={() => drawerMiniMethod()}
-                    >
-
-                    </div>
+                <div className="drawer-handle-arrow">
+            {mini ? (
+              <button
+                className="top-header-icon"
+                onClick={() => drawerMiniMethod()}
+              >
+                <i className="fas fa-bars"></i>
+              </button>
+            ) : (
+              <button
+                className="top-header-icon"
+                onClick={() => drawerMiniMethod()}
+              >
+                <i className="fas fa-bars"></i>
+              </button>
+            )}
+          </div>
+          <div
+            className="mini-drawer-menu-icon"
+            onClick={() => drawerMiniMethod()}
+          >
+                <i className="fas fa-bars"></i>
+          </div>
                     {/* <div className="pl-10">
                         <button
                             id="mail"

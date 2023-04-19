@@ -27,7 +27,7 @@ const authActions = {
               isLogin: true,
               accessToken: res.data.data.access_token,
             });
-            dispatch(push("/project_listing"));
+            window.location.href = "/project_listing"
           }
         })
         .catch((e) => {
@@ -115,7 +115,7 @@ const authActions = {
           if (res.status === 200) {
             toast.success(res.data.message);
             setTimeout(() => {
-              window.location.href = "/login";
+              dispatch(push('/login'))
             }, 3000);
           }
         })
