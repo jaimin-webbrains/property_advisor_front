@@ -27,7 +27,7 @@ const authActions = {
               isLogin: true,
               accessToken: res.data.data.access_token,
             });
-            window.location.href = "/project_listing"
+            dispatch(push("/project_listing"))
           }
         })
         .catch((e) => {
