@@ -29,7 +29,7 @@ const AddRoleModal = ({
   const getSelectedValue = (e) => {
     let val = "";
     debugger
-    if (typeof value[e] === "string" && value[e] !== "") {
+    if ( value[e] !== "") {
       val = value[e]["name"] ? value[e]["name"] : value[e];
     } else {
       if (selected[e] && selected[e] !== "") {
