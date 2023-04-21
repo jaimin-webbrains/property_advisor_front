@@ -306,8 +306,12 @@ const Zone = (props) => {
                         let data = states.filter(
                           (v) => v.name === e.target.value
                         );
-                        if (data.length > 0)
+                        if (data.length > 0){
                           setselected({ ...selected, state: data[0] });
+                          dispatch({
+                            type: Geolocationconstants.DELETE_DISTRICT,
+                          });
+                        }
                         else {
                           setselected({
                             ...selected,
@@ -320,7 +324,7 @@ const Zone = (props) => {
                           });
                         }
                       }}
-                      value={formik.values.state}
+                      value={formik.values.state.name}
                     >
                       <option>Select</option>
                       {states &&
@@ -349,7 +353,7 @@ const Zone = (props) => {
                             city: "",
                           });
                           dispatch({
-                            type: Geolocationconstants.DELETE_ZONE,
+                            type: Geolocationconstants.DELETE_CITY,
                           });
                         } else {
                           setselected({ ...selected, district: "", city: "" });
@@ -358,7 +362,7 @@ const Zone = (props) => {
                           });
                         }
                       }}
-                      value={formik.values.district}
+                      value={formik.values.district.name}
                     >
                       <option>Select</option>
 
@@ -393,7 +397,7 @@ const Zone = (props) => {
                           });
                         }
                       }}
-                      value={formik.values.city}
+                      value={formik.values.city.name}
                     >
                       <option>Select</option>
 
