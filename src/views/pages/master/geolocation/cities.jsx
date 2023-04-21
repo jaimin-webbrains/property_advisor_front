@@ -34,17 +34,25 @@ const City = (props) => {
     delete: false,
   });
   const states = useSelector((store) => store.master.geolocation.states);
-  const [selected, setselected] = useState("");
+  const districts = useSelector((store) => store.master.geolocation.district);
+  const [selected, setselected] = useState({ state: "", district: "" });
   const formik = useFormik({
     initialValues: {
-      state: states.length > 0 ? states[0].name : "",
+      state: "",
+      district: "",
       name: "",
       description: "",
     },
     validate: (values) => {
       let errors = {};
-      if (!values.name) {
-        errors.name = "Required!";
+      if (!values.state) {
+        errors.state = "Required!";
+      }
+      if (!values.district) {
+        errors.district = "Required!";
+      }
+      if(!values.name){
+        errors.name = "Required!"
       }
       return errors;
     },
@@ -54,14 +62,30 @@ const City = (props) => {
   const [dummyData, setDummyData] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (selected && selected._id) {
-      dispatch(GeolocationActions.getCities(selected._id));
+    if (selected.state !== "" && selected.district !== "") {
+      dispatch(GeolocationActions.getCities(selected.district));
     }
-    if (!selected)
+    if (selected.state === "") {
       dispatch({
         type: Geolocationconstants.DELETE_CITY,
       });
-  }, [selected]);
+      dispatch({
+        type: Geolocationconstants.DELETE_DISTRICT,
+      });
+    }
+  }, [selected.district]);
+
+  useEffect(() => {
+    if (selected && selected.state !== "") {
+      dispatch(GeolocationActions.getDistrict(selected.state));
+      setselected({ ...selected, district: "" });
+    }
+    if (!selected.state)
+      dispatch({
+        type: Geolocationconstants.DELETE_CITY,
+      });
+  }, [selected.state]);
+
   useEffect(() => {
     dispatch(GeolocationActions.getStates());
     return () => {
@@ -181,6 +205,8 @@ const City = (props) => {
   };
   const handleAddChange = (e, v) => {
     formik.setValues({ ...formik.values, [e]: v });
+    if (e === "state") setselected({ ...selected, state: v, district: "" });
+    if (e === "district") setselected({ ...selected, district: v });
   };
   const handleAddClick = (type) => {
     if (formik.values.name !== "") {
@@ -211,16 +237,25 @@ const City = (props) => {
             <div className="col pr-2">
               <Form>
                 <FormGroup>
+                  <label>State</label>
                   <select
                     className="form-control form-control-lg react-form-input"
                     onChange={(e) => {
                       let data = states.filter(
                         (v) => v.name.trim() === e.target.value.trim()
                       );
-                      setselected(data[0]);
+                      if (data.length > 0)
+                        setselected({ ...selected, state: data[0].name });
+                      else {
+                        dispatch({
+                          type: Geolocationconstants.DELETE_CITY,
+                        });
+                        setselected({ ...selected, state: "", district: "" });
+                      }
                     }}
+                    value={selected.state}
                   >
-                    <option>select</option>
+                    <option>Select</option>
                     {states &&
                       states.length > 0 &&
                       states.map((e) => <option>{e.name}</option>)}
@@ -228,7 +263,37 @@ const City = (props) => {
                 </FormGroup>
               </Form>
             </div>
+            <div className="col pr-2">
+              <Form>
+                <FormGroup>
+                  <label>District</label>
+                  <select
+                    className="form-control form-control-lg react-form-input"
+                    onChange={(e) => {
+                      let data = districts.filter(
+                        (v) => v.name.trim() === e.target.value.trim()
+                      );
+                      if (data.length > 0)
+                        setselected({ ...selected, district: data[0].name });
+                      else {
+                        dispatch({
+                          type: Geolocationconstants.DELETE_CITY,
+                        });
+                        setselected({ ...selected, district: "" });
+                      }
+                    }}
+                    value={selected.district}
+                  >
+                    <option>Select</option>
+                    {districts &&
+                      districts.length > 0 &&
+                      districts.map((e) => <option>{e.name}</option>)}
+                  </select>
+                </FormGroup>
+              </Form>
+            </div>
             <div className="col-sm-auto px-0">
+              <label>&nbsp;</label>
               <Button
                 className="btn btn-blue w-100 mb-3"
                 onClick={(e) => {
@@ -373,7 +438,8 @@ const City = (props) => {
         isFromUpdate={true}
         error={formik.errors}
         name="City"
-        states={{ state: states }}
+        states={{ state: states, district: districts }}
+        selected={selected}
       />
       <DeleteRoleModal
         modal={modal.delete}
@@ -390,7 +456,8 @@ const City = (props) => {
         isFromUpdate={false}
         error={formik.errors}
         name="City"
-        states={{ state: states }}
+        states={{ state: states, district: districts }}
+        selected={selected}
       />
     </div>
   );

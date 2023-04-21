@@ -35,7 +35,7 @@ const GeolocationService = {
   },
   GET_CITIES: async (data) => {
     const response = await axios.get(
-      `${process.env.REACT_APP_BASE_URL}/geo/get_cities?id=${data}`,
+      `${process.env.REACT_APP_BASE_URL}/geo/get_cities?district=${data}`,
       config_header
     );
     return response;
@@ -79,9 +79,9 @@ const GeolocationService = {
     );
     return response;
   },
-  GET_DISTRICT: async () => {
+  GET_DISTRICT: async (data) => {
     const response = await axios.get(
-      `${process.env.REACT_APP_BASE_URL}/geo/get_districts`,
+      `${process.env.REACT_APP_BASE_URL}/geo/get_districts?state=${data}`,
       config_header
     );
     return response;
@@ -102,32 +102,32 @@ const GeolocationService = {
     );
     return response;
   },
-  GET_SUB_DISTRICT: async () => {
+  GET_LANDMARK: async (data) => {
     const response = await axios.get(
-      `${process.env.REACT_APP_BASE_URL}/geo/get_sub_districts`,
+      `${process.env.REACT_APP_BASE_URL}/geo/get_landmarks?subLocation=${data}`,
       config_header
     );
     return response;
   },
-  ADD_OR_UPDATE_SUB_DISTRICT: async (data) => {
+  ADD_OR_UPDATE_LANDMARK: async (data) => {
     const response = await axios.post(
-      `${process.env.REACT_APP_BASE_URL}/geo/add_or_update_sub_district`,
+      `${process.env.REACT_APP_BASE_URL}/geo/add_or_update_landmark`,
       data,
       config_header
     );
     return response;
   },
-  DELETE_SUB_DISTRICT: async (data) => {
+  DELETE_LANDMARK: async (data) => {
     const response = await axios.post(
-      `${process.env.REACT_APP_BASE_URL}/geo/delete_sub_district`,
+      `${process.env.REACT_APP_BASE_URL}/geo/delete_landmark`,
       data,
       config_header
     );
     return response;
   },
-  GET_LOCATION: async () => {
+  GET_LOCATION: async (data) => {
     const response = await axios.get(
-      `${process.env.REACT_APP_BASE_URL}/geo/get_locations`,
+      `${process.env.REACT_APP_BASE_URL}/geo/get_locations?zone=${data}`,
       config_header
     );
     return response;
@@ -148,9 +148,9 @@ const GeolocationService = {
     );
     return response;
   },
-  GET_SUB_LOCATION: async () => {
+  GET_SUB_LOCATION: async (data) => {
     const response = await axios.get(
-      `${process.env.REACT_APP_BASE_URL}/geo/get_sub_locations`,
+      `${process.env.REACT_APP_BASE_URL}/geo/get_sub_locations?location=${data}`,
       config_header
     );
     return response;

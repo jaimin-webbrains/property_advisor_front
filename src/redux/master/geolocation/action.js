@@ -142,7 +142,7 @@ const GeolocationActions = {
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.ADD_CITY,
           });
-          dispatch(GeolocationActions.getCities());
+          dispatch(GeolocationActions.getCities(res.data.data.district.name));
         })
         .catch((e) => {
           toast.error(e.message);
@@ -166,7 +166,7 @@ const GeolocationActions = {
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.DELETE_CITY,
           });
-          dispatch(GeolocationActions.getCities());
+          dispatch(GeolocationActions.getCities(res.data.data.district.name));
         })
         .catch((e) => {
           toast.error(e.message);
@@ -251,13 +251,13 @@ const GeolocationActions = {
         });
     };
   },
-  getDistrict: () => {
+  getDistrict: (data) => {
     return (dispatch, getState) => {
       dispatch({
         type: NETWORK_CONSTANTS.ADD_PROPERTY_NETWORK_CALL,
         payload: constants.GET_DISTRICT,
       });
-      GeolocationService.GET_DISTRICT()
+      GeolocationService.GET_DISTRICT(data)
         .then((res) => {
           dispatch({
             type: constants.GET_DISTRICT,
@@ -290,7 +290,7 @@ const GeolocationActions = {
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.ADD_OR_UPDATE_DISTRICT,
           });
-          dispatch(GeolocationActions.getDistrict());
+          dispatch(GeolocationActions.getDistrict(res.data.data.state));
         })
         .catch((e) => {
           toast.error(e.message);
@@ -314,7 +314,7 @@ const GeolocationActions = {
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.DELETE_DISTRICT,
           });
-          dispatch(GeolocationActions.getDistrict());
+          dispatch(GeolocationActions.getDistrict(res.data.data.state.name));
         })
         .catch((e) => {
           toast.error(e.message);
@@ -325,87 +325,91 @@ const GeolocationActions = {
         });
     };
   },
-  getSubDistrict: () => {
+  getLandmark: (data) => {
     return (dispatch, getState) => {
       dispatch({
         type: NETWORK_CONSTANTS.ADD_PROPERTY_NETWORK_CALL,
-        payload: constants.GET_SUB_DISTRICT,
+        payload: constants.GET_LANDMARK,
       });
-      GeolocationService.GET_SUB_DISTRICT()
+      GeolocationService.GET_LANDMARK(data)
         .then((res) => {
           dispatch({
-            type: constants.GET_SUB_DISTRICT,
+            type: constants.GET_LANDMARK,
             payload: res.data.data,
           });
           dispatch({
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
-            payload: constants.GET_SUB_DISTRICT,
+            payload: constants.GET_LANDMARK,
           });
         })
         .catch((e) => {
           toast.error(e.message);
           dispatch({
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
-            payload: constants.GET_SUB_DISTRICT,
+            payload: constants.GET_LANDMARK,
           });
         });
     };
   },
-  addOrUpdateSubDistrict: (data) => {
+  addOrUpdateLandmark: (data) => {
     return (dispatch, getState) => {
       dispatch({
         type: NETWORK_CONSTANTS.ADD_PROPERTY_NETWORK_CALL,
-        payload: constants.ADD_OR_UPDATE_SUB_DISTRICT,
+        payload: constants.ADD_OR_UPDATE_LANDMARK,
       });
-      GeolocationService.ADD_OR_UPDATE_SUB_DISTRICT(data)
+      GeolocationService.ADD_OR_UPDATE_LANDMARK(data)
         .then((res) => {
           toast.success(res.data.message);
           dispatch({
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
-            payload: constants.ADD_OR_UPDATE_SUB_DISTRICT,
+            payload: constants.ADD_OR_UPDATE_LANDMARK,
           });
-          dispatch(GeolocationActions.getSubDistrict());
+          dispatch(
+            GeolocationActions.getLandmark(res.data.data.subLocation.name)
+          );
         })
         .catch((e) => {
           toast.error(e.message);
           dispatch({
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
-            payload: constants.ADD_OR_UPDATE_SUB_DISTRICT,
+            payload: constants.ADD_OR_UPDATE_LANDMARK,
           });
         });
     };
   },
-  deleteSubDistrict: (data) => {
+  deleteLandmark: (data) => {
     return (dispatch, getState) => {
       dispatch({
         type: NETWORK_CONSTANTS.ADD_PROPERTY_NETWORK_CALL,
-        payload: constants.DELETE_SUB_DISTRICT,
+        payload: constants.DELETE_LANDMARK,
       });
-      GeolocationService.DELETE_SUB_DISTRICT(data)
+      GeolocationService.DELETE_LANDMARK(data)
         .then((res) => {
           toast.success(res.data.message);
           dispatch({
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
-            payload: constants.DELETE_SUB_DISTRICT,
+            payload: constants.DELETE_LANDMARK,
           });
-          dispatch(GeolocationActions.getSubDistrict());
+          dispatch(
+            GeolocationActions.getLandmark(res.data.data.subLocation.name)
+          );
         })
         .catch((e) => {
           toast.error(e.message);
           dispatch({
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
-            payload: constants.DELETE_SUB_DISTRICT,
+            payload: constants.DELETE_LANDMARK,
           });
         });
     };
   },
-  getLocation: () => {
+  getLocation: (data) => {
     return (dispatch, getState) => {
       dispatch({
         type: NETWORK_CONSTANTS.ADD_PROPERTY_NETWORK_CALL,
         payload: constants.GET_LOCATION,
       });
-      GeolocationService.GET_LOCATION()
+      GeolocationService.GET_LOCATION(data)
         .then((res) => {
           dispatch({
             type: constants.GET_LOCATION,
@@ -438,7 +442,7 @@ const GeolocationActions = {
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.ADD_OR_UPDATE_LOCATION,
           });
-          dispatch(GeolocationActions.getLocation());
+          dispatch(GeolocationActions.getLocation(res.data.data.zone.name));
         })
         .catch((e) => {
           toast.error(e.message);
@@ -462,7 +466,7 @@ const GeolocationActions = {
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.DELETE_LOCATION,
           });
-          dispatch(GeolocationActions.getLocation());
+          dispatch(GeolocationActions.getLocation(res.data.data.zone.name));
         })
         .catch((e) => {
           toast.error(e.message);
@@ -473,13 +477,13 @@ const GeolocationActions = {
         });
     };
   },
-  getSubLocation: () => {
+  getSubLocation: (data) => {
     return (dispatch, getState) => {
       dispatch({
         type: NETWORK_CONSTANTS.ADD_PROPERTY_NETWORK_CALL,
         payload: constants.GET_SUB_LOCATION,
       });
-      GeolocationService.GET_SUB_LOCATION()
+      GeolocationService.GET_SUB_LOCATION(data)
         .then((res) => {
           dispatch({
             type: constants.GET_SUB_LOCATION,
@@ -512,7 +516,9 @@ const GeolocationActions = {
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.ADD_OR_UPDATE_SUB_LOCATION,
           });
-          dispatch(GeolocationActions.getSubLocation());
+          dispatch(
+            GeolocationActions.getSubLocation(res.data.data.location.name)
+          );
         })
         .catch((e) => {
           toast.error(e.message);
@@ -536,7 +542,11 @@ const GeolocationActions = {
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.DELETE_SUB_LOCATION,
           });
-          dispatch(GeolocationActions.getSubLocation());
+          dispatch(
+            GeolocationActions.getSubLocation(
+              res.data.data.response.location.name
+            )
+          );
         })
         .catch((e) => {
           toast.error(e.message);

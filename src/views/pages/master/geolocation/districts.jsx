@@ -7,7 +7,7 @@ import ReactTableWrapper from "../../../../components/reacttable/reacttbl.style"
 import { useDispatch, useSelector } from "react-redux";
 import Geolocationconstants from "redux/master/geolocation/constants";
 import constant from "redux/networkCall/constant";
-import { Button, Spinner } from "reactstrap";
+import { Button, Form, FormGroup, Spinner } from "reactstrap";
 import DeleteRoleModal from "../masterModals/deleteModal";
 import AddRoleModal from "../masterModals/addOrUpdateModal";
 import RoleActions from "redux/master/Role/action";
@@ -26,18 +26,23 @@ const HeaderComponent = (props) => {
 
 const District = (props) => {
   const networkCalls = useSelector((store) => store.NetworkCall.NETWORK_CALLS);
+  const states = useSelector((store) => store.master.geolocation.states);
+  const [selected, setselected] = useState({ state: "" });
   const [modal, setModal] = useState({
     add: false,
     update: false,
     delete: false,
   });
-  const initial = { name: "", description: "" };
+  const initial = { state: "", name: "", description: "" };
   const formik = useFormik({
-    initialValues: { name: "", description: "" },
+    initialValues: { state: "", name: "", description: "" },
     validate: (values) => {
       let errors = {};
       if (!values.name) {
         errors.name = "Required!";
+      }
+      if (!values.state) {
+        errors.state = "Required!";
       }
       return errors;
     },
@@ -47,7 +52,17 @@ const District = (props) => {
   const [dummyData, setDummyData] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(GeolocationActions.getDistrict());
+    if (selected.state !== "" && selected.state !== undefined) {
+      dispatch(GeolocationActions.getDistrict(selected.state.name));
+    } else {
+      dispatch({
+        type: Geolocationconstants.DELETE_DISTRICT,
+      });
+    }
+  }, [selected.state]);
+
+  useEffect(() => {
+    dispatch(GeolocationActions.getStates());
     return () => {
       dispatch({
         type: Geolocationconstants.DELETE_DISTRICT,
@@ -169,16 +184,9 @@ const District = (props) => {
   const handleAddClick = (type) => {
     if (formik.values.name !== "") {
       if (type === "add") {
-        dispatch(
-          GeolocationActions.addOrUpdateDistrict({ name: formik.values.name })
-        );
+        dispatch(GeolocationActions.addOrUpdateDistrict(formik.values));
       } else if (type === "update") {
-        dispatch(
-          GeolocationActions.addOrUpdateDistrict({
-            _id: formik.values._id,
-            name: formik.values.name,
-          })
-        );
+        dispatch(GeolocationActions.addOrUpdateDistrict(formik.values));
       }
     }
     if (type === "delete") {
@@ -195,18 +203,45 @@ const District = (props) => {
     <div className="container-fluid">
       <div className="row title-sec">
         <div className="col-sm headline">Districts</div>
-        <div className="col-sm-auto px-0">
-          <Button
-            className="btn btn-blue w-100 mb-3"
-            onClick={(e) => {
-              setModal({ ...modal, add: e });
-              formik.setValues(initial);
-            }}
-          >
-            {" "}
-            <i className="fas fa-plus mr-10" />
-            Add district
-          </Button>
+        <div className="col-12">
+          <div className="row">
+            <div className="col pr-2">
+              <Form>
+                <FormGroup>
+                  <label>State</label>
+                  <select
+                    className="form-control form-control-lg react-form-input"
+                    onChange={(e) => {
+                      let data = states.filter(
+                        (v) => v.name.trim() === e.target.value.trim()
+                      );
+                      setselected({ ...selected, state: data[0] });
+                    }}
+                    value={formik.values.state}
+                  >
+                    <option>Select</option>
+                    {states &&
+                      states.length > 0 &&
+                      states.map((e) => <option>{e.name}</option>)}
+                  </select>
+                </FormGroup>
+              </Form>
+            </div>
+            <div className="col-sm-auto px-0">
+              <label>&nbsp;</label>
+              <Button
+                className="btn btn-blue w-100 mb-3"
+                onClick={(e) => {
+                  setModal({ ...modal, add: e });
+                  formik.setValues(initial);
+                }}
+              >
+                {" "}
+                <i className="fas fa-plus mr-10" />
+                Add district
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
       <div>
@@ -338,7 +373,8 @@ const District = (props) => {
         isFromUpdate={true}
         error={formik.errors}
         name="District"
-        states={[]}
+        states={{ state: states }}
+        selected={selected}
       />
       <DeleteRoleModal
         modal={modal.delete}
@@ -356,7 +392,8 @@ const District = (props) => {
         isFromUpdate={false}
         error={formik.errors}
         name="District"
-        states={[]}
+        states={{ state: states }}
+        selected={selected}
       />
     </div>
   );

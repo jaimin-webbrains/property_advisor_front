@@ -8,7 +8,7 @@ import { Scrollbars } from "react-custom-scrollbars";
 import { NavLink } from "react-router-dom";
 import IntlMessages from "util/intlMessages";
 
-const Sidebar = props => {
+const Sidebar = (props) => {
   let listNameStyle;
   let sidebar;
   let sideScrollStyle;
@@ -22,7 +22,7 @@ const Sidebar = props => {
     sidebarTheme,
     layoutTheme,
     closeDrawer,
-    themeSetting
+    themeSetting,
   } = props;
 
   if (
@@ -31,22 +31,22 @@ const Sidebar = props => {
   ) {
     sideScrollStyle = {
       zIndex: 5,
-      height: "calc(100vh - 190px)"
+      height: "calc(100vh - 190px)",
     };
   } else if (themeSetting.toolbarAlignValue === "above") {
     sideScrollStyle = {
       zIndex: 5,
-      height: "calc(100vh - 145px)"
+      height: "calc(100vh - 145px)",
     };
   } else if (themeSetting.footerAlignValue === "above") {
     sideScrollStyle = {
       zIndex: 5,
-      height: "calc(100vh - 128px)"
+      height: "calc(100vh - 128px)",
     };
   } else {
     sideScrollStyle = {
       zIndex: 5,
-      height: "calc(100vh - 75px)"
+      height: "calc(100vh - 75px)",
     };
   }
 
@@ -58,23 +58,23 @@ const Sidebar = props => {
       backgroundSize: "cover",
       width: mini ? miniDrawerWidth : drawerWidth,
       "@media (max-width: 991.98px)": {
-        width: mini ? 0 : drawerWidth
-      }
+        width: mini ? 0 : drawerWidth,
+      },
     };
   } else {
     sidebar = {
       width: mini ? miniDrawerWidth : drawerWidth,
       background: sidebarTheme.backgroundColor,
       "@media (max-width: 991.98px)": {
-        width: mini ? 0 : drawerWidth
-      }
+        width: mini ? 0 : drawerWidth,
+      },
     };
   }
 
   const closeIcon = {
     "@media (max-width: 991.98px)": {
-      display: "block"
-    }
+      display: "block",
+    },
   };
 
   if (mini) {
@@ -83,28 +83,28 @@ const Sidebar = props => {
       transform:
         miniDrawerWidth === drawerWidth
           ? "translateZ(0)"
-          : "translate3d(-25px,0,0)"
+          : "translate3d(-25px,0,0)",
     };
   } else {
     listNameStyle = {
       opacity: !mini ? 1 : 0,
-      transform: !mini ? "translateZ(0)" : "translate3d(-25px,0,0)"
+      transform: !mini ? "translateZ(0)" : "translate3d(-25px,0,0)",
     };
   }
   const sidebarData = [
     {
-      name: 'RERA project load',
-      routepath: '/project_listing',
-      iconClass: 'fas fa-home'
+      name: "RERA project load",
+      routepath: "/project_listing",
+      iconClass: "fas fa-home",
     },
     {
-      name: 'Users',
-      routepath: '/user_master',
-      iconClass: 'fas fa-users'
+      name: "Users",
+      routepath: "/user_master",
+      iconClass: "fas fa-users",
     },
     {
-      name: 'Masters',
-      iconClass: 'fas fa-server',
+      name: "Masters",
+      iconClass: "fas fa-server",
       child: [
         {
           listname: "Roles",
@@ -112,10 +112,10 @@ const Sidebar = props => {
           shortname: "RL",
           module: "Role",
         },
-      ]
+      ],
     },
     {
-      name: 'Geolocation',
+      name: "Geolocation",
       iconClass: "fas fa-location-arrow",
       child: [
         {
@@ -123,6 +123,12 @@ const Sidebar = props => {
           routepath: "/state_master",
           shortname: "ST",
           module: "state",
+        },
+        {
+          listname: "Districts",
+          routepath: "/district_master",
+          shortname: "DT",
+          module: "district",
         },
         {
           listname: "Cities",
@@ -137,18 +143,6 @@ const Sidebar = props => {
           module: "zone",
         },
         {
-          listname: "Districts",
-          routepath: "/district_master",
-          shortname: "DT",
-          module: "district",
-        },
-        {
-          listname: "Sub districts",
-          routepath: "/sub_district_master",
-          shortname: "SD",
-          module: "sub district",
-        },
-        {
           listname: "Locations",
           routepath: "/location_master",
           shortname: "LC",
@@ -160,8 +154,14 @@ const Sidebar = props => {
           shortname: "SL",
           module: "sublocation",
         },
-      ]
-    }
+        {
+          listname: "Landmark",
+          routepath: "/landmark_master",
+          shortname: "LM",
+          module: "landmark",
+        },
+      ],
+    },
   ];
   return (
     <SidebarWrapper
@@ -213,7 +213,7 @@ const Sidebar = props => {
                 right: "2px",
                 bottom: "2px",
                 top: "2px",
-                borderRadius: "3px"
+                borderRadius: "3px",
               }}
             />
           )}
@@ -232,7 +232,7 @@ const Sidebar = props => {
                               {list.hasOwnProperty("isNew") && list["isNew"] && (
                                 <span
                                   style={{
-                                    right: "23px"
+                                    right: "23px",
                                   }}
                                   className="new-update-tag fs-13 bold-text"
                                 >

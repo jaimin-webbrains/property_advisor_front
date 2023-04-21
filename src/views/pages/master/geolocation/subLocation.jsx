@@ -7,7 +7,7 @@ import ReactTableWrapper from "../../../../components/reacttable/reacttbl.style"
 import { useDispatch, useSelector } from "react-redux";
 import Geolocationconstants from "redux/master/geolocation/constants";
 import constant from "redux/networkCall/constant";
-import { Button, Spinner } from "reactstrap";
+import { Button, Form, FormGroup, Spinner } from "reactstrap";
 import DeleteRoleModal from "../masterModals/deleteModal";
 import AddRoleModal from "../masterModals/addOrUpdateModal";
 import RoleActions from "redux/master/Role/action";
@@ -35,21 +35,46 @@ const Sublocation = (props) => {
   const cities = useSelector((store) => store.master.geolocation.cities);
   const zones = useSelector((store) => store.master.geolocation.zones);
   const locations = useSelector((store) => store.master.geolocation.location);
+  const districts = useSelector((store) => store.master.geolocation.district);
+
+  const [selected, setselected] = useState({
+    state: "",
+    city: "",
+    zone: "",
+    location: "",
+    district: "",
+  });
   const sublocations = useSelector(
     (store) => store.master.geolocation.subLocation
   );
 
   const formik = useFormik({
     initialValues: {
-      state: states.length > 0 ? states[0] : "",
-      city: cities.length > 0 ? cities[0] : "",
-      zone: zones.length > 0 ? zones[0] : "",
-      location: locations.length > 0 ? locations[0] : "",
-      description: "",
+      state: "",
+      district: "",
+      city: "",
+      zone: "",
+      location: "",
       name: "",
+      description: "",
     },
     validate: (values) => {
       let errors = {};
+      if (!values.state) {
+        errors.state = "Required!";
+      }
+      if (!values.district) {
+        errors.district = "Required!";
+      }
+      if (!values.city) {
+        errors.city = "Required!";
+      }
+      if (!values.zone) {
+        errors.zone = "Required!";
+      }
+      if (!values.location) {
+        errors.location = "Required!";
+      }
       if (!values.name) {
         errors.name = "Required!";
       }
@@ -61,26 +86,64 @@ const Sublocation = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GeolocationActions.getStates());
-    dispatch(
-      GeolocationActions.getCities(
-        formik.values.state._id ? formik.values.state._id : formik.values.state
-      )
-    );
-    if (formik.values.city !== "") {
-      dispatch(
-        GeolocationActions.getZones(
-          formik.values.city.name ? formik.values.city.name : formik.values.city
-        )
-      );
+    if (selected.state !== "") {
+      dispatch(GeolocationActions.getDistrict(selected.state.name));
     }
-    dispatch(GeolocationActions.getLocation());
+    if (selected.state !== "" && selected.district !== "") {
+      dispatch(GeolocationActions.getCities(selected.district.name));
+    }
+    if (selected.state !== "" && selected.city !== "") {
+      dispatch(GeolocationActions.getZones(selected.city.name));
+    }
+    if (selected.state !== "" && selected.city !== "" && selected.zone !== "") {
+      dispatch(GeolocationActions.getLocation(selected.zone.name));
+    }
+    if (
+      selected.state !== "" &&
+      selected.city !== "" &&
+      selected.zone !== "" &&
+      selected.location !== ""
+    ) {
+      dispatch(GeolocationActions.getSubLocation(selected.location.name));
+    }
+    if (selected.state === "") {
+      dispatch({
+        type: Geolocationconstants.DELETE_CITY,
+      });
+    }
+    if (selected.district === "") {
+      dispatch({
+        type: Geolocationconstants.DELETE_DISTRICT,
+      });
+    }
+    if (selected.city === "") {
+      dispatch({
+        type: Geolocationconstants.DELETE_ZONE,
+      });
+    }
+    if (selected.zone === "") {
+      dispatch({
+        type: Geolocationconstants.DELETE_LOCATION,
+      });
+    }
+    if (selected.location === "") {
+      dispatch({
+        type: Geolocationconstants.DELETE_SUB_LOCATION,
+      });
+    }
 
     return () => {
       dispatch({
         type: Geolocationconstants.DELETE_SUB_LOCATION,
       });
     };
-  }, [formik.values.city, formik.values.state]);
+  }, [
+    selected.city,
+    selected.state,
+    selected.zone,
+    selected.location,
+    selected.district,
+  ]);
 
   const deleteClick = useCallback(
     (data) => {
@@ -101,69 +164,13 @@ const Sublocation = (props) => {
           return (
             <HeaderComponent
               isSortedDesc={tableInstance.column.isSortedDesc}
-              title="Name"
+              title="Sub location Name"
             />
           );
         },
         Filter: FilterComponent,
-        placeholder: "Name",
+        placeholder: "Sub location Name",
         accessor: "name",
-        disableFilters: true,
-      },
-      {
-        Header: (tableInstance) => {
-          return (
-            <HeaderComponent
-              isSortedDesc={tableInstance.column.isSortedDesc}
-              title="Location name"
-            />
-          );
-        },
-        Filter: FilterComponent,
-        placeholder: "Location name",
-        accessor: "location.name",
-        disableFilters: true,
-      },
-      {
-        Header: (tableInstance) => {
-          return (
-            <HeaderComponent
-              isSortedDesc={tableInstance.column.isSortedDesc}
-              title="State name"
-            />
-          );
-        },
-        Filter: FilterComponent,
-        placeholder: "State name",
-        accessor: "state.name",
-        disableFilters: true,
-      },
-      {
-        Header: (tableInstance) => {
-          return (
-            <HeaderComponent
-              isSortedDesc={tableInstance.column.isSortedDesc}
-              title="City name"
-            />
-          );
-        },
-        Filter: FilterComponent,
-        placeholder: "City name",
-        accessor: "city.name",
-        disableFilters: true,
-      },
-      {
-        Header: (tableInstance) => {
-          return (
-            <HeaderComponent
-              isSortedDesc={tableInstance.column.isSortedDesc}
-              title="Zone name"
-            />
-          );
-        },
-        Filter: FilterComponent,
-        placeholder: "Zone name",
-        accessor: "zone.name",
         disableFilters: true,
       },
       {
@@ -248,6 +255,53 @@ const Sublocation = (props) => {
   };
   const handleAddChange = (e, v) => {
     formik.setValues({ ...formik.values, [e]: v });
+    if (e === "state") {
+      let data = states.length > 0 && states.filter((val) => val.name === v);
+      if (data.length > 0) {
+        setselected({ ...selected, state: data[0], city: "", zone: "" });
+        dispatch({
+          type: Geolocationconstants.DELETE_CITY,
+        });
+      }
+    }
+    if (e === "city") {
+      let data = cities.length > 0 && cities.filter((val) => val.name === v);
+      if (data.length > 0) {
+        setselected({ ...selected, city: data[0], zone: "" });
+        dispatch({
+          type: Geolocationconstants.DELETE_ZONE,
+        });
+      }
+    }
+    if (e === "zone") {
+      let data = zones.length > 0 && zones.filter((val) => val.name === v);
+      if (data.length > 0) {
+        setselected({ ...selected, zone: data[0] });
+        dispatch({
+          type: Geolocationconstants.DELETE_LOCATION,
+        });
+      }
+    }
+    if (e === "location") {
+      let data =
+        locations.length > 0 && locations.filter((val) => val.name === v);
+      if (data.length > 0) {
+        setselected({ ...selected, location: data[0] });
+        dispatch({
+          type: Geolocationconstants.DELETE_SUB_LOCATION,
+        });
+      }
+    }
+    if (e === "district") {
+      let data =
+        districts.length > 0 && districts.filter((val) => val.name === v);
+      if (data.length > 0) {
+        setselected({ ...selected, district: data[0] });
+        dispatch({
+          type: Geolocationconstants.DELETE_CITY,
+        });
+      }
+    }
   };
   const handleAddClick = (type) => {
     if (formik.values.name !== "") {
@@ -273,18 +327,169 @@ const Sublocation = (props) => {
     <div className="container-fluid">
       <div className="row title-sec">
         <div className="col-sm headline">Sub-locations</div>
-        <div className="col-sm-auto px-0">
-          <Button
-            className="btn btn-blue w-100 mb-3"
-            onClick={(e) => {
-              setModal({ ...modal, add: e });
-              formik.setValues(formik.initialValues);
-            }}
-          >
-            {" "}
-            <i className="fas fa-plus mr-10" />
-            Add Sublocation
-          </Button>
+        <div className="w-100">
+          <div className="row">
+            <div className="col pr-2">
+              <Form>
+                <FormGroup>
+                  <div>
+                    <label>State</label>
+                    <select
+                      className="form-control form-control-lg react-form-input"
+                      onChange={(e) => {
+                        let data = states.filter(
+                          (v) => v.name === e.target.value
+                        );
+                        if (data.length > 0)
+                          setselected({ ...selected, state: data[0] });
+                        else
+                          setselected({
+                            ...selected,
+                            state: "",
+                            city: "",
+                            zone: "",
+                          });
+                      }}
+                      value={selected.state.name}
+                    >
+                      <option>Select</option>
+                      {states &&
+                        states.length > 0 &&
+                        states.map((e) => <option>{e.name}</option>)}
+                    </select>
+                  </div>
+                </FormGroup>
+              </Form>
+            </div>
+            <div className="col pr-2">
+              <Form>
+                <FormGroup>
+                  <div>
+                    <label>District</label>
+                    <select
+                      className="form-control form-control-lg react-form-input"
+                      onChange={(e) => {
+                        let data = districts.filter(
+                          (v) => v.name === e.target.value
+                        );
+                        if (data.length > 0)
+                          setselected({ ...selected, district: data[0] });
+                        else
+                          setselected({
+                            ...selected,
+                            district: "",
+                            city: "",
+                            zone: "",
+                          });
+                      }}
+                      value={selected.district.name}
+                    >
+                      <option>Select</option>
+                      {districts &&
+                        districts.length > 0 &&
+                        districts.map((e) => <option>{e.name}</option>)}
+                    </select>
+                  </div>
+                </FormGroup>
+              </Form>
+            </div>
+            <div className="col pr-2">
+              <Form>
+                <FormGroup>
+                  <div>
+                    <label>City</label>
+                    <select
+                      className="form-control form-control-lg react-form-input"
+                      onChange={(e) => {
+                        let data = cities.filter(
+                          (v) => v.name === e.target.value
+                        );
+                        if (data.length > 0)
+                          setselected({ ...selected, city: data[0] });
+                        else setselected({ ...selected, city: "", zone: "" });
+                      }}
+                      value={selected.city.name}
+                    >
+                      <option>Select</option>
+
+                      {cities &&
+                        cities.length > 0 &&
+                        cities.map((e) => <option>{e.name}</option>)}
+                    </select>
+                  </div>
+                </FormGroup>
+              </Form>
+            </div>
+            <div className="col pr-2">
+              <Form>
+                <FormGroup>
+                  <div>
+                    <label>Zone</label>
+                    <select
+                      className="form-control form-control-lg react-form-input"
+                      onChange={(e) => {
+                        let data = zones.filter(
+                          (v) => v.name === e.target.value
+                        );
+                        if (data.length > 0)
+                          setselected({ ...selected, zone: data[0] });
+                        else
+                          setselected({ ...selected, zone: "", location: "" });
+                      }}
+                      value={selected.zone.name}
+                    >
+                      <option>Select</option>
+
+                      {zones &&
+                        zones.length > 0 &&
+                        zones.map((e) => <option>{e.name}</option>)}
+                    </select>
+                  </div>
+                </FormGroup>
+              </Form>
+            </div>
+            <div className="col pr-2">
+              <Form>
+                <FormGroup>
+                  <div>
+                    <label>Location</label>
+                    <select
+                      className="form-control form-control-lg react-form-input"
+                      onChange={(e) => {
+                        let data = locations.filter(
+                          (v) => v.name === e.target.value
+                        );
+                        if (data.length > 0)
+                          setselected({ ...selected, location: data[0] });
+                        else setselected({ ...selected, location: "" });
+                      }}
+                      value={selected.location.name}
+                    >
+                      <option>Select</option>
+
+                      {locations &&
+                        locations.length > 0 &&
+                        locations.map((e) => <option>{e.name}</option>)}
+                    </select>
+                  </div>
+                </FormGroup>
+              </Form>
+            </div>
+            <div className="col-sm-auto px-0">
+              <label>&nbsp;</label>
+              <Button
+                className="btn btn-blue w-100 mb-3"
+                onClick={(e) => {
+                  setModal({ ...modal, add: e });
+                  formik.setValues(formik.initialValues);
+                }}
+              >
+                {" "}
+                <i className="fas fa-plus mr-10" />
+                Add Sublocation
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
       <div>
@@ -415,19 +620,21 @@ const Sublocation = (props) => {
         handleAddClick={(type) => handleAddClick(type)}
         isFromUpdate={true}
         error={formik.errors}
-        name="District"
+        name="Sub-location"
         states={{
           state: states,
           city: cities,
           zone: zones,
           location: locations,
+          district: districts,
         }}
+        selected={selected}
       />
       <DeleteRoleModal
         modal={modal.delete}
         setModal={(e) => handleModalChange(e, "delete")}
         handleAddClick={(type) => handleAddClick(type)}
-        name="District"
+        name="Sub-location"
         states={[]}
       />
       <AddRoleModal
@@ -438,13 +645,15 @@ const Sublocation = (props) => {
         handleAddClick={(type) => handleAddClick(type)}
         isFromUpdate={false}
         error={formik.errors}
-        name="District"
+        name="sub-location"
         states={{
           state: states,
           city: cities,
           zone: zones,
           location: locations,
+          district: districts,
         }}
+        selected={selected}
       />
     </div>
   );

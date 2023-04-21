@@ -5,7 +5,7 @@ const initState = {
   cities: [],
   zones: [],
   district: [],
-  subDistrict: [],
+  landmark: [],
   location: [],
   subLocation: [],
 };
@@ -21,6 +21,11 @@ export default function GeolocationReducer(state = initState, action) {
       return {
         ...state,
         states: [],
+        cities:[],
+        zones:[],
+        location:[],
+        subLocation:[],
+        landmark:[]
       };
     case constants.GET_CITIES:
       return {
@@ -31,6 +36,10 @@ export default function GeolocationReducer(state = initState, action) {
       return {
         ...state,
         cities: [],
+        zones:[],
+        location:[],
+        subLocation:[],
+        landmark: []
       };
     case constants.GET_ZONES:
       return {
@@ -40,7 +49,10 @@ export default function GeolocationReducer(state = initState, action) {
     case constants.DELETE_ZONE:
       return {
         ...state,
-        zones: [],
+        zones:[],
+        location:[],
+        subLocation:[] ,
+        landmark: []     
       };
     case constants.GET_DISTRICT:
       return {
@@ -51,16 +63,21 @@ export default function GeolocationReducer(state = initState, action) {
       return {
         ...state,
         district: [],
+        cities:[],
+        zones:[],
+        location:[],
+        subLocation:[],
+        landmark: []
       };
-    case constants.GET_SUB_DISTRICT:
+    case constants.GET_LANDMARK:
       return {
         ...state,
-        subDistrict: action.payload,
+        landmark: action.payload,
       };
-    case constants.DELETE_SUB_DISTRICT:
+    case constants.DELETE_LANDMARK:
       return {
         ...state,
-        subDistrict: [],
+        landmark: [],
       };
     case constants.GET_LOCATION:
       return {
@@ -71,6 +88,8 @@ export default function GeolocationReducer(state = initState, action) {
       return {
         ...state,
         location: [],
+        subLocation:[],
+        landmark: []
       };
     case constants.GET_SUB_LOCATION:
       return {
@@ -81,6 +100,7 @@ export default function GeolocationReducer(state = initState, action) {
       return {
         ...state,
         subLocation: [],
+        landmark : []
       };
     default:
       return state;
