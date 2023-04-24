@@ -30,14 +30,7 @@ const AddRoleModal = ({
    let val = "";
     if ( value[e] !== "") {
       val = value[e]["name"] ? value[e]["name"] : value[e];
-    } else {
-      if (selected[e] && selected[e] !== "") {
-        val =
-          selected[e] && selected[e]["name"]
-            ? selected[e]["name"]
-            : selected[e];
-      }
-    }
+    } 
     return val;
   };
   return (
