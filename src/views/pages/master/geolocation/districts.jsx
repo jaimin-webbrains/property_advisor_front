@@ -168,7 +168,7 @@ const District = (props) => {
     useSortBy,
     usePagination
   );
-
+  console.log(pageCount);
   const handleModalChange = (e, tab) => {
     if (tab === "update") {
       setModal({ ...modal, update: e });
@@ -301,7 +301,7 @@ const District = (props) => {
                 </div>
                 <Pagination
                   onPageChange={gotoPage}
-                  pages={pageCount}
+                  pages={pageCount === 0 ? 1 : pageCount}
                   page={pageIndex}
                 />
               </div>
@@ -358,7 +358,7 @@ const District = (props) => {
                 </div>
                 <Pagination
                   onPageChange={gotoPage}
-                  pages={pageCount}
+                  pages={pageCount === 0 ? 1 : pageCount}
                   page={pageIndex}
                 />
               </div>

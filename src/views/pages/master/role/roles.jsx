@@ -14,9 +14,7 @@ import AddRoleModal from "../masterModals/addOrUpdateModal";
 import RoleActions from "redux/master/Role/action";
 import { useFormik } from "formik";
 
-
-
-const HeaderComponent = props => {
+const HeaderComponent = (props) => {
   let classes = {
     "my-2": true,
     "mx-3": true,
@@ -26,33 +24,37 @@ const HeaderComponent = props => {
   return <div className={classnames(classes)}>{props.title}</div>;
 };
 
-const Roles = props => {
-  const networkCalls = useSelector(store => store.NetworkCall.NETWORK_CALLS)
-  const [modal, setModal] = useState({ add: false, update: false, delete: false })
-  const initial = { name: "" }
+const Roles = (props) => {
+  const networkCalls = useSelector((store) => store.NetworkCall.NETWORK_CALLS);
+  const [modal, setModal] = useState({
+    add: false,
+    update: false,
+    delete: false,
+  });
+  const initial = { name: "" };
   const formik = useFormik({
     initialValues: { name: "" },
-    validate: values => {
+    validate: (values) => {
       let errors = {};
       if (!values.name) {
         errors.name = "Required!";
       }
       return errors;
     },
-    validateOnChange: true
-  });  const roles = useSelector(store => store.master.role.roles)
+    validateOnChange: true,
+  });
+  const roles = useSelector((store) => store.master.role.roles);
   const [dummyData, setDummyData] = useState([]);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(RoleActios.getRoles())
-  }, [])
-
+    dispatch(RoleActios.getRoles());
+  }, []);
 
   const deleteClick = useCallback(
-    data => {
+    (data) => {
       // Here you can view the data and delete through API calling
       const array = dummyData;
-      remove(array, function (n) {
+      remove(array, function(n) {
         return n.id === data.id;
       });
       setDummyData([...array]);
@@ -63,7 +65,7 @@ const Roles = props => {
   const columns = useMemo(
     () => [
       {
-        Header: tableInstance => {
+        Header: (tableInstance) => {
           return (
             <HeaderComponent
               isSortedDesc={tableInstance.column.isSortedDesc}
@@ -74,10 +76,10 @@ const Roles = props => {
         Filter: FilterComponent,
         placeholder: "Role name",
         accessor: "name",
-        disableFilters: true
+        disableFilters: true,
       },
       {
-        Header: tableInstance => {
+        Header: (tableInstance) => {
           return (
             <HeaderComponent
               isSortedDesc={tableInstance.column.isSortedDesc}
@@ -88,7 +90,7 @@ const Roles = props => {
         accessor: "updated_at",
         disableSortBy: true,
         disableFilters: true,
-        Cell: tableInstance => {
+        Cell: (tableInstance) => {
           return (
             <div className="react-action-class">
               <button
@@ -100,7 +102,7 @@ const Roles = props => {
                 data-bs-toggle="tooltip"
                 data-bs-placement="top"
                 title="Edit"
-                disabled={tableInstance.row.original.name === 'admin'}
+                disabled={tableInstance.row.original.name === "admin"}
               >
                 <i className="fas fa-edit" />
               </button>
@@ -114,19 +116,17 @@ const Roles = props => {
                 data-bs-toggle="tooltip"
                 data-bs-placement="top"
                 title="Delete"
-                disabled={tableInstance.row.original.name === 'admin'}
-
+                disabled={tableInstance.row.original.name === "admin"}
               >
                 <i className="fas fa-trash" />
               </button>
             </div>
           );
-        }
-      }
+        },
+      },
     ],
     [deleteClick]
   );
-
 
   const {
     getTableProps,
@@ -136,15 +136,15 @@ const Roles = props => {
     headerGroups,
     pageCount,
     gotoPage,
-    state: { pageIndex }
+    state: { pageIndex },
   } = useTable(
     {
       data: roles,
       columns: columns,
       initialState: {
         pageSize: 10,
-        pageIndex: 0
-      }
+        pageIndex: 0,
+      },
     },
     useFilters,
     useSortBy,
@@ -152,38 +152,41 @@ const Roles = props => {
   );
 
   const handleModalChange = (e, tab) => {
-    if (tab === 'update') {
-      setModal({ ...modal, update: e })
+    if (tab === "update") {
+      setModal({ ...modal, update: e });
     } else if (tab === "add") {
-      setModal({ ...modal, add: e })
+      setModal({ ...modal, add: e });
+    } else {
+      setModal({ ...modal, delete: e });
     }
-    else {
-      setModal({ ...modal, delete: e })
-    }
-  }
+  };
   const handleAddChange = (e, v) => {
-    formik.setValues({ ...formik.values, [e]: v })
-  }
+    formik.setValues({ ...formik.values, [e]: v });
+  };
   const handleAddClick = (type) => {
-    if(formik.values.name !== ""){
+    if (formik.values.name !== "") {
       if (type === "add") {
-        dispatch(RoleActions.addRole({ name: formik.values.name }))
+        dispatch(RoleActions.addRole({ name: formik.values.name }));
       } else if (type === "update") {
-        dispatch(RoleActions.updateRole({ id: formik.values._id, name: formik.values.name }))
+        dispatch(
+          RoleActions.updateRole({
+            id: formik.values._id,
+            name: formik.values.name,
+          })
+        );
       }
     }
-    if(type === "delete"){
-        dispatch(RoleActions.deleteRole({ id: formik.values._id }))
+    if (type === "delete") {
+      dispatch(RoleActions.deleteRole({ id: formik.values._id }));
     }
-    setModal(!modal)
-
-  }
+    setModal(!modal);
+  };
   const networkRoleConstants = [
     RoleActionconstants.ADD_ROLE,
     RoleActionconstants.DELETE_ROLE,
     RoleActionconstants.GET_ROLES,
-    RoleActionconstants.UPDATE_ROLE
-  ]
+    RoleActionconstants.UPDATE_ROLE,
+  ];
   return (
     <div className="container-fluid">
       <div className="row title-sec">
@@ -192,8 +195,8 @@ const Roles = props => {
           <Button
             className="btn btn-blue w-100 mb-3"
             onClick={(e) => {
-              setModal({ ...modal, add: e })
-              formik.setValues(initial)
+              setModal({ ...modal, add: e });
+              formik.setValues(initial);
             }}
           >
             {" "}
@@ -203,162 +206,169 @@ const Roles = props => {
         </div>
       </div>
       <div>
-        {
-          networkRoleConstants.some(i => networkCalls.includes(i)) ?
+        {networkRoleConstants.some((i) => networkCalls.includes(i)) ? (
           <div className="d-flex justify-content-center align-items-center vh-100">
             <Spinner color="primary" />
-          </div>          :
-            roles.length > 0 ?
-              <div className="div-container">
-                <ReactTableWrapper {...props}>
-                  <div className="row title-sec align-items-center">
-                    <div className="table-responsive common-table card-box grey-box mb-2">
-                      <table
-                        border={1}
-                        className="table border-0" {...getTableProps()}
-                      >
-                        <thead className="thead-color">
-                          {headerGroups.map(headerGroup => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                              {headerGroup.headers.map(header => (
-                                <th
-                                  className="thead-color"
-                                  {...header.getHeaderProps(header.getSortByToggleProps())}
-                                >
-                                  <div>{header.render("Header")}</div>
-                                </th>
-                              ))}
-                            </tr>
+          </div>
+        ) : roles.length > 0 ? (
+          <div className="div-container">
+            <ReactTableWrapper {...props}>
+              <div className="row title-sec align-items-center">
+                <div className="table-responsive common-table card-box grey-box mb-2">
+                  <table
+                    border={1}
+                    className="table border-0"
+                    {...getTableProps()}
+                  >
+                    <thead className="thead-color">
+                      {headerGroups.map((headerGroup) => (
+                        <tr {...headerGroup.getHeaderGroupProps()}>
+                          {headerGroup.headers.map((header) => (
+                            <th
+                              className="thead-color"
+                              {...header.getHeaderProps(
+                                header.getSortByToggleProps()
+                              )}
+                            >
+                              <div>{header.render("Header")}</div>
+                            </th>
                           ))}
-                        </thead>
-                        <tbody {...getTableBodyProps()}>
-                          {headerGroups.map(headerGroup => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                            </tr>
-                          ))}
-                          {page.map(row => {
-                            prepareRow(row);
-                            return (
-                              <tr {...row.getRowProps()}>
-                                {row.cells.map(cell => (
-                                  <td className="td-border"{...cell.getCellProps()}>{cell.render("Cell")}</td>
-                                ))}
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
-                    </div>
-                    <Pagination
-                      onPageChange={gotoPage}
-                      pages={pageCount}
-                      page={pageIndex}
-                    />
-                  </div>
-                </ReactTableWrapper>
-              </div>
-              :
-              <div className="div-container">
-                <ReactTableWrapper {...props}>
-                  <div className="row title-sec align-items-center">
-                    <div className="col-md">
-                      {/* <span className="hash"># </span> */}
-                      {/* Client Side Table */}
-                    </div>
-                    <div className="table-responsive common-table card-box grey-box mb-2">
-                      <table
-                        border={1}
-                        className="table border-0" {...getTableProps()}
-                      >
-                        <thead className="thead-color">
-                          {headerGroups.map(headerGroup => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                              {headerGroup.headers.map(header => (
-                                <th
-                                  className="thead-color"
-                                  {...header.getHeaderProps(header.getSortByToggleProps())}
-                                >
-                                  <div>{header.render("Header")}</div>
-                                </th>
-                              ))}
-                            </tr>
-                          ))}
-                        </thead>
-                        <tbody {...getTableBodyProps()}>
-                          <tr>
-                            {
-                              networkCalls.indexOf(constant.ADD_TRACKS_LIST_NETWORK_CALL) > -1
-                                ?
-                                <td colSpan={8} >
-                                  <div className="d-flex justify-content-center align-items-center">
-                                    <Spinner color="primary" />
-                                  </div>
-                                </td>
-                                :
-                                <td colSpan={8} style={{ color: '#898989' }}>
-                                  No records found
-                                </td>
-                            }
+                        </tr>
+                      ))}
+                    </thead>
+                    <tbody {...getTableBodyProps()}>
+                      {headerGroups.map((headerGroup) => (
+                        <tr {...headerGroup.getHeaderGroupProps()}></tr>
+                      ))}
+                      {page.map((row) => {
+                        prepareRow(row);
+                        return (
+                          <tr {...row.getRowProps()}>
+                            {row.cells.map((cell) => (
+                              <td
+                                className="td-border"
+                                {...cell.getCellProps()}
+                              >
+                                {cell.render("Cell")}
+                              </td>
+                            ))}
                           </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <Pagination
-                      onPageChange={gotoPage}
-                      pages={pageCount}
-                      page={pageIndex}
-                    />
-                  </div>
-                </ReactTableWrapper>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                <Pagination
+                  onPageChange={gotoPage}
+                  pages={pageCount === 0 ? 1 : pageCount}
+                  page={pageIndex}
+                />
               </div>
-        }
-        
+            </ReactTableWrapper>
+          </div>
+        ) : (
+          <div className="div-container">
+            <ReactTableWrapper {...props}>
+              <div className="row title-sec align-items-center">
+                <div className="col-md">
+                  {/* <span className="hash"># </span> */}
+                  {/* Client Side Table */}
+                </div>
+                <div className="table-responsive common-table card-box grey-box mb-2">
+                  <table
+                    border={1}
+                    className="table border-0"
+                    {...getTableProps()}
+                  >
+                    <thead className="thead-color">
+                      {headerGroups.map((headerGroup) => (
+                        <tr {...headerGroup.getHeaderGroupProps()}>
+                          {headerGroup.headers.map((header) => (
+                            <th
+                              className="thead-color"
+                              {...header.getHeaderProps(
+                                header.getSortByToggleProps()
+                              )}
+                            >
+                              <div>{header.render("Header")}</div>
+                            </th>
+                          ))}
+                        </tr>
+                      ))}
+                    </thead>
+                    <tbody {...getTableBodyProps()}>
+                      <tr>
+                        {networkCalls.indexOf(
+                          constant.ADD_TRACKS_LIST_NETWORK_CALL
+                        ) > -1 ? (
+                          <td colSpan={8}>
+                            <div className="d-flex justify-content-center align-items-center">
+                              <Spinner color="primary" />
+                            </div>
+                          </td>
+                        ) : (
+                          <td colSpan={8} style={{ color: "#898989" }}>
+                            No records found
+                          </td>
+                        )}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <Pagination
+                  onPageChange={gotoPage}
+                  pages={pageCount === 0 ? 1 : pageCount}
+                  page={pageIndex}
+                />
+              </div>
+            </ReactTableWrapper>
+          </div>
+        )}
       </div>
       <AddRoleModal
         modal={modal.update}
-        setModal={(e) => handleModalChange(e, 'update')}
+        setModal={(e) => handleModalChange(e, "update")}
         value={formik.values}
         setValue={(e, v) => handleAddChange(e, v)}
         handleAddClick={(type) => handleAddClick(type)}
         isFromUpdate={true}
         error={formik.errors}
-        name = "Role"
+        name="Role"
         states={[]}
       />
       <DeleteRoleModal
         modal={modal.delete}
-        setModal={(e) => handleModalChange(e, 'delete')}
+        setModal={(e) => handleModalChange(e, "delete")}
         handleAddClick={(type) => handleAddClick(type)}
-        name = "Role"
+        name="Role"
       />
       <AddRoleModal
         modal={modal.add}
-        setModal={(e) => handleModalChange(e, 'add')}
+        setModal={(e) => handleModalChange(e, "add")}
         value={formik.values}
         setValue={(e, v) => handleAddChange(e, v)}
         handleAddClick={(type) => handleAddClick(type)}
         isFromUpdate={false}
         error={formik.errors}
-        name = "Role"
+        name="Role"
         states={[]}
       />
     </div>
-
   );
 };
 
-const FilterComponent = tableInstance => {
+const FilterComponent = (tableInstance) => {
   const { filterValue, setFilter } = tableInstance.column;
   return (
     <input
       type="text"
       value={filterValue || ""}
-      onChange={e => {
+      onChange={(e) => {
         setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
       }}
       className="tabl-search react-form-input"
       placeholder={`Search ${tableInstance.column.placeholder}`}
-      onClick={e => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
     />
   );
 };

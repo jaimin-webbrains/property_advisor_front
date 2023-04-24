@@ -412,7 +412,7 @@ const ProjectListing = (props) => {
                   </div>
                   <Pagination
                     onPageChange={gotoPage}
-                    pages={pageCount}
+                    pages={pageCount === 0 ? 1 : pageCount}
                     page={pageIndex}
                   />
                 </div>
@@ -469,7 +469,7 @@ const ProjectListing = (props) => {
                   </div>
                   <Pagination
                     onPageChange={gotoPage}
-                    pages={pageCount}
+                    pages={pageCount === 0 ? 1 : pageCount}
                     page={pageIndex}
                   />
                 </div>

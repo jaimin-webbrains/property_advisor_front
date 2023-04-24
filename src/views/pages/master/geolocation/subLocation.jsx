@@ -631,7 +631,7 @@ const Sublocation = (props) => {
                 </div>
                 <Pagination
                   onPageChange={gotoPage}
-                  pages={pageCount}
+                  pages={pageCount === 0 ? 1 : pageCount}
                   page={pageIndex}
                 />
               </div>
@@ -688,7 +688,7 @@ const Sublocation = (props) => {
                 </div>
                 <Pagination
                   onPageChange={gotoPage}
-                  pages={pageCount}
+                  pages={pageCount === 0 ? 1 : pageCount}
                   page={pageIndex}
                 />
               </div>
