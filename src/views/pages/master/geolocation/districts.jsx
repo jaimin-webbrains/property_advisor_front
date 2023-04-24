@@ -214,7 +214,11 @@ const District = (props) => {
                       let data = states.filter(
                         (v) => v.name.trim() === e.target.value.trim()
                       );
-                      setselected({ ...selected, state: data[0] });
+                      if(data.length > 0){
+                        setselected({ ...selected, state: data[0] });
+                      }else{
+                        setselected({ ...selected, state: "" });
+                      }
                     }}
                     value={
                       selected.state.name ? selected.state.name : ""
