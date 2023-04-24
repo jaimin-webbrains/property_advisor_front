@@ -229,7 +229,7 @@ const District = (props) => {
                 </FormGroup>
               </Form>
             </div>
-            <div className="col-sm-auto px-0">
+            <div className="col-sm-auto">
               <label>&nbsp;</label>
               <Button
                 className="btn btn-blue w-100 mb-3"
