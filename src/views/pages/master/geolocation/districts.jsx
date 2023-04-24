@@ -168,7 +168,6 @@ const District = (props) => {
     useSortBy,
     usePagination
   );
-  console.log(pageCount);
   const handleModalChange = (e, tab) => {
     if (tab === "update") {
       setModal({ ...modal, update: e });

@@ -9,7 +9,6 @@ const Register = props => {
         let { values, isValid, handleSubmit } = props;
         e.preventDefault();
         if (isValid) {
-            console.log("Here is your form value", values);
             props.history.push("/login");
         }
         handleSubmit();

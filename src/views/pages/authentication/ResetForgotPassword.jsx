@@ -37,7 +37,6 @@ const ForgotPassword = () => {
     if (pass.pass !== pass.conf_pass) setErr("Both passwords are not same!");
   };
   const isOtpSent = localStorage.getItem("isOtpSent");
-  console.log(isOtpSent);
   useEffect(() => {
     if (isOtpSent && isOtpSent === "false") {
       dispatch(push(`/login`));
