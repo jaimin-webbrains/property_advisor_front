@@ -218,7 +218,7 @@ const District = (props) => {
                       setselected({ ...selected, state: data[0] });
                     }}
                     value={
-                      formik.values.state.name ? formik.values.state.name : ""
+                      selected.state.name ? selected.state.name : ""
                     }
                   >
                     <option>Select</option>
