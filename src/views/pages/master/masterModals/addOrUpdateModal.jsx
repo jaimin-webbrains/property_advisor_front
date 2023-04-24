@@ -23,7 +23,7 @@ const AddRoleModal = ({
     "location",
     "subLocation",
   ];
-  const errorField = ["mobile"];
+  const errorField = ["mobile",'email'];
   const disabledField = ["email"];
   const notRequiredField = ["description"]
   const getSelectedValue = (e) => {

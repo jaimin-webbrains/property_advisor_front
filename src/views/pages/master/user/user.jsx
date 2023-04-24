@@ -197,7 +197,13 @@ const User = (props) => {
     }
   };
   const handleAddChange = (e, v) => {
-    formik.setValues({ ...formik.values, [e]: v });
+    if(e === 'mobile'){
+      if(v.length <= 10){
+        formik.setValues({ ...formik.values, [e]: v });
+      }
+    }else{
+      formik.setValues({ ...formik.values, [e]: v });
+    }
   };
   const handleAddClick = (type) => {
     if (type === "add") {
