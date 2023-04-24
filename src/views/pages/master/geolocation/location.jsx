@@ -36,6 +36,7 @@ const Location = (props) => {
   const zones = useSelector((store) => store.master.geolocation.zones);
   const locations = useSelector((store) => store.master.geolocation.location);
   const district = useSelector((store) => store.master.geolocation.district);
+  const [showResult, setshowResult] = useState(true);
 
   const formik = useFormik({
     initialValues: {
@@ -49,16 +50,16 @@ const Location = (props) => {
     },
     validate: (values) => {
       let errors = {};
-      if (!values.state) {
+      if (!values.state || values.state === "Select") {
         errors.state = "Required!";
       }
-      if (!values.district) {
+      if (!values.district || values.district === "Select") {
         errors.district = "Required!";
       }
-      if (!values.city) {
+      if (!values.city || values.city === "Select") {
         errors.city = "Required!";
       }
-      if (!values.zone) {
+      if (!values.zone || values.zone === "Select") {
         errors.zone = "Required!";
       }
       if (!values.locationGrade) {
@@ -87,14 +88,19 @@ const Location = (props) => {
     if (selected.state !== "" && selected.district !== "") {
       dispatch(GeolocationActions.getCities(selected.district));
     }
-    if (selected.state !== "" && selected.city !== "") {
+    if (
+      selected.state !== "" &&
+      selected.district !== "" &&
+      selected.city !== ""
+    ) {
       dispatch(GeolocationActions.getZones(selected.city));
     }
     if (
       selected.state !== "" &&
       selected.district !== "" &&
       selected.city !== "" &&
-      selected.zone !== ""
+      selected.zone !== "" &&
+      showResult
     ) {
       dispatch(GeolocationActions.getLocation(selected.zone));
     }
@@ -246,10 +252,18 @@ const Location = (props) => {
     } else {
       setModal({ ...modal, delete: e });
     }
+    setshowResult(!showResult);
   };
   const handleAddChange = (e, v) => {
-    formik.setValues({ ...formik.values, [e]: v });
+    // formik.setValues({ ...formik.values, [e]: v });
     if (e === "state") {
+      formik.setValues({
+        ...formik.values,
+        state: v,
+        district: "",
+        city: "",
+        zone: "",
+      });
       let data = states.length > 0 && states.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({
@@ -260,11 +274,27 @@ const Location = (props) => {
           district: "",
         });
         dispatch({
-          type: Geolocationconstants.DELETE_CITY,
+          type: Geolocationconstants.DELETE_DISTRICT,
+        });
+      } else {
+        setselected({
+          ...selected,
+          state: "",
+          city: "",
+          zone: "",
+          district: "",
+        });
+        dispatch({
+          type: Geolocationconstants.DELETE_DISTRICT,
         });
       }
-    }
-    if (e === "district") {
+    } else if (e === "district") {
+      formik.setValues({
+        ...formik.values,
+        district: v,
+        city: "",
+        zone: "",
+      });
       let data =
         district.length > 0 && district.filter((val) => val.name === v);
       if (data.length > 0) {
@@ -277,25 +307,61 @@ const Location = (props) => {
         dispatch({
           type: Geolocationconstants.DELETE_CITY,
         });
+      } else {
+        setselected({
+          ...selected,
+          city: "",
+          zone: "",
+          district: "",
+        });
+        dispatch({
+          type: Geolocationconstants.DELETE_CITY,
+        });
       }
-    }
-    if (e === "city") {
+    } else if (e === "city") {
+      formik.setValues({
+        ...formik.values,
+        city: v,
+        zone: "",
+      });
       let data = cities.length > 0 && cities.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({ ...selected, city: data[0].name, zone: "" });
         dispatch({
           type: Geolocationconstants.DELETE_ZONE,
         });
+      } else {
+        setselected({
+          ...selected,
+          city: "",
+          zone: "",
+        });
+        dispatch({
+          type: Geolocationconstants.DELETE_ZONE,
+        });
       }
-    }
-    if (e === "zone") {
+    } else if (e === "zone") {
+      formik.setValues({
+        ...formik.values,
+        zone: v,
+      });
       let data = zones.length > 0 && zones.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({ ...selected, zone: data[0].name });
         dispatch({
           type: Geolocationconstants.DELETE_LOCATION,
         });
+      } else {
+        setselected({
+          ...selected,
+          zone: "",
+        });
+        dispatch({
+          type: Geolocationconstants.DELETE_LOCATION,
+        });
       }
+    } else {
+      formik.setValues({ ...formik.values, [e]: v });
     }
   };
   const handleAddClick = (type) => {
@@ -448,6 +514,7 @@ const Location = (props) => {
                 onClick={(e) => {
                   setModal({ ...modal, add: e });
                   formik.setValues(formik.initialValues);
+                  setshowResult(!showResult);
                 }}
               >
                 {" "}

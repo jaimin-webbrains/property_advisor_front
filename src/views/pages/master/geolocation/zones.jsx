@@ -35,6 +35,8 @@ const Zone = (props) => {
   const geolocation = useSelector((store) => store.master.geolocation);
   const { states, cities, district, zones } = geolocation;
   const [selected, setselected] = useState({ state: "", city: "", district });
+  const [showResult, setshowResult] = useState(true);
+
   const formik = useFormik({
     initialValues: {
       state: "",
@@ -45,13 +47,13 @@ const Zone = (props) => {
     },
     validate: (values) => {
       let errors = {};
-      if (!values.state) {
+      if (!values.state || values.state === "Select") {
         errors.state = "Required!";
       }
-      if (!values.district) {
+      if (!values.district || values.district === "Select") {
         errors.district = "Required!";
       }
-      if (!values.city) {
+      if (!values.city || values.city === "Select") {
         errors.city = "Required!";
       }
       if (!values.name) {
@@ -202,27 +204,66 @@ const Zone = (props) => {
     } else {
       setModal({ ...modal, delete: e });
     }
+    setshowResult(!showResult);
   };
   const handleAddChange = (e, v) => {
-    formik.setValues({ ...formik.values, [e]: v });
+    // formik.setValues({ ...formik.values, [e]: v });
     if (e === "state") {
+      formik.setValues({
+        ...formik.values,
+        state: v,
+        district: "",
+        city: "",
+      });
       let data = states.length > 0 && states.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({ ...selected, state: data[0] });
+        dispatch({
+          type: Geolocationconstants.DELETE_DISTRICT,
+        });
+      } else {
+        setselected({ ...selected, state: "", district: "", city: "" });
+        dispatch({
+          type: Geolocationconstants.DELETE_DISTRICT,
+        });
       }
-    }
-    if (e === "city") {
+    } else if (e === "city") {
+      formik.setValues({
+        ...formik.values,
+        city: v,
+      });
       let data = cities.length > 0 && cities.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({ ...selected, city: data[0] });
+        dispatch({
+          type: Geolocationconstants.DELETE_ZONE,
+        });
+      } else {
+        dispatch({
+          type: Geolocationconstants.DELETE_ZONE,
+        });
       }
-    }
-    if (e === "district") {
+    } else if (e === "district") {
+      formik.setValues({
+        ...formik.values,
+        district: v,
+        city: "",
+      });
       let data =
         district.length > 0 && district.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({ ...selected, district: data[0] });
+        dispatch({
+          type: Geolocationconstants.DELETE_CITY,
+        });
+      } else {
+        setselected({ ...selected, district: "", city: "" });
+        dispatch({
+          type: Geolocationconstants.DELETE_CITY,
+        });
       }
+    } else {
+      formik.setValues({ ...formik.values, [e]: v });
     }
   };
   const handleAddClick = (type) => {
@@ -252,12 +293,6 @@ const Zone = (props) => {
       dispatch({
         type: Geolocationconstants.DELETE_DISTRICT,
       });
-      dispatch({
-        type: Geolocationconstants.DELETE_ZONE,
-      });
-      dispatch({
-        type: Geolocationconstants.DELETE_CITY,
-      });
     }
     return () => {
       dispatch({
@@ -266,7 +301,11 @@ const Zone = (props) => {
     };
   }, [selected.state]);
   useEffect(() => {
-    if (selected.city.name !== "" && selected.city.name !== undefined) {
+    if (
+      selected.city.name !== "" &&
+      selected.city.name !== undefined &&
+      showResult
+    ) {
       dispatch(GeolocationActions.getZones(selected.city.name));
     }
     if (!selected.city.name || selected.city.name === "") {
@@ -288,7 +327,6 @@ const Zone = (props) => {
       });
     }
   }, [selected.district]);
-
   return (
     <div className="container-fluid">
       <div className="row title-sec">
@@ -306,13 +344,12 @@ const Zone = (props) => {
                         let data = states.filter(
                           (v) => v.name === e.target.value
                         );
-                        if (data.length > 0){
+                        if (data.length > 0) {
                           setselected({ ...selected, state: data[0] });
                           dispatch({
                             type: Geolocationconstants.DELETE_DISTRICT,
                           });
-                        }
-                        else {
+                        } else {
                           setselected({
                             ...selected,
                             state: "",
@@ -320,11 +357,11 @@ const Zone = (props) => {
                             district: "",
                           });
                           dispatch({
-                            type: Geolocationconstants.DELETE_ZONE,
+                            type: Geolocationconstants.DELETE_DISTRICT,
                           });
                         }
                       }}
-                      value={formik.values.state.name}
+                      value={selected.state.name ? selected.state.name : ""}
                     >
                       <option>Select</option>
                       {states &&
@@ -362,7 +399,7 @@ const Zone = (props) => {
                           });
                         }
                       }}
-                      value={formik.values.district.name}
+                      value={selected.district.name}
                     >
                       <option>Select</option>
 
@@ -397,7 +434,7 @@ const Zone = (props) => {
                           });
                         }
                       }}
-                      value={formik.values.city.name}
+                      value={selected.city.name}
                     >
                       <option>Select</option>
 
@@ -416,6 +453,7 @@ const Zone = (props) => {
                 onClick={(e) => {
                   setModal({ ...modal, add: e });
                   formik.setValues(formik.initialValues);
+                  setshowResult(!showResult);
                 }}
               >
                 {" "}

@@ -36,6 +36,8 @@ const City = (props) => {
   const states = useSelector((store) => store.master.geolocation.states);
   const districts = useSelector((store) => store.master.geolocation.district);
   const [selected, setselected] = useState({ state: "", district: "" });
+  const [showResult, setshowResult] = useState(true);
+
   const formik = useFormik({
     initialValues: {
       state: "",
@@ -45,14 +47,14 @@ const City = (props) => {
     },
     validate: (values) => {
       let errors = {};
-      if (!values.state) {
+      if (!values.state || values.state === "Select") {
         errors.state = "Required!";
       }
-      if (!values.district) {
+      if (!values.district || values.district === "Select") {
         errors.district = "Required!";
       }
-      if(!values.name){
-        errors.name = "Required!"
+      if (!values.name) {
+        errors.name = "Required!";
       }
       return errors;
     },
@@ -62,7 +64,7 @@ const City = (props) => {
   const [dummyData, setDummyData] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (selected.state !== "" && selected.district !== "") {
+    if (selected.state !== "" && selected.district !== "" && showResult) {
       dispatch(GeolocationActions.getCities(selected.district));
     }
     if (selected.state === "") {
@@ -82,7 +84,7 @@ const City = (props) => {
     }
     if (!selected.state)
       dispatch({
-        type: Geolocationconstants.DELETE_CITY,
+        type: Geolocationconstants.DELETE_DISTRICT,
       });
   }, [selected.state]);
 
@@ -94,7 +96,6 @@ const City = (props) => {
       });
     };
   }, []);
-
   const deleteClick = useCallback(
     (data) => {
       // Here you can view the data and delete through API calling
@@ -202,11 +203,28 @@ const City = (props) => {
     } else {
       setModal({ ...modal, delete: e });
     }
+    setshowResult(!showResult);
   };
   const handleAddChange = (e, v) => {
-    formik.setValues({ ...formik.values, [e]: v });
-    if (e === "state") setselected({ ...selected, state: v, district: "" });
-    if (e === "district") setselected({ ...selected, district: v });
+    if (e === "state") {
+      formik.setValues({
+        ...formik.values,
+        state: v,
+        district: "",
+      });
+      setselected({ ...selected, state: v, district: "" });
+      dispatch({
+        type: Geolocationconstants.DELETE_DISTRICT,
+      });
+    } else if (e === "district") {
+      formik.setValues({
+        ...formik.values,
+        district: v,
+      });
+      setselected({ ...selected, district: v });
+    } else {
+      formik.setValues({ ...formik.values, [e]: v });
+    }
   };
   const handleAddClick = (type) => {
     if (formik.values.name !== "") {
@@ -299,6 +317,7 @@ const City = (props) => {
                 onClick={(e) => {
                   setModal({ ...modal, add: e });
                   formik.setValues(formik.initialValues);
+                  setshowResult(!showResult);
                 }}
               >
                 {" "}

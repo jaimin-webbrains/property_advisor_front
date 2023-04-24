@@ -41,7 +41,7 @@ const District = (props) => {
       if (!values.name) {
         errors.name = "Required!";
       }
-      if (!values.state) {
+      if (!values.state || values.state === "Select") {
         errors.state = "Required!";
       }
       return errors;
@@ -217,7 +217,9 @@ const District = (props) => {
                       );
                       setselected({ ...selected, state: data[0] });
                     }}
-                    value={formik.values.state.name}
+                    value={
+                      formik.values.state.name ? formik.values.state.name : ""
+                    }
                   >
                     <option>Select</option>
                     {states &&

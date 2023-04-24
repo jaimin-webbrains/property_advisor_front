@@ -36,6 +36,7 @@ const Sublocation = (props) => {
   const zones = useSelector((store) => store.master.geolocation.zones);
   const locations = useSelector((store) => store.master.geolocation.location);
   const districts = useSelector((store) => store.master.geolocation.district);
+  const [showResult, setshowResult] = useState(true);
 
   const [selected, setselected] = useState({
     state: "",
@@ -60,19 +61,19 @@ const Sublocation = (props) => {
     },
     validate: (values) => {
       let errors = {};
-      if (!values.state) {
+      if (!values.state || values.state === "Select") {
         errors.state = "Required!";
       }
-      if (!values.district) {
+      if (!values.district || values.district === "Select") {
         errors.district = "Required!";
       }
-      if (!values.city) {
+      if (!values.city || values.city === "Select") {
         errors.city = "Required!";
       }
-      if (!values.zone) {
+      if (!values.zone || values.zone === "Select") {
         errors.zone = "Required!";
       }
-      if (!values.location) {
+      if (!values.location || values.location === "Select") {
         errors.location = "Required!";
       }
       if (!values.name) {
@@ -102,7 +103,8 @@ const Sublocation = (props) => {
       selected.state !== "" &&
       selected.city !== "" &&
       selected.zone !== "" &&
-      selected.location !== ""
+      selected.location !== "" &&
+      showResult
     ) {
       dispatch(GeolocationActions.getSubLocation(selected.location.name));
     }
@@ -252,37 +254,85 @@ const Sublocation = (props) => {
     } else {
       setModal({ ...modal, delete: e });
     }
+    setshowResult(!showResult);
   };
   const handleAddChange = (e, v) => {
-    formik.setValues({ ...formik.values, [e]: v });
+    // formik.setValues({ ...formik.values, [e]: v });
     if (e === "state") {
+      formik.setValues({
+        ...formik.values,
+        state: v,
+        district: "",
+        city: "",
+        zone: "",
+        location: "",
+      });
       let data = states.length > 0 && states.filter((val) => val.name === v);
       if (data.length > 0) {
-        setselected({ ...selected, state: data[0], city: "", zone: "" });
+        setselected({
+          ...selected,
+          state: data[0],
+          district: "",
+          city: "",
+          zone: "",
+        });
         dispatch({
-          type: Geolocationconstants.DELETE_CITY,
+          type: Geolocationconstants.DELETE_DISTRICT,
+        });
+      } else {
+        setselected({
+          ...selected,
+          state: "",
+          district: "",
+          city: "",
+          zone: "",
+        });
+        dispatch({
+          type: Geolocationconstants.DELETE_DISTRICT,
         });
       }
-    }
-    if (e === "city") {
+    } else if (e === "city") {
+      formik.setValues({
+        ...formik.values,
+        city: v,
+        zone: "",
+        location: "",
+      });
       let data = cities.length > 0 && cities.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({ ...selected, city: data[0], zone: "" });
         dispatch({
           type: Geolocationconstants.DELETE_ZONE,
         });
+      } else {
+        setselected({ ...selected, city: "", zone: "", location: "" });
+        dispatch({
+          type: Geolocationconstants.DELETE_ZONE,
+        });
       }
-    }
-    if (e === "zone") {
+    } else if (e === "zone") {
+      formik.setValues({
+        ...formik.values,
+        zone: v,
+        location: "",
+      });
       let data = zones.length > 0 && zones.filter((val) => val.name === v);
       if (data.length > 0) {
-        setselected({ ...selected, zone: data[0] });
+        setselected({ ...selected, zone: data[0], location: "" });
+        dispatch({
+          type: Geolocationconstants.DELETE_LOCATION,
+        });
+      } else {
+        setselected({ ...selected, zone: "", location: "" });
         dispatch({
           type: Geolocationconstants.DELETE_LOCATION,
         });
       }
-    }
-    if (e === "location") {
+    } else if (e === "location") {
+      formik.setValues({
+        ...formik.values,
+        location: v,
+      });
       let data =
         locations.length > 0 && locations.filter((val) => val.name === v);
       if (data.length > 0) {
@@ -290,17 +340,49 @@ const Sublocation = (props) => {
         dispatch({
           type: Geolocationconstants.DELETE_SUB_LOCATION,
         });
+      } else {
+        setselected({ ...selected, location: "" });
+        dispatch({
+          type: Geolocationconstants.DELETE_SUB_LOCATION,
+        });
       }
-    }
-    if (e === "district") {
+    } else if (e === "district") {
+      formik.setValues({
+        ...formik.values,
+        district: v,
+        city: "",
+        zone: "",
+        location: "",
+      });
       let data =
         districts.length > 0 && districts.filter((val) => val.name === v);
       if (data.length > 0) {
-        setselected({ ...selected, district: data[0] });
+        setselected({
+          ...selected,
+          district: data[0],
+          city: "",
+          zone: "",
+          location: "",
+          subLocation: "",
+        });
+        dispatch({
+          type: Geolocationconstants.DELETE_CITY,
+        });
+      } else {
+        setselected({
+          ...selected,
+          district: "",
+          city: "",
+          zone: "",
+          location: "",
+          subLocation: "",
+        });
         dispatch({
           type: Geolocationconstants.DELETE_CITY,
         });
       }
+    } else {
+      formik.setValues({ ...formik.values, [e]: v });
     }
   };
   const handleAddClick = (type) => {
@@ -346,6 +428,7 @@ const Sublocation = (props) => {
                           setselected({
                             ...selected,
                             state: "",
+                            district: "",
                             city: "",
                             zone: "",
                           });
@@ -482,6 +565,7 @@ const Sublocation = (props) => {
                 onClick={(e) => {
                   setModal({ ...modal, add: e });
                   formik.setValues(formik.initialValues);
+                  setshowResult(!showResult);
                 }}
               >
                 {" "}

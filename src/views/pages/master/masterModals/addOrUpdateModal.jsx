@@ -27,8 +27,8 @@ const AddRoleModal = ({
   const disabledField = ["email"];
   const notRequiredField = ["description"]
   const getSelectedValue = (e) => {
-    let val = "";
     debugger
+    let val = "";
     if ( value[e] !== "") {
       val = value[e]["name"] ? value[e]["name"] : value[e];
     } else {
