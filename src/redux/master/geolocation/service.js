@@ -1,11 +1,16 @@
 import axios from "axios";
-import { config_header, getToken } from "helper/methods";
+import {  getToken } from "helper/methods";
 
 const GeolocationService = {
   GET_STATES: async () => {
     const response = await axios.get(
       `${process.env.REACT_APP_BASE_URL}/geo/get_states`,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
@@ -13,7 +18,12 @@ const GeolocationService = {
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/geo/add_states`,
       data,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
@@ -21,7 +31,12 @@ const GeolocationService = {
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/geo/update_states`,
       data,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
@@ -29,14 +44,24 @@ const GeolocationService = {
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/geo/delete_state`,
       data,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
   GET_CITIES: async (data) => {
     const response = await axios.get(
       `${process.env.REACT_APP_BASE_URL}/geo/get_cities?district=${data}`,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
@@ -44,7 +69,12 @@ const GeolocationService = {
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/geo/add_or_update_city`,
       data,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
@@ -52,14 +82,24 @@ const GeolocationService = {
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/geo/delete_city`,
       data,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
   GET_ZONE: async (data) => {
     const response = await axios.get(
       `${process.env.REACT_APP_BASE_URL}/geo/get_zones?city=${data}`,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
@@ -67,7 +107,12 @@ const GeolocationService = {
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/geo/add_or_update_zone`,
       data,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
@@ -75,14 +120,24 @@ const GeolocationService = {
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/geo/delete_zone`,
       data,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
   GET_DISTRICT: async (data) => {
     const response = await axios.get(
       `${process.env.REACT_APP_BASE_URL}/geo/get_districts?state=${data}`,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
@@ -90,7 +145,12 @@ const GeolocationService = {
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/geo/add_or_update_district`,
       data,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
@@ -98,14 +158,24 @@ const GeolocationService = {
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/geo/delete_district`,
       data,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
   GET_LANDMARK: async (data) => {
     const response = await axios.get(
       `${process.env.REACT_APP_BASE_URL}/geo/get_landmarks?subLocation=${data}`,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
@@ -113,7 +183,12 @@ const GeolocationService = {
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/geo/add_or_update_landmark`,
       data,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
@@ -121,14 +196,24 @@ const GeolocationService = {
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/geo/delete_landmark`,
       data,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
   GET_LOCATION: async (data) => {
     const response = await axios.get(
       `${process.env.REACT_APP_BASE_URL}/geo/get_locations?zone=${data}`,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
@@ -136,7 +221,12 @@ const GeolocationService = {
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/geo/add_or_update_location`,
       data,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
@@ -144,14 +234,24 @@ const GeolocationService = {
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/geo/delete_location`,
       data,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
   GET_SUB_LOCATION: async (data) => {
     const response = await axios.get(
       `${process.env.REACT_APP_BASE_URL}/geo/get_sub_locations?location=${data}`,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
@@ -159,7 +259,12 @@ const GeolocationService = {
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/geo/add_or_update_sub_location`,
       data,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },
@@ -167,7 +272,12 @@ const GeolocationService = {
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/geo/delete_sub_location`,
       data,
-      config_header
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
     );
     return response;
   },

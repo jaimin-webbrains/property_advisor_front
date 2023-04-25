@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { config_header, getToken } from 'helper/methods';
+import { getToken } from 'helper/methods';
 
 const authService = {
 
@@ -23,7 +23,12 @@ const authService = {
     },
 
     RESET_PASSWORD: async (data) => {
-        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/reset_password`, data,config_header)
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/reset_password`, data,{
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      })
         return response
     }
 }

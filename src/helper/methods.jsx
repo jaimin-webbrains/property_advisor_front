@@ -44,9 +44,3 @@ export const getToken = () => {
   }
   return access_token
 }
-export const config_header = {
-  headers: {
-    'Authorization': getToken(),
-    'Content-Type': 'application/json'
-  }
-}
