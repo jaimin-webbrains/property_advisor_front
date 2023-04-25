@@ -276,9 +276,6 @@ const Sublocation = (props) => {
           city: "",
           zone: "",
         });
-        dispatch({
-          type: Geolocationconstants.DELETE_DISTRICT,
-        });
       } else {
         setselected({
           ...selected,
@@ -286,9 +283,6 @@ const Sublocation = (props) => {
           district: "",
           city: "",
           zone: "",
-        });
-        dispatch({
-          type: Geolocationconstants.DELETE_DISTRICT,
         });
       }
     } else if (e === "city") {
@@ -301,14 +295,8 @@ const Sublocation = (props) => {
       let data = cities.length > 0 && cities.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({ ...selected, city: data[0], zone: "" });
-        dispatch({
-          type: Geolocationconstants.DELETE_ZONE,
-        });
       } else {
         setselected({ ...selected, city: "", zone: "", location: "" });
-        dispatch({
-          type: Geolocationconstants.DELETE_ZONE,
-        });
       }
     } else if (e === "zone") {
       formik.setValues({
@@ -319,14 +307,8 @@ const Sublocation = (props) => {
       let data = zones.length > 0 && zones.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({ ...selected, zone: data[0], location: "" });
-        dispatch({
-          type: Geolocationconstants.DELETE_LOCATION,
-        });
       } else {
         setselected({ ...selected, zone: "", location: "" });
-        dispatch({
-          type: Geolocationconstants.DELETE_LOCATION,
-        });
       }
     } else if (e === "location") {
       formik.setValues({
@@ -337,14 +319,8 @@ const Sublocation = (props) => {
         locations.length > 0 && locations.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({ ...selected, location: data[0] });
-        dispatch({
-          type: Geolocationconstants.DELETE_SUB_LOCATION,
-        });
       } else {
         setselected({ ...selected, location: "" });
-        dispatch({
-          type: Geolocationconstants.DELETE_SUB_LOCATION,
-        });
       }
     } else if (e === "district") {
       formik.setValues({
@@ -365,9 +341,6 @@ const Sublocation = (props) => {
           location: "",
           subLocation: "",
         });
-        dispatch({
-          type: Geolocationconstants.DELETE_CITY,
-        });
       } else {
         setselected({
           ...selected,
@@ -376,9 +349,6 @@ const Sublocation = (props) => {
           zone: "",
           location: "",
           subLocation: "",
-        });
-        dispatch({
-          type: Geolocationconstants.DELETE_CITY,
         });
       }
     } else {

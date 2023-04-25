@@ -213,9 +213,6 @@ const City = (props) => {
         district: "",
       });
       setselected({ ...selected, state: v, district: "" });
-      dispatch({
-        type: Geolocationconstants.DELETE_DISTRICT,
-      });
     } else if (e === "district") {
       formik.setValues({
         ...formik.values,

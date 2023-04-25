@@ -365,7 +365,7 @@ const GeolocationActions = {
             payload: constants.ADD_OR_UPDATE_LANDMARK,
           });
           dispatch(
-            GeolocationActions.getLandmark(res.data.data.subLocation.name)
+            GeolocationActions.getLandmark(res.data.data.subLocation)
           );
         })
         .catch((e) => {

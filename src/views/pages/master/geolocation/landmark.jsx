@@ -310,9 +310,6 @@ const Landmark = (props) => {
           location: "",
           subLocation: "",
         });
-        dispatch({
-          type: Geolocationconstants.DELETE_DISTRICT,
-        });
       } else {
         setselected({
           ...selected,
@@ -322,9 +319,6 @@ const Landmark = (props) => {
           zone: "",
           location: "",
           subLocation: "",
-        });
-        dispatch({
-          type: Geolocationconstants.DELETE_DISTRICT,
         });
       }
     } else if (e === "city") {
@@ -344,9 +338,6 @@ const Landmark = (props) => {
           location: "",
           subLocation: "",
         });
-        dispatch({
-          type: Geolocationconstants.DELETE_ZONE,
-        });
       } else {
         setselected({
           ...selected,
@@ -354,9 +345,6 @@ const Landmark = (props) => {
           zone: "",
           location: "",
           subLocation: "",
-        });
-        dispatch({
-          type: Geolocationconstants.DELETE_ZONE,
         });
       }
     } else if (e === "zone") {
@@ -373,15 +361,9 @@ const Landmark = (props) => {
           zone: data[0],
           location: "",
           subLocation: "",
-        });
-        dispatch({
-          type: Geolocationconstants.DELETE_LOCATION,
-        });
+        });     
       } else {
         setselected({ ...selected, zone: "", location: "", subLocation: "" });
-        dispatch({
-          type: Geolocationconstants.DELETE_LOCATION,
-        });
       }
     } else if (e === "location") {
       formik.setValues({
@@ -393,14 +375,8 @@ const Landmark = (props) => {
         locations.length > 0 && locations.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({ ...selected, location: data[0], subLocation: "" });
-        dispatch({
-          type: Geolocationconstants.DELETE_SUB_LOCATION,
-        });
       } else {
         setselected({ ...selected, location: "", subLocation: "" });
-        dispatch({
-          type: Geolocationconstants.DELETE_SUB_LOCATION,
-        });
       }
     } else if (e === "subLocation") {
       formik.setValues({
@@ -411,14 +387,8 @@ const Landmark = (props) => {
         subLocations.length > 0 && subLocations.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({ ...selected, subLocation: data[0] });
-        dispatch({
-          type: Geolocationconstants.DELETE_LANDMARK,
-        });
       } else {
         setselected({ ...selected, subLocation: "" });
-        dispatch({
-          type: Geolocationconstants.DELETE_LANDMARK,
-        });
       }
     } else if (e === "district") {
       formik.setValues({
@@ -439,9 +409,6 @@ const Landmark = (props) => {
           zone: "",
           location: "",
           subLocation: "",
-        });
-        dispatch({
-          type: Geolocationconstants.DELETE_CITY,
         });
       }
     } else {

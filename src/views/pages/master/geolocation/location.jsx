@@ -273,9 +273,6 @@ const Location = (props) => {
           zone: "",
           district: "",
         });
-        dispatch({
-          type: Geolocationconstants.DELETE_DISTRICT,
-        });
       } else {
         setselected({
           ...selected,
@@ -283,9 +280,6 @@ const Location = (props) => {
           city: "",
           zone: "",
           district: "",
-        });
-        dispatch({
-          type: Geolocationconstants.DELETE_DISTRICT,
         });
       }
     } else if (e === "district") {
@@ -304,18 +298,12 @@ const Location = (props) => {
           city: "",
           zone: "",
         });
-        dispatch({
-          type: Geolocationconstants.DELETE_CITY,
-        });
       } else {
         setselected({
           ...selected,
           city: "",
           zone: "",
           district: "",
-        });
-        dispatch({
-          type: Geolocationconstants.DELETE_CITY,
         });
       }
     } else if (e === "city") {
@@ -327,17 +315,11 @@ const Location = (props) => {
       let data = cities.length > 0 && cities.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({ ...selected, city: data[0].name, zone: "" });
-        dispatch({
-          type: Geolocationconstants.DELETE_ZONE,
-        });
       } else {
         setselected({
           ...selected,
           city: "",
           zone: "",
-        });
-        dispatch({
-          type: Geolocationconstants.DELETE_ZONE,
         });
       }
     } else if (e === "zone") {
@@ -348,16 +330,10 @@ const Location = (props) => {
       let data = zones.length > 0 && zones.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({ ...selected, zone: data[0].name });
-        dispatch({
-          type: Geolocationconstants.DELETE_LOCATION,
-        });
       } else {
         setselected({
           ...selected,
           zone: "",
-        });
-        dispatch({
-          type: Geolocationconstants.DELETE_LOCATION,
         });
       }
     } else {

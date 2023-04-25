@@ -218,14 +218,8 @@ const Zone = (props) => {
       let data = states.length > 0 && states.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({ ...selected, state: data[0] });
-        dispatch({
-          type: Geolocationconstants.DELETE_DISTRICT,
-        });
       } else {
         setselected({ ...selected, state: "", district: "", city: "" });
-        dispatch({
-          type: Geolocationconstants.DELETE_DISTRICT,
-        });
       }
     } else if (e === "city") {
       formik.setValues({
@@ -235,13 +229,6 @@ const Zone = (props) => {
       let data = cities.length > 0 && cities.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({ ...selected, city: data[0] });
-        dispatch({
-          type: Geolocationconstants.DELETE_ZONE,
-        });
-      } else {
-        dispatch({
-          type: Geolocationconstants.DELETE_ZONE,
-        });
       }
     } else if (e === "district") {
       formik.setValues({
@@ -253,14 +240,8 @@ const Zone = (props) => {
         district.length > 0 && district.filter((val) => val.name === v);
       if (data.length > 0) {
         setselected({ ...selected, district: data[0] });
-        dispatch({
-          type: Geolocationconstants.DELETE_CITY,
-        });
       } else {
         setselected({ ...selected, district: "", city: "" });
-        dispatch({
-          type: Geolocationconstants.DELETE_CITY,
-        });
       }
     } else {
       formik.setValues({ ...formik.values, [e]: v });
