@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
+import Sublocation from "../geolocation/subLocation";
 const AddRoleModal = ({
   modal,
   setModal,
@@ -23,7 +24,8 @@ const AddRoleModal = ({
     "location",
     "subLocation",
   ];
-  const errorField = ["mobile",'email'];
+  console.log(error)
+  const errorField = ["mobile",'email','name','state','district','city','location','subLocation','zone'];
   const disabledField = ["email"];
   const notRequiredField = ["description"]
   const getSelectedValue = (e) => {
@@ -43,6 +45,7 @@ const AddRoleModal = ({
           <ModalBody>
             {Object.keys(value).length > 0
               ? Object.keys(value).map((e) => {
+                debugger
                   if (!filtered.includes(e)) {
                     return !selectField.includes(e) ? (
                       <div className="form-group">
@@ -59,9 +62,11 @@ const AddRoleModal = ({
                           value={value[e]}
                           disabled={isFromUpdate && disabledField.includes(e)}
                         />
-                        {errorField.includes(e) && value[e].length > 0 && (
+                        <div className="pb-2">
+                        {errorField.includes(e) && (
                           <p style={{ color: "red" }}>{error[e]}</p>
                         )}
+                        </div>
                       </div>
                     ) : (
                       <div>
@@ -80,6 +85,11 @@ const AddRoleModal = ({
                           {states[e].length > 0 &&
                             states[e].map((opt) => <option>{opt.name}</option>)}
                         </select>
+                        <div className="pb-5">
+                        {errorField.includes(e) && (
+                          <p style={{ color: "red" }}>{error[e]}</p>
+                        )}
+                        </div>
                       </div>
                     );
                   }
