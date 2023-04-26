@@ -7,13 +7,12 @@ import ReactTableWrapper from "../../../../components/reacttable/reacttbl.style"
 import { useDispatch, useSelector } from "react-redux";
 import Geolocationconstants from "redux/master/geolocation/constants";
 import constant from "redux/networkCall/constant";
-import { Button, Form, FormGroup, Input, Spinner } from "reactstrap";
+import { Button, Form, FormGroup, Spinner } from "reactstrap";
 import DeleteRoleModal from "../masterModals/deleteModal";
 import AddRoleModal from "../masterModals/addOrUpdateModal";
-import RoleActions from "redux/master/Role/action";
 import { useFormik } from "formik";
 import GeolocationActions from "redux/master/geolocation/action";
-import { Select } from "react-select/dist/Select-a783e33f.cjs.prod";
+import GeolocationService from "redux/master/geolocation/service";
 
 const HeaderComponent = (props) => {
   let classes = {
@@ -34,7 +33,17 @@ const Zone = (props) => {
   });
   const geolocation = useSelector((store) => store.master.geolocation);
   const { states, cities, district, zones } = geolocation;
-  const [selected, setselected] = useState({ state: "", city: "", district });
+  const [selected, setselected] = useState({
+    state: "",
+    city: "",
+    district: "",
+  });
+  const [popselected, setpopselected] = useState({
+    state: "",
+    city: "",
+    district: "",
+  });
+  const [popLocData, setPopLocData] = useState({ city: [], district: [] });
   const [showResult, setshowResult] = useState(true);
 
   const formik = useFormik({
@@ -67,11 +76,15 @@ const Zone = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GeolocationActions.getStates());
+    return () => {
+      dispatch({
+        type: Geolocationconstants.DELETE_ZONE,
+      });
+    };
   }, []);
 
   const deleteClick = useCallback(
     (data) => {
-      // Here you can view the data and delete through API calling
       const array = dummyData;
       remove(array, function(n) {
         return n.id === data.id;
@@ -97,34 +110,6 @@ const Zone = (props) => {
         accessor: "name",
         disableFilters: true,
       },
-      // {
-      //   Header: (tableInstance) => {
-      //     return (
-      //       <HeaderComponent
-      //         isSortedDesc={tableInstance.column.isSortedDesc}
-      //         title="City name"
-      //       />
-      //     );
-      //   },
-      //   Filter: FilterComponent,
-      //   placeholder: "City name",
-      //   accessor: "city.name",
-      //   disableFilters: true,
-      // },
-      // {
-      //   Header: (tableInstance) => {
-      //     return (
-      //       <HeaderComponent
-      //         isSortedDesc={tableInstance.column.isSortedDesc}
-      //         title="State name"
-      //       />
-      //     );
-      //   },
-      //   Filter: FilterComponent,
-      //   placeholder: "State name",
-      //   accessor: "state.name",
-      //   disableFilters: true,
-      // },
       {
         Header: (tableInstance) => {
           return (
@@ -215,20 +200,18 @@ const Zone = (props) => {
         district: "",
         city: "",
       });
-      let data = states.length > 0 && states.filter((val) => val.name === v);
-      if (data.length > 0) {
-        setselected({ ...selected, state: data[0] });
+      if (v !== "") {
+        setpopselected({ ...popselected, state: v, district: "", city: "" });
       } else {
-        setselected({ ...selected, state: "", district: "", city: "" });
+        setpopselected({ ...popselected, state: "", district: "", city: "" });
       }
     } else if (e === "city") {
       formik.setValues({
         ...formik.values,
         city: v,
       });
-      let data = cities.length > 0 && cities.filter((val) => val.name === v);
-      if (data.length > 0) {
-        setselected({ ...selected, city: data[0] });
+      if (v !== "") {
+        setpopselected({ ...popselected, city: v });
       }
     } else if (e === "district") {
       formik.setValues({
@@ -236,12 +219,10 @@ const Zone = (props) => {
         district: v,
         city: "",
       });
-      let data =
-        district.length > 0 && district.filter((val) => val.name === v);
-      if (data.length > 0) {
-        setselected({ ...selected, district: data[0] });
+      if (v !== "") {
+        setpopselected({ ...popselected, district: v, city: "" });
       } else {
-        setselected({ ...selected, district: "", city: "" });
+        setpopselected({ ...popselected, district: "", city: "" });
       }
     } else {
       formik.setValues({ ...formik.values, [e]: v });
@@ -258,6 +239,7 @@ const Zone = (props) => {
     if (type === "delete") {
       dispatch(GeolocationActions.deleteZone({ _id: formik.values._id }));
     }
+    setshowResult(!showResult);
     setModal(!modal);
   };
   const networkRoleConstants = [
@@ -267,20 +249,22 @@ const Zone = (props) => {
     Geolocationconstants.DELETE_ZONE,
   ];
   useEffect(() => {
-    if (selected.state._id) {
+    if (selected.state._id && showResult) {
       dispatch(GeolocationActions.getDistrict(selected.state.name));
     }
-    if (!selected.state.name || selected.state.name === "") {
+    if ((!selected.state.name || selected.state.name === "") && showResult) {
       dispatch({
         type: Geolocationconstants.DELETE_DISTRICT,
       });
     }
-    return () => {
-      dispatch({
-        type: Geolocationconstants.DELETE_ZONE,
-      });
-    };
-  }, [selected.state]);
+    if (popselected.state !== "") {
+      (async () => {
+        await GeolocationService.GET_DISTRICT(popselected.state).then((res) => {
+          setPopLocData({ ...popLocData, district: res.data.data });
+        });
+      })();
+    }
+  }, [selected.state, popselected.state]);
   useEffect(() => {
     if (
       selected.city.name !== "" &&
@@ -296,6 +280,7 @@ const Zone = (props) => {
     }
   }, [selected.city]);
   useEffect(() => {
+    debugger;
     if (selected.district.name !== "" && selected.district.name !== undefined) {
       dispatch(GeolocationActions.getCities(selected.district.name));
     }
@@ -307,7 +292,17 @@ const Zone = (props) => {
         type: Geolocationconstants.DELETE_CITY,
       });
     }
-  }, [selected.district]);
+    if (popselected.district !== "") {
+      debugger;
+      (async () => {
+        await GeolocationService.GET_CITIES(popselected.district).then(
+          (res) => {
+            setPopLocData({ ...popLocData, city: res.data.data });
+          }
+        );
+      })();
+    }
+  }, [selected.district, popselected.district]);
   return (
     <div className="container-fluid">
       <div className="row title-sec">
@@ -574,7 +569,11 @@ const Zone = (props) => {
         isFromUpdate={true}
         error={formik.errors}
         name="Zone"
-        states={{ state: states, city: cities, district: district }}
+        states={{
+          state: states,
+          city: popLocData.city,
+          district: popLocData.district,
+        }}
         selected={selected}
       />
       <DeleteRoleModal
@@ -592,7 +591,11 @@ const Zone = (props) => {
         isFromUpdate={false}
         error={formik.errors}
         name="Zone"
-        states={{ state: states, city: cities, district: district }}
+        states={{
+          state: states,
+          city: popLocData.city,
+          district: popLocData.district,
+        }}
         selected={selected}
       />
     </div>

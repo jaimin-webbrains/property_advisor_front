@@ -10,9 +10,9 @@ import constant from "redux/networkCall/constant";
 import { Button, Form, FormGroup, Spinner } from "reactstrap";
 import DeleteRoleModal from "../masterModals/deleteModal";
 import AddRoleModal from "../masterModals/addOrUpdateModal";
-import RoleActions from "redux/master/Role/action";
 import { useFormik } from "formik";
 import GeolocationActions from "redux/master/geolocation/action";
+import GeolocationService from "redux/master/geolocation/service";
 
 const HeaderComponent = (props) => {
   let classes = {
@@ -44,6 +44,20 @@ const Sublocation = (props) => {
     zone: "",
     location: "",
     district: "",
+  });
+  const [popselected, setpopselected] = useState({
+    state: "",
+    city: "",
+    zone: "",
+    location: "",
+    district: "",
+  });
+  const [popLocData, setpopLockData] = useState({
+    city: [],
+    zone: [],
+    location: [],
+    district: [],
+    location: [],
   });
   const sublocations = useSelector(
     (store) => store.master.geolocation.subLocation
@@ -87,16 +101,21 @@ const Sublocation = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GeolocationActions.getStates());
-    if (selected.state !== "") {
+    if (selected.state !== "" && showResult) {
       dispatch(GeolocationActions.getDistrict(selected.state.name));
     }
-    if (selected.state !== "" && selected.district !== "") {
+    if (selected.state !== "" && selected.district !== "" && showResult) {
       dispatch(GeolocationActions.getCities(selected.district.name));
     }
-    if (selected.state !== "" && selected.city !== "") {
+    if (selected.state !== "" && selected.city !== "" && showResult) {
       dispatch(GeolocationActions.getZones(selected.city.name));
     }
-    if (selected.state !== "" && selected.city !== "" && selected.zone !== "") {
+    if (
+      selected.state !== "" &&
+      selected.city !== "" &&
+      selected.zone !== "" &&
+      showResult
+    ) {
       dispatch(GeolocationActions.getLocation(selected.zone.name));
     }
     if (
@@ -108,44 +127,136 @@ const Sublocation = (props) => {
     ) {
       dispatch(GeolocationActions.getSubLocation(selected.location.name));
     }
-    if (selected.state === "") {
+    if (selected.state === "" && showResult) {
       dispatch({
         type: Geolocationconstants.DELETE_CITY,
       });
     }
-    if (selected.district === "") {
+    if (selected.district === "" && showResult) {
       dispatch({
         type: Geolocationconstants.DELETE_DISTRICT,
       });
     }
-    if (selected.city === "") {
+    if (selected.city === "" && showResult) {
       dispatch({
         type: Geolocationconstants.DELETE_ZONE,
       });
     }
-    if (selected.zone === "") {
+    if (selected.zone === "" && showResult) {
       dispatch({
         type: Geolocationconstants.DELETE_LOCATION,
       });
     }
-    if (selected.location === "") {
+    if (selected.location === "" && showResult) {
       dispatch({
         type: Geolocationconstants.DELETE_SUB_LOCATION,
       });
     }
-
-    return () => {
-      dispatch({
-        type: Geolocationconstants.DELETE_SUB_LOCATION,
-      });
-    };
+    if (popselected.state) {
+      if (popselected.state !== "" && !showResult) {
+        (async () => {
+          await GeolocationService.GET_DISTRICT(popselected.state).then(
+            (res) => {
+              setpopLockData({
+                ...popLocData,
+                district: res.data.data,
+                city: [],
+                zone: [],
+                location: [],
+              });
+            }
+          );
+        })();
+      } else {
+        setpopLockData({
+          ...popLocData,
+          district: [],
+          city: [],
+          zone: [],
+          location: [],
+        });
+      }
+    }
+    if (popselected.district) {
+      if (
+        popselected.state !== "" &&
+        popselected.district !== "" &&
+        !showResult
+      ) {
+        (async () => {
+          await GeolocationService.GET_CITIES(popselected.district).then(
+            (res) => {
+              setpopLockData({
+                ...popLocData,
+                city: res.data.data,
+                zone: [],
+                location: [],
+              });
+            }
+          );
+        })();
+      } else {
+        setpopLockData({ ...popLocData, city: [], zone: [], location: [] });
+      }
+    }
+    if (popselected.city) {
+      if (
+        popselected.state !== "" &&
+        popselected.district !== "" &&
+        popselected.city !== "" &&
+        !showResult
+      ) {
+        (async () => {
+          await GeolocationService.GET_ZONE(popselected.city).then((res) => {
+            setpopLockData({
+              ...popLocData,
+              zone: res.data.data,
+              location: [],
+            });
+          });
+        })();
+      } else {
+        setpopLockData({ ...popLocData, zone: [], location: [] });
+      }
+    }
+    if (popselected.zone) {
+      if (
+        popselected.state !== "" &&
+        popselected.district !== "" &&
+        popselected.city !== "" &&
+        popselected.zone !== "" &&
+        !showResult
+      ) {
+        (async () => {
+          await GeolocationService.GET_LOCATION(popselected.zone).then(
+            (res) => {
+              setpopLockData({ ...popLocData, location: res.data.data });
+            }
+          );
+        })();
+      } else {
+        setpopLockData({ ...popLocData, location: [] });
+      }
+    }
   }, [
     selected.city,
     selected.state,
     selected.zone,
     selected.location,
     selected.district,
+    popselected.state,
+    popselected.district,
+    popselected.city,
+    popselected.zone,
+    popselected.location,
   ]);
+  useEffect(() => {
+    return () => {
+      dispatch({
+        type: Geolocationconstants.DELETE_SUB_LOCATION,
+      });
+    };
+  }, []);
 
   const deleteClick = useCallback(
     (data) => {
@@ -267,22 +378,23 @@ const Sublocation = (props) => {
         zone: "",
         location: "",
       });
-      let data = states.length > 0 && states.filter((val) => val.name === v);
-      if (data.length > 0) {
-        setselected({
-          ...selected,
-          state: data[0],
+      if (v !== "") {
+        setpopselected({
+          ...popselected,
+          state: v,
           district: "",
           city: "",
           zone: "",
+          location: "",
         });
       } else {
-        setselected({
-          ...selected,
+        setpopselected({
+          ...popselected,
           state: "",
           district: "",
           city: "",
           zone: "",
+          location: "",
         });
       }
     } else if (e === "city") {
@@ -292,11 +404,10 @@ const Sublocation = (props) => {
         zone: "",
         location: "",
       });
-      let data = cities.length > 0 && cities.filter((val) => val.name === v);
-      if (data.length > 0) {
-        setselected({ ...selected, city: data[0], zone: "" });
+      if (v !== "") {
+        setpopselected({ ...popselected, city: v, zone: "", location: "" });
       } else {
-        setselected({ ...selected, city: "", zone: "", location: "" });
+        setpopselected({ ...popselected, city: "", zone: "", location: "" });
       }
     } else if (e === "zone") {
       formik.setValues({
@@ -304,23 +415,20 @@ const Sublocation = (props) => {
         zone: v,
         location: "",
       });
-      let data = zones.length > 0 && zones.filter((val) => val.name === v);
-      if (data.length > 0) {
-        setselected({ ...selected, zone: data[0], location: "" });
+      if (v !== "") {
+        setpopselected({ ...popselected, zone: v, location: "" });
       } else {
-        setselected({ ...selected, zone: "", location: "" });
+        setpopselected({ ...popselected, zone: "", location: "" });
       }
     } else if (e === "location") {
       formik.setValues({
         ...formik.values,
         location: v,
       });
-      let data =
-        locations.length > 0 && locations.filter((val) => val.name === v);
-      if (data.length > 0) {
-        setselected({ ...selected, location: data[0] });
+      if (v !== "") {
+        setpopselected({ ...popselected, location: v });
       } else {
-        setselected({ ...selected, location: "" });
+        setpopselected({ ...popselected, location: "" });
       }
     } else if (e === "district") {
       formik.setValues({
@@ -330,25 +438,21 @@ const Sublocation = (props) => {
         zone: "",
         location: "",
       });
-      let data =
-        districts.length > 0 && districts.filter((val) => val.name === v);
-      if (data.length > 0) {
-        setselected({
-          ...selected,
-          district: data[0],
+      if (v !== "") {
+        setpopselected({
+          ...popselected,
+          district: v,
           city: "",
           zone: "",
           location: "",
-          subLocation: "",
         });
       } else {
-        setselected({
-          ...selected,
+        setpopselected({
+          ...popselected,
           district: "",
           city: "",
           zone: "",
           location: "",
-          subLocation: "",
         });
       }
     } else {
@@ -368,6 +472,7 @@ const Sublocation = (props) => {
         GeolocationActions.deleteSubLocation({ _id: formik.values._id })
       );
     }
+    setshowResult(!showResult);
     setModal(!modal);
   };
   const networkRoleConstants = [
@@ -485,7 +590,11 @@ const Sublocation = (props) => {
                           (v) => v.name === e.target.value
                         );
                         if (data.length > 0)
-                          setselected({ ...selected, zone: data[0] });
+                          setselected({
+                            ...selected,
+                            zone: data[0],
+                            location: "",
+                          });
                         else
                           setselected({ ...selected, zone: "", location: "" });
                       }}
@@ -677,10 +786,10 @@ const Sublocation = (props) => {
         name="Sub-location"
         states={{
           state: states,
-          city: cities,
-          zone: zones,
-          location: locations,
-          district: districts,
+          city: popLocData.city,
+          zone: popLocData.zone,
+          location: popLocData.location,
+          district: popLocData.district,
         }}
         selected={selected}
       />
@@ -702,10 +811,10 @@ const Sublocation = (props) => {
         name="sub-location"
         states={{
           state: states,
-          city: cities,
-          zone: zones,
-          location: locations,
-          district: districts,
+          city: popLocData.city,
+          zone: popLocData.zone,
+          location: popLocData.location,
+          district: popLocData.district,
         }}
         selected={selected}
       />

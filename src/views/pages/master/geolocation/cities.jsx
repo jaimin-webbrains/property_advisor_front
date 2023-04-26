@@ -10,11 +10,9 @@ import constant from "redux/networkCall/constant";
 import { Button, Form, FormGroup, Input, Spinner } from "reactstrap";
 import DeleteRoleModal from "../masterModals/deleteModal";
 import AddRoleModal from "../masterModals/addOrUpdateModal";
-import RoleActions from "redux/master/Role/action";
 import { useFormik } from "formik";
 import GeolocationActions from "redux/master/geolocation/action";
-import { Select } from "react-select/dist/Select-a783e33f.cjs.prod";
-import constants from "redux/auth/constants";
+import GeolocationService from "redux/master/geolocation/service";
 
 const HeaderComponent = (props) => {
   let classes = {
@@ -36,6 +34,8 @@ const City = (props) => {
   const states = useSelector((store) => store.master.geolocation.states);
   const districts = useSelector((store) => store.master.geolocation.district);
   const [selected, setselected] = useState({ state: "", district: "" });
+  const [popselected, setPopSelected] = useState({ state: "", district: "" });
+  const [popLocData, setPopLocData] = useState({ district: [] });
   const [showResult, setshowResult] = useState(true);
 
   const formik = useFormik({
@@ -75,10 +75,9 @@ const City = (props) => {
         type: Geolocationconstants.DELETE_DISTRICT,
       });
     }
-  }, [selected.district]);
-
+  }, [selected.district, popselected.district]);
   useEffect(() => {
-    if (selected && selected.state !== "") {
+    if (selected && selected.state !== "" && showResult) {
       dispatch(GeolocationActions.getDistrict(selected.state));
       setselected({ ...selected, district: "" });
     }
@@ -86,8 +85,14 @@ const City = (props) => {
       dispatch({
         type: Geolocationconstants.DELETE_DISTRICT,
       });
-  }, [selected.state]);
-
+    if (popselected.state !== "") {
+      (async () => {
+        await GeolocationService.GET_DISTRICT(popselected.state).then((res) => {
+          setPopLocData({ ...popLocData, district: res.data.data });
+        });
+      })();
+    }
+  }, [selected.state, popselected.state]);
   useEffect(() => {
     dispatch(GeolocationActions.getStates());
     return () => {
@@ -212,13 +217,13 @@ const City = (props) => {
         state: v,
         district: "",
       });
-      setselected({ ...selected, state: v, district: "" });
+      setPopSelected({ ...popselected, state: v, district: "" });
     } else if (e === "district") {
       formik.setValues({
         ...formik.values,
         district: v,
       });
-      setselected({ ...selected, district: v });
+      setPopSelected({ ...popselected, district: v });
     } else {
       formik.setValues({ ...formik.values, [e]: v });
     }
@@ -235,6 +240,7 @@ const City = (props) => {
       dispatch(GeolocationActions.deleteCity({ id: formik.values._id }));
     }
     setModal(!modal);
+    setshowResult(!showResult);
   };
   const networkRoleConstants = [
     Geolocationconstants.GET_CITIES,
@@ -260,7 +266,11 @@ const City = (props) => {
                         (v) => v.name.trim() === e.target.value.trim()
                       );
                       if (data.length > 0)
-                        setselected({ ...selected, state: data[0].name });
+                        setselected({
+                          ...selected,
+                          state: data[0].name,
+                          district: "",
+                        });
                       else {
                         dispatch({
                           type: Geolocationconstants.DELETE_CITY,
@@ -454,7 +464,7 @@ const City = (props) => {
         isFromUpdate={true}
         error={formik.errors}
         name="City"
-        states={{ state: states, district: districts }}
+        states={{ state: states, district: popLocData.district }}
         selected={selected}
       />
       <DeleteRoleModal
@@ -472,7 +482,7 @@ const City = (props) => {
         isFromUpdate={false}
         error={formik.errors}
         name="City"
-        states={{ state: states, district: districts }}
+        states={{ state: states, district: popLocData.district }}
         selected={selected}
       />
     </div>

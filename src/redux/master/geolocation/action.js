@@ -137,12 +137,12 @@ const GeolocationActions = {
       GeolocationService.ADD_CITY(data)
         .then((res) => {
           toast.success(res.data.message);
-          dispatch(GeolocationActions.getStates());
+          // dispatch(GeolocationActions.getStates());
           dispatch({
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.ADD_CITY,
           });
-          dispatch(GeolocationActions.getCities(res.data.data.district.name));
+          // dispatch(GeolocationActions.getCities(res.data.data.district.name));
         })
         .catch((e) => {
           toast.error(e.message);
@@ -216,7 +216,7 @@ const GeolocationActions = {
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.ADD_ZONE,
           });
-          dispatch(GeolocationActions.getZones(res.data.data.city.name));
+          // dispatch(GeolocationActions.getZones(res.data.data.city.name));
         })
         .catch((e) => {
           toast.error(e.message);
@@ -290,7 +290,7 @@ const GeolocationActions = {
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.ADD_OR_UPDATE_DISTRICT,
           });
-          dispatch(GeolocationActions.getDistrict(res.data.data.state));
+          // dispatch(GeolocationActions.getDistrict(res.data.data.state));
         })
         .catch((e) => {
           toast.error(e.message);
@@ -364,9 +364,9 @@ const GeolocationActions = {
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.ADD_OR_UPDATE_LANDMARK,
           });
-          dispatch(
-            GeolocationActions.getLandmark(res.data.data.subLocation)
-          );
+          // dispatch(
+          //   GeolocationActions.getLandmark(res.data.data.subLocation)
+          // );
         })
         .catch((e) => {
           toast.error(e.message);
@@ -442,7 +442,7 @@ const GeolocationActions = {
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.ADD_OR_UPDATE_LOCATION,
           });
-          dispatch(GeolocationActions.getLocation(res.data.data.zone.name));
+          // dispatch(GeolocationActions.getLocation(res.data.data.zone.name));
         })
         .catch((e) => {
           toast.error(e.message);
@@ -516,9 +516,9 @@ const GeolocationActions = {
             type: NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
             payload: constants.ADD_OR_UPDATE_SUB_LOCATION,
           });
-          dispatch(
-            GeolocationActions.getSubLocation(res.data.data.location.name)
-          );
+          // dispatch(
+          //   GeolocationActions.getSubLocation(res.data.data.location.name)
+          // );
         })
         .catch((e) => {
           toast.error(e.message);

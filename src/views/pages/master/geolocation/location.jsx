@@ -10,9 +10,9 @@ import constant from "redux/networkCall/constant";
 import { Button, Form, FormGroup, Spinner } from "reactstrap";
 import DeleteRoleModal from "../masterModals/deleteModal";
 import AddRoleModal from "../masterModals/addOrUpdateModal";
-import RoleActions from "redux/master/Role/action";
 import { useFormik } from "formik";
 import GeolocationActions from "redux/master/geolocation/action";
+import GeolocationService from "redux/master/geolocation/service";
 
 const HeaderComponent = (props) => {
   let classes = {
@@ -79,19 +79,31 @@ const Location = (props) => {
     city: "",
     zone: "",
   });
+  const [popselected, setpopselected] = useState({
+    state: "",
+    district: "",
+    city: "",
+    zone: "",
+  });
+  const [popLocData, setPopLocData] = useState({
+    district: [],
+    city: [],
+    zone: [],
+  });
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GeolocationActions.getStates());
-    if (selected.state !== "") {
+    if (selected.state !== "" && showResult) {
       dispatch(GeolocationActions.getDistrict(selected.state));
     }
-    if (selected.state !== "" && selected.district !== "") {
+    if (selected.state !== "" && selected.district !== "" && showResult) {
       dispatch(GeolocationActions.getCities(selected.district));
     }
     if (
       selected.state !== "" &&
       selected.district !== "" &&
-      selected.city !== ""
+      selected.city !== "" &&
+      showResult
     ) {
       dispatch(GeolocationActions.getZones(selected.city));
     }
@@ -104,33 +116,94 @@ const Location = (props) => {
     ) {
       dispatch(GeolocationActions.getLocation(selected.zone));
     }
-    if (selected.state === "") {
+    if (selected.state === "" && showResult) {
       dispatch({
         type: Geolocationconstants.DELETE_DISTRICT,
       });
     }
-    if (selected.district === "") {
+    if (selected.district === "" && showResult) {
       dispatch({
         type: Geolocationconstants.DELETE_CITY,
       });
     }
-    if (selected.city === "") {
+    if (selected.city === "" && showResult) {
       dispatch({
         type: Geolocationconstants.DELETE_ZONE,
       });
     }
-    if (selected.zone === "") {
+    if (selected.zone === "" && showResult) {
       dispatch({
         type: Geolocationconstants.DELETE_LOCATION,
       });
     }
-
+    if (popselected.state) {
+      if (popselected.state !== "" && !showResult) {
+        (async () => {
+          await GeolocationService.GET_DISTRICT(popselected.state).then(
+            (res) => {
+              setPopLocData({
+                ...popLocData,
+                district: res.data.data,
+                city: [],
+                zone: [],
+              });
+            }
+          );
+        })();
+      } else {
+        setPopLocData({ ...popLocData, district: [], city: [], zone: [] });
+      }
+    }
+    if (popselected.district) {
+      if (
+        popselected.state !== "" &&
+        popselected.district !== "" &&
+        !showResult
+      ) {
+        (async () => {
+          await GeolocationService.GET_CITIES(popselected.district).then(
+            (res) => {
+              setPopLocData({ ...popLocData, city: res.data.data, zone: [] });
+            }
+          );
+        })();
+      } else {
+        setPopLocData({ ...popLocData, city: [], zone: [] });
+      }
+    }
+    if (popselected.city) {
+      if (
+        popselected.state !== "" &&
+        popselected.district !== "" &&
+        popselected.city !== "" &&
+        !showResult
+      ) {
+        (async () => {
+          await GeolocationService.GET_ZONE(popselected.city).then((res) => {
+            setPopLocData({ ...popLocData, zone: res.data.data });
+          });
+        })();
+      } else {
+        setPopLocData({ ...popLocData, zone: [] });
+      }
+    }
+  }, [
+    selected.city,
+    selected.state,
+    selected.zone,
+    selected.district,
+    popselected.city,
+    popselected.district,
+    popselected.state,
+  ]);
+  useEffect(() => {
     return () => {
       dispatch({
         type: Geolocationconstants.DELETE_LOCATION,
       });
     };
-  }, [selected.city, selected.state, selected.zone, selected.district]);
+  }, []);
+
   const deleteClick = useCallback(
     (data) => {
       // Here you can view the data and delete through API calling
@@ -264,18 +337,17 @@ const Location = (props) => {
         city: "",
         zone: "",
       });
-      let data = states.length > 0 && states.filter((val) => val.name === v);
-      if (data.length > 0) {
-        setselected({
-          ...selected,
-          state: data[0].name,
+      if (v !== "") {
+        setpopselected({
+          ...popselected,
+          state: v,
           city: "",
           zone: "",
           district: "",
         });
       } else {
-        setselected({
-          ...selected,
+        setpopselected({
+          ...popselected,
           state: "",
           city: "",
           zone: "",
@@ -289,18 +361,16 @@ const Location = (props) => {
         city: "",
         zone: "",
       });
-      let data =
-        district.length > 0 && district.filter((val) => val.name === v);
-      if (data.length > 0) {
-        setselected({
-          ...selected,
-          district: data[0].name,
+      if (v !== "") {
+        setpopselected({
+          ...popselected,
+          district: v,
           city: "",
           zone: "",
         });
       } else {
-        setselected({
-          ...selected,
+        setpopselected({
+          ...popselected,
           city: "",
           zone: "",
           district: "",
@@ -312,12 +382,11 @@ const Location = (props) => {
         city: v,
         zone: "",
       });
-      let data = cities.length > 0 && cities.filter((val) => val.name === v);
-      if (data.length > 0) {
-        setselected({ ...selected, city: data[0].name, zone: "" });
+      if (v !== "") {
+        setpopselected({ ...popselected, city: v, zone: "" });
       } else {
-        setselected({
-          ...selected,
+        setpopselected({
+          ...popselected,
           city: "",
           zone: "",
         });
@@ -327,12 +396,11 @@ const Location = (props) => {
         ...formik.values,
         zone: v,
       });
-      let data = zones.length > 0 && zones.filter((val) => val.name === v);
-      if (data.length > 0) {
-        setselected({ ...selected, zone: data[0].name });
+      if (v !== "") {
+        setpopselected({ ...popselected, zone: v });
       } else {
-        setselected({
-          ...selected,
+        setpopselected({
+          ...popselected,
           zone: "",
         });
       }
@@ -351,6 +419,7 @@ const Location = (props) => {
     if (type === "delete") {
       dispatch(GeolocationActions.deleteLocation({ _id: formik.values._id }));
     }
+    setshowResult(!showResult);
     setModal(!modal);
   };
   const networkRoleConstants = [
@@ -632,9 +701,9 @@ const Location = (props) => {
         name="Location"
         states={{
           state: states,
-          city: cities,
-          zone: zones,
-          district: district,
+          city: popLocData.city,
+          zone: popLocData.zone,
+          district: popLocData.district,
         }}
         selected={selected}
       />
@@ -656,9 +725,9 @@ const Location = (props) => {
         name="Location"
         states={{
           state: states,
-          city: cities,
-          zone: zones,
-          district: district,
+          city: popLocData.city,
+          zone: popLocData.zone,
+          district: popLocData.district,
         }}
         selected={selected}
       />
