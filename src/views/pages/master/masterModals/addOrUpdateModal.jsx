@@ -45,7 +45,6 @@ const AddRoleModal = ({
           <ModalBody>
             {Object.keys(value).length > 0
               ? Object.keys(value).map((e) => {
-                debugger
                   if (!filtered.includes(e)) {
                     return !selectField.includes(e) ? (
                       <div className="form-group">

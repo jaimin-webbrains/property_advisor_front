@@ -280,7 +280,6 @@ const Zone = (props) => {
     }
   }, [selected.city]);
   useEffect(() => {
-    debugger;
     if (selected.district.name !== "" && selected.district.name !== undefined) {
       dispatch(GeolocationActions.getCities(selected.district.name));
     }
@@ -293,7 +292,6 @@ const Zone = (props) => {
       });
     }
     if (popselected.district !== "") {
-      debugger;
       (async () => {
         await GeolocationService.GET_CITIES(popselected.district).then(
           (res) => {
