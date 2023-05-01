@@ -23,7 +23,6 @@ const AddRoleModal = ({
     "location",
     "subLocation",
   ];
-  console.log(error);
   const errorField = [
     "mobile",
     "email",
