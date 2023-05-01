@@ -325,7 +325,7 @@ const Zone = (props) => {
                           (v) => v.name === e.target.value
                         );
                         if (data.length > 0) {
-                          setselected({ ...selected, state: data[0] });
+                          setselected({ ...selected, state: data[0],district:"",city:"" });
                           dispatch({
                             type: Geolocationconstants.DELETE_DISTRICT,
                           });

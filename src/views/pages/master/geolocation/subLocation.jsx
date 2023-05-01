@@ -501,7 +501,7 @@ const Sublocation = (props) => {
                           (v) => v.name === e.target.value
                         );
                         if (data.length > 0)
-                          setselected({ ...selected, state: data[0] });
+                          setselected({ ...selected, state: data[0],district:"",city:"",zone:"",location:"" });
                         else
                           setselected({
                             ...selected,
@@ -511,7 +511,7 @@ const Sublocation = (props) => {
                             zone: "",
                           });
                       }}
-                      value={selected.state.name}
+                      value={selected.state.name?selected.state.name : ""}
                     >
                       <option>Select</option>
                       {states &&
@@ -534,7 +534,7 @@ const Sublocation = (props) => {
                           (v) => v.name === e.target.value
                         );
                         if (data.length > 0)
-                          setselected({ ...selected, district: data[0] });
+                          setselected({ ...selected, district: data[0],city:"",zone:"",location:"" });
                         else
                           setselected({
                             ...selected,
@@ -543,7 +543,7 @@ const Sublocation = (props) => {
                             zone: "",
                           });
                       }}
-                      value={selected.district.name}
+                      value={selected.district.name ? selected.district.name:""}
                     >
                       <option>Select</option>
                       {districts &&
@@ -566,10 +566,10 @@ const Sublocation = (props) => {
                           (v) => v.name === e.target.value
                         );
                         if (data.length > 0)
-                          setselected({ ...selected, city: data[0] });
-                        else setselected({ ...selected, city: "", zone: "" });
+                          setselected({ ...selected, city: data[0],zone:"",location:"" });
+                        else setselected({ ...selected, city: "", zone: "",location:"" });
                       }}
-                      value={selected.city.name}
+                      value={selected.city.name ? selected.city.name : ""}
                     >
                       <option>Select</option>
 
@@ -601,7 +601,7 @@ const Sublocation = (props) => {
                         else
                           setselected({ ...selected, zone: "", location: "" });
                       }}
-                      value={selected.zone.name}
+                      value={selected.zone.name ? selected.zone.name : ""}
                     >
                       <option>Select</option>
 
@@ -628,7 +628,7 @@ const Sublocation = (props) => {
                           setselected({ ...selected, location: data[0] });
                         else setselected({ ...selected, location: "" });
                       }}
-                      value={selected.location.name}
+                      value={selected.location.name ? selected.location.name : ""}
                     >
                       <option>Select</option>
 

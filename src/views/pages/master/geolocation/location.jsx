@@ -450,7 +450,7 @@ const Location = (props) => {
                           (v) => v.name === e.target.value
                         );
                         if (data.length > 0)
-                          setselected({ ...selected, state: data[0].name });
+                          setselected({ ...selected, state: data[0].name,district:"",city:"",zone:"" });
                         else
                           setselected({
                             ...selected,
@@ -483,7 +483,7 @@ const Location = (props) => {
                           (v) => v.name === e.target.value
                         );
                         if (data.length > 0)
-                          setselected({ ...selected, district: data[0].name });
+                          setselected({ ...selected, district: data[0].name,city:"",zone:"" });
                         else
                           setselected({
                             ...selected,
@@ -515,7 +515,7 @@ const Location = (props) => {
                           (v) => v.name === e.target.value
                         );
                         if (data.length > 0)
-                          setselected({ ...selected, city: data[0].name });
+                          setselected({ ...selected, city: data[0].name,zone:"" });
                         else setselected({ ...selected, city: "", zone: "" });
                       }}
                       value={selected.city}

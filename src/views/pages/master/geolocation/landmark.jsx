@@ -596,7 +596,7 @@ const Landmark = (props) => {
                             subLocation: "",
                           });
                       }}
-                      value={selected.state.name}
+                      value={selected.state.name ? selected.state.name : ""}
                     >
                       <option>Select</option>
                       {states &&
@@ -637,7 +637,7 @@ const Landmark = (props) => {
                             subLocation: "",
                           });
                       }}
-                      value={selected.district.name}
+                      value={selected.district.name?selected.district.name:""}
                     >
                       <option>Select</option>
                       {districts &&
@@ -676,7 +676,7 @@ const Landmark = (props) => {
                             subLocation: "",
                           });
                       }}
-                      value={selected.city.name}
+                      value={selected.city.name ? selected.city.name : ""}
                     >
                       <option>Select</option>
 
@@ -714,7 +714,7 @@ const Landmark = (props) => {
                             subLocation: "",
                           });
                       }}
-                      value={selected.zone.name}
+                      value={selected.zone.name ? selected.zone.name : ""}
                     >
                       <option>Select</option>
 
@@ -750,7 +750,7 @@ const Landmark = (props) => {
                             subLocation: "",
                           });
                       }}
-                      value={selected.location.name}
+                      value={selected.location.name ? selected.location.name : ""}
                     >
                       <option>Select</option>
 
@@ -777,7 +777,7 @@ const Landmark = (props) => {
                           setselected({ ...selected, subLocation: data[0] });
                         else setselected({ ...selected, subLocation: "" });
                       }}
-                      value={selected.subLocation.name}
+                      value={selected.subLocation.name?selected.subLocation.name : ""}
                     >
                       <option>Select</option>
 

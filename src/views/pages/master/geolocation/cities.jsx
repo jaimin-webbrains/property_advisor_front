@@ -67,12 +67,9 @@ const City = (props) => {
     if (selected.state !== "" && selected.district !== "" && showResult) {
       dispatch(GeolocationActions.getCities(selected.district));
     }
-    if (selected.state === "") {
+    if (selected.district === "") {
       dispatch({
         type: Geolocationconstants.DELETE_CITY,
-      });
-      dispatch({
-        type: Geolocationconstants.DELETE_DISTRICT,
       });
     }
   }, [selected.district, popselected.district]);
