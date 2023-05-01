@@ -76,26 +76,26 @@ const Sublocation = (props) => {
     validate: (values) => {
       let errors = {};
       if (!values.state || values.state === "Select") {
-        errors.state = "Required!";
+        errors.state = "State is required!";
       }
       if (!values.district || values.district === "Select") {
-        errors.district = "Required!";
+        errors.district = "District is required!";
       }
       if (!values.city || values.city === "Select") {
-        errors.city = "Required!";
+        errors.city = "City is required!";
       }
       if (!values.zone || values.zone === "Select") {
-        errors.zone = "Required!";
+        errors.zone = "Zone is required!";
       }
       if (!values.location || values.location === "Select") {
-        errors.location = "Required!";
+        errors.location = "Location is required!";
       }
       if (!values.name) {
-        errors.name = "Required!";
+        errors.name = "Sub location name is required!";
       }
       return errors;
     },
-    validateOnChange: true,
+    validateOnChange: false,
   });
   const [dummyData, setDummyData] = useState([]);
   const dispatch = useDispatch();
@@ -112,7 +112,7 @@ const Sublocation = (props) => {
     if (selected.state.name && selected.state.name !== "" && showResult) {
       dispatch(GeolocationActions.getDistrict(selected.state.name));
     }
-    if ( selected.state === "" && showResult) {
+    if (selected.state === "" && showResult) {
       dispatch({
         type: Geolocationconstants.DELETE_DISTRICT,
       });
@@ -172,7 +172,7 @@ const Sublocation = (props) => {
     if (
       selected.state.name !== "" &&
       selected.district.name !== "" &&
-      selected.city.name && 
+      selected.city.name &&
       selected.city.name !== "" &&
       showResult
     ) {
@@ -457,20 +457,26 @@ const Sublocation = (props) => {
     }
   };
   const handleAddClick = (type) => {
-    if (formik.values.name !== "") {
-      if (type === "add") {
-        dispatch(GeolocationActions.addOrUpdateSubLocation(formik.values));
-      } else if (type === "update") {
-        dispatch(GeolocationActions.addOrUpdateSubLocation(formik.values));
+    formik.validateForm((data) => {
+      if (Object.keys(data).length === 0) {
+        if (type === "add") {
+          dispatch(GeolocationActions.addOrUpdateSubLocation(formik.values));
+          setshowResult(!showResult);
+          setModal(!modal);
+        } else if (type === "update") {
+          dispatch(GeolocationActions.addOrUpdateSubLocation(formik.values));
+          setshowResult(!showResult);
+          setModal(!modal);
+        }
       }
-    }
-    if (type === "delete") {
-      dispatch(
-        GeolocationActions.deleteSubLocation({ _id: formik.values._id })
-      );
-    }
-    setshowResult(!showResult);
-    setModal(!modal);
+      if (type === "delete") {
+        dispatch(
+          GeolocationActions.deleteSubLocation({ _id: formik.values._id })
+        );
+        setshowResult(!showResult);
+        setModal(!modal);
+      }
+    });
   };
   const networkRoleConstants = [
     Geolocationconstants.GET_SUB_LOCATION,

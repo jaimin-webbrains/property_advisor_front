@@ -39,14 +39,14 @@ const District = (props) => {
     validate: (values) => {
       let errors = {};
       if (!values.name) {
-        errors.name = "Required!";
+        errors.name = "District name is required!";
       }
       if (!values.state || values.state === "Select") {
-        errors.state = "Required!";
+        errors.state = "State is required!";
       }
       return errors;
     },
-    validateOnChange: true,
+    validateOnChange: false,
   });
   const district = useSelector((store) => store.master.geolocation.district);
   const [dummyData, setDummyData] = useState([]);
@@ -181,17 +181,21 @@ const District = (props) => {
     formik.setValues({ ...formik.values, [e]: v });
   };
   const handleAddClick = (type) => {
-    if (formik.values.name !== "") {
-      if (type === "add") {
-        dispatch(GeolocationActions.addOrUpdateDistrict(formik.values));
-      } else if (type === "update") {
-        dispatch(GeolocationActions.addOrUpdateDistrict(formik.values));
+    formik.validateForm().then((data) => {
+      if (Object.keys(data).length === 0) {
+        if (type === "add") {
+          dispatch(GeolocationActions.addOrUpdateDistrict(formik.values));
+          setModal(!modal);
+        } else if (type === "update") {
+          dispatch(GeolocationActions.addOrUpdateDistrict(formik.values));
+          setModal(!modal);
+        }
       }
-    }
-    if (type === "delete") {
-      dispatch(GeolocationActions.deleteDistrict({ _id: formik.values._id }));
-    }
-    setModal(!modal);
+      if (type === "delete") {
+        dispatch(GeolocationActions.deleteDistrict({ _id: formik.values._id }));
+        setModal(!modal);
+      }
+    });
   };
   const networkRoleConstants = [
     Geolocationconstants.GET_DISTRICT,
@@ -214,15 +218,13 @@ const District = (props) => {
                       let data = states.filter(
                         (v) => v.name.trim() === e.target.value.trim()
                       );
-                      if(data.length > 0){
+                      if (data.length > 0) {
                         setselected({ ...selected, state: data[0] });
-                      }else{
+                      } else {
                         setselected({ ...selected, state: "" });
                       }
                     }}
-                    value={
-                      selected.state.name ? selected.state.name : ""
-                    }
+                    value={selected.state.name ? selected.state.name : ""}
                   >
                     <option>Select</option>
                     {states &&

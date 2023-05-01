@@ -51,26 +51,26 @@ const Location = (props) => {
     validate: (values) => {
       let errors = {};
       if (!values.state || values.state === "Select") {
-        errors.state = "Required!";
+        errors.state = "State is required!";
       }
       if (!values.district || values.district === "Select") {
-        errors.district = "Required!";
+        errors.district = "District is required!";
       }
       if (!values.city || values.city === "Select") {
-        errors.city = "Required!";
+        errors.city = "City is required!";
       }
       if (!values.zone || values.zone === "Select") {
-        errors.zone = "Required!";
+        errors.zone = "Zone is required!";
       }
       if (!values.locationGrade) {
-        errors.locationGrade = "Required!";
+        errors.locationGrade = "Location grade is required!";
       }
       if (!values.name) {
-        errors.name = "Required!";
+        errors.name = "Location name is required!";
       }
       return errors;
     },
-    validateOnChange: true,
+    validateOnChange: false,
   });
   const [dummyData, setDummyData] = useState([]);
   const [selected, setselected] = useState({
@@ -408,18 +408,24 @@ const Location = (props) => {
     }
   };
   const handleAddClick = (type) => {
-    if (formik.values.name !== "") {
-      if (type === "add") {
-        dispatch(GeolocationActions.addOrUpdateLocation(formik.values));
-      } else if (type === "update") {
-        dispatch(GeolocationActions.addOrUpdateLocation(formik.values));
+    formik.validateForm().then((data) => {
+      if (Object.keys(data).length === 0) {
+        if (type === "add") {
+          dispatch(GeolocationActions.addOrUpdateLocation(formik.values));
+          setshowResult(!showResult);
+          setModal(!modal);
+        } else if (type === "update") {
+          dispatch(GeolocationActions.addOrUpdateLocation(formik.values));
+          setshowResult(!showResult);
+          setModal(!modal);
+        }
       }
-    }
-    if (type === "delete") {
-      dispatch(GeolocationActions.deleteLocation({ _id: formik.values._id }));
-    }
-    setshowResult(!showResult);
-    setModal(!modal);
+      if (type === "delete") {
+        dispatch(GeolocationActions.deleteLocation({ _id: formik.values._id }));
+        setshowResult(!showResult);
+        setModal(!modal);
+      }
+    });
   };
   const networkRoleConstants = [
     Geolocationconstants.GET_LOCATION,

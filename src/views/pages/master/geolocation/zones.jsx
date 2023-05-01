@@ -57,20 +57,20 @@ const Zone = (props) => {
     validate: (values) => {
       let errors = {};
       if (!values.state || values.state === "Select") {
-        errors.state = "Required!";
+        errors.state = "State name is required!";
       }
       if (!values.district || values.district === "Select") {
-        errors.district = "Required!";
+        errors.district = "District name is required!";
       }
       if (!values.city || values.city === "Select") {
-        errors.city = "Required!";
+        errors.city = "City name is required!";
       }
       if (!values.name) {
-        errors.name = "Required!";
+        errors.name = "Zone name is required!";
       }
       return errors;
     },
-    validateOnChange: true,
+    validateOnChange: false,
   });
   const [dummyData, setDummyData] = useState([]);
   const dispatch = useDispatch();
@@ -229,18 +229,24 @@ const Zone = (props) => {
     }
   };
   const handleAddClick = (type) => {
-    if (formik.values.name !== "") {
-      if (type === "add") {
-        dispatch(GeolocationActions.addOrUpdateZone(formik.values));
-      } else if (type === "update") {
-        dispatch(GeolocationActions.addOrUpdateZone(formik.values));
+    formik.validateForm().then((data) => {
+      if (Object.keys(data).length === 0) {
+        if (type === "add") {
+          dispatch(GeolocationActions.addOrUpdateZone(formik.values));
+          setshowResult(!showResult);
+          setModal(!modal);
+        } else if (type === "update") {
+          dispatch(GeolocationActions.addOrUpdateZone(formik.values));
+          setshowResult(!showResult);
+          setModal(!modal);
+        }
       }
-    }
-    if (type === "delete") {
-      dispatch(GeolocationActions.deleteZone({ _id: formik.values._id }));
-    }
-    setshowResult(!showResult);
-    setModal(!modal);
+      if (type === "delete") {
+        dispatch(GeolocationActions.deleteZone({ _id: formik.values._id }));
+        setshowResult(!showResult);
+        setModal(!modal);
+      }
+    });
   };
   const networkRoleConstants = [
     Geolocationconstants.GET_ZONES,

@@ -197,23 +197,29 @@ const User = (props) => {
     }
   };
   const handleAddChange = (e, v) => {
-    if(e === 'mobile'){
-      if(v.length <= 10){
+    if (e === "mobile") {
+      if (v.length <= 10) {
         formik.setValues({ ...formik.values, [e]: v });
       }
-    }else{
+    } else {
       formik.setValues({ ...formik.values, [e]: v });
     }
   };
   const handleAddClick = (type) => {
-    if (type === "add") {
-      dispatch(UserActions.addUser(formik.values));
-    } else if (type === "update") {
-      dispatch(UserActions.updateUser(formik.values));
-    } else {
-      dispatch(UserActions.deleteUser({ _id: formik.values._id }));
-    }
-    setModal(!modal);
+    formik.validateForm().then((data) => {
+      if (Object.keys(data).length === 0) {
+        if (type === "add") {
+          dispatch(UserActions.addUser(formik.values));
+          setModal(!modal);
+        } else if (type === "update") {
+          dispatch(UserActions.updateUser(formik.values));
+          setModal(!modal);
+        } else {
+          dispatch(UserActions.deleteUser({ _id: formik.values._id }));
+          setModal(!modal);
+        }
+      }
+    });
   };
   const networkRoleConstants = [
     UserActionconstants.ADD_USER,
@@ -226,19 +232,19 @@ const User = (props) => {
     validate: (values) => {
       let errors = {};
       if (!values.name) {
-        errors.name = "Required!";
+        errors.name = "User name is required!";
       }
       if (!values.mobile) {
-        errors.mobile = "Required!";
+        errors.mobile = "Mobile number is required!";
       }
       if (!values.email) {
-        errors.email = "Required!";
+        errors.email = "Email is required!";
       }
       if (!values.role) {
-        errors.role = "Required!";
+        errors.role = "Role name is required!";
       }
       if (values.mobile && values.mobile.toString().length !== 10) {
-        errors.mobile = "10 digits required";
+        errors.mobile = "Mobile number should be of 10 digits!";
       }
       if (
         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email) &&
@@ -248,7 +254,7 @@ const User = (props) => {
       }
       return errors;
     },
-    validateOnChange: true,
+    validateOnChange: false,
   });
   return (
     <div className="container-fluid">

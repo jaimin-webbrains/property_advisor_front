@@ -37,11 +37,11 @@ const Roles = (props) => {
     validate: (values) => {
       let errors = {};
       if (!values.name) {
-        errors.name = "Required!";
+        errors.name = "Role name is required!";
       }
       return errors;
     },
-    validateOnChange: true,
+    validateOnChange: false,
   });
   const roles = useSelector((store) => store.master.role.roles);
   const [dummyData, setDummyData] = useState([]);
@@ -164,22 +164,26 @@ const Roles = (props) => {
     formik.setValues({ ...formik.values, [e]: v });
   };
   const handleAddClick = (type) => {
-    if (formik.values.name !== "") {
-      if (type === "add") {
-        dispatch(RoleActions.addRole({ name: formik.values.name }));
-      } else if (type === "update") {
-        dispatch(
-          RoleActions.updateRole({
-            id: formik.values._id,
-            name: formik.values.name,
-          })
-        );
+    formik.validateForm().then((data) => {
+      if (Object.keys(data).length === 0) {
+        if (type === "add") {
+          dispatch(RoleActions.addRole({ name: formik.values.name }));
+          setModal(!modal);
+        } else if (type === "update") {
+          dispatch(
+            RoleActions.updateRole({
+              id: formik.values._id,
+              name: formik.values.name,
+            })
+          );
+          setModal(!modal);
+        }
       }
-    }
-    if (type === "delete") {
-      dispatch(RoleActions.deleteRole({ id: formik.values._id }));
-    }
-    setModal(!modal);
+      if (type === "delete") {
+        dispatch(RoleActions.deleteRole({ id: formik.values._id }));
+        setModal(!modal);
+      }
+    });
   };
   const networkRoleConstants = [
     RoleActionconstants.ADD_ROLE,

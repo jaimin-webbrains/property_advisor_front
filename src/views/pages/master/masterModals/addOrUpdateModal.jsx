@@ -11,7 +11,6 @@ const AddRoleModal = ({
   error,
   name,
   states,
-  selected,
 }) => {
   const filtered = ["_id", "status", "updatedAt", "createdAt", "__v"];
   const numberField = ["mobile"];
@@ -24,15 +23,26 @@ const AddRoleModal = ({
     "location",
     "subLocation",
   ];
-  console.log(error)
-  const errorField = ["mobile",'email','name','state','district','city','location','subLocation','zone'];
+  console.log(error);
+  const errorField = [
+    "mobile",
+    "email",
+    "name",
+    "state",
+    "district",
+    "city",
+    "location",
+    "subLocation",
+    "zone",
+    "locationGrade",
+  ];
   const disabledField = ["email"];
-  const notRequiredField = ["description"]
+  const notRequiredField = ["description"];
   const getSelectedValue = (e) => {
-   let val = "";
-    if ( value[e] !== "") {
+    let val = "";
+    if (value[e] !== "") {
       val = value[e]["name"] ? value[e]["name"] : value[e];
-    } 
+    }
     return val;
   };
   return (
@@ -50,7 +60,9 @@ const AddRoleModal = ({
                       <div className="form-group">
                         <label>
                           {e.charAt(0).toUpperCase() + e.slice(1)}
-                          {notRequiredField.indexOf(e) === -1 && <span className="error-msg">*</span>}
+                          {notRequiredField.indexOf(e) === -1 && (
+                            <span className="error-msg">*</span>
+                          )}
                         </label>
                         <input
                           type={numberField.includes(e) ? "number" : "text"}
@@ -62,9 +74,9 @@ const AddRoleModal = ({
                           disabled={isFromUpdate && disabledField.includes(e)}
                         />
                         <div className="pb-2">
-                        {errorField.includes(e) && (
-                          <p style={{ color: "red" }}>{error[e]}</p>
-                        )}
+                          {errorField.includes(e) && (
+                            <p style={{ color: "red" }}>{error[e]}</p>
+                          )}
                         </div>
                       </div>
                     ) : (
@@ -85,9 +97,9 @@ const AddRoleModal = ({
                             states[e].map((opt) => <option>{opt.name}</option>)}
                         </select>
                         <div className="pb-5">
-                        {errorField.includes(e) && (
-                          <p style={{ color: "red" }}>{error[e]}</p>
-                        )}
+                          {errorField.includes(e) && (
+                            <p style={{ color: "red" }}>{error[e]}</p>
+                          )}
                         </div>
                       </div>
                     );
@@ -109,7 +121,6 @@ const AddRoleModal = ({
                   className="btn btn-blue w-100 border-0 mr-5"
                   type="button"
                   onClick={() => handleAddClick("add")}
-                  disabled={Object.keys(error).length > 0}
                 >
                   Add
                 </Button>

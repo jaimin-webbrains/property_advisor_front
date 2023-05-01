@@ -79,29 +79,29 @@ const Landmark = (props) => {
     validate: (values) => {
       let errors = {};
       if (!values.state || values.state === "Select") {
-        errors.state = "Required!";
+        errors.state = "State is required!";
       }
       if (!values.district || values.district === "Select") {
-        errors.district = "Required!";
+        errors.district = "District is required!";
       }
       if (!values.city || values.city === "Select") {
-        errors.city = "Required!";
+        errors.city = "City is required!";
       }
       if (!values.zone || values.zone === "Select") {
-        errors.zone = "Required!";
+        errors.zone = "Zone is required!";
       }
       if (!values.location || values.location === "Select") {
-        errors.location = "Required!";
+        errors.location = "Location is required!";
       }
       if (!values.subLocation || values.subLocation === "Select") {
-        errors.subLocation = "Required!";
+        errors.subLocation = "Sub location is required!";
       }
       if (!values.name) {
-        errors.name = "Required!";
+        errors.name = "Landmark name is required!";
       }
       return errors;
     },
-    validateOnChange: true,
+    validateOnChange: false,
   });
   const [dummyData, setDummyData] = useState([]);
   const dispatch = useDispatch();
@@ -278,7 +278,7 @@ const Landmark = (props) => {
         setpopLockData({ ...popLocData, subLocation: [] });
       }
     }
-  }, [selected.location,popselected.location]);
+  }, [selected.location, popselected.location]);
 
   useEffect(() => {
     if (
@@ -298,8 +298,7 @@ const Landmark = (props) => {
         type: Geolocationconstants.DELETE_LANDMARK,
       });
     }
-  }, [selected.subLocation.name])
-  
+  }, [selected.subLocation.name]);
 
   const deleteClick = useCallback(
     (data) => {
@@ -535,18 +534,24 @@ const Landmark = (props) => {
     }
   };
   const handleAddClick = (type) => {
-    if (formik.values.name !== "") {
-      if (type === "add") {
-        dispatch(GeolocationActions.addOrUpdateLandmark(formik.values));
-      } else if (type === "update") {
-        dispatch(GeolocationActions.addOrUpdateLandmark(formik.values));
+    formik.validateForm().then((data) => {
+      if (Object.keys(data).length === 0) {
+        if (type === "add") {
+          dispatch(GeolocationActions.addOrUpdateLandmark(formik.values));
+          setshowResult(!showResult);
+          setModal(!modal);
+        } else if (type === "update") {
+          dispatch(GeolocationActions.addOrUpdateLandmark(formik.values));
+          setshowResult(!showResult);
+          setModal(!modal);
+        }
       }
-    }
-    if (type === "delete") {
-      dispatch(GeolocationActions.deleteLandmark({ _id: formik.values._id }));
-    }
-    setshowResult(!showResult);
-    setModal(!modal);
+      if (type === "delete") {
+        dispatch(GeolocationActions.deleteLandmark({ _id: formik.values._id }));
+        setshowResult(!showResult);
+        setModal(!modal);
+      }
+    });
   };
   const networkRoleConstants = [
     Geolocationconstants.GET_LANDMARK,

@@ -48,17 +48,17 @@ const City = (props) => {
     validate: (values) => {
       let errors = {};
       if (!values.state || values.state === "Select") {
-        errors.state = "Required!";
+        errors.state = "State is required!";
       }
       if (!values.district || values.district === "Select") {
-        errors.district = "Required!";
+        errors.district = "District is required!";
       }
       if (!values.name) {
-        errors.name = "Required!";
+        errors.name = "City name is required!";
       }
       return errors;
     },
-    validateOnChange: true,
+    validateOnChange: false,
   });
   const cities = useSelector((store) => store.master.geolocation.cities);
   const [dummyData, setDummyData] = useState([]);
@@ -229,18 +229,24 @@ const City = (props) => {
     }
   };
   const handleAddClick = (type) => {
-    if (formik.values.name !== "") {
-      if (type === "add") {
-        dispatch(GeolocationActions.addCity(formik.values));
-      } else if (type === "update") {
-        dispatch(GeolocationActions.addCity(formik.values));
+    formik.validateForm().then((data) => {
+      if (Object.keys(data).length === 0) {
+        if (type === "add") {
+          dispatch(GeolocationActions.addCity(formik.values));
+          setModal(!modal);
+          setshowResult(!showResult);
+        } else if (type === "update") {
+          dispatch(GeolocationActions.addCity(formik.values));
+          setModal(!modal);
+          setshowResult(!showResult);
+        }
       }
-    }
-    if (type === "delete") {
-      dispatch(GeolocationActions.deleteCity({ id: formik.values._id }));
-    }
-    setModal(!modal);
-    setshowResult(!showResult);
+      if (type === "delete") {
+        dispatch(GeolocationActions.deleteCity({ id: formik.values._id }));
+        setModal(!modal);
+        setshowResult(!showResult);
+      }
+    });
   };
   const networkRoleConstants = [
     Geolocationconstants.GET_CITIES,

@@ -37,11 +37,11 @@ const State = (props) => {
     validate: (values) => {
       let errors = {};
       if (!values.name) {
-        errors.name = "Required!";
+        errors.name = "State name is required!";
       }
       return errors;
     },
-    validateOnChange: true,
+    validateOnChange: false,
   });
   const states = useSelector((store) => store.master.geolocation.states);
   const [dummyData, setDummyData] = useState([]);
@@ -167,22 +167,26 @@ const State = (props) => {
     formik.setValues({ ...formik.values, [e]: v });
   };
   const handleAddClick = (type) => {
-    if (formik.values.name !== "") {
-      if (type === "add") {
-        dispatch(GeolocationActions.addState({ name: formik.values.name }));
-      } else if (type === "update") {
-        dispatch(
-          GeolocationActions.updateState({
-            id: formik.values._id,
-            name: formik.values.name,
-          })
-        );
+    formik.validateForm().then((data) => {
+      if (Object.keys(data).length === 0) {
+        if (type === "add") {
+          dispatch(GeolocationActions.addState({ name: formik.values.name }));
+          setModal(!modal);
+        } else if (type === "update") {
+          dispatch(
+            GeolocationActions.updateState({
+              id: formik.values._id,
+              name: formik.values.name,
+            })
+          );
+          setModal(!modal);
+        }
       }
-    }
-    if (type === "delete") {
-      dispatch(GeolocationActions.deleteState({ id: formik.values._id }));
-    }
-    setModal(!modal);
+      if (type === "delete") {
+        dispatch(GeolocationActions.deleteState({ id: formik.values._id }));
+        setModal(!modal);
+      }
+    });
   };
   const networkRoleConstants = [
     Geolocationconstants.GET_STATES,
