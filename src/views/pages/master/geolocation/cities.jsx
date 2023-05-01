@@ -7,7 +7,7 @@ import ReactTableWrapper from "../../../../components/reacttable/reacttbl.style"
 import { useDispatch, useSelector } from "react-redux";
 import Geolocationconstants from "redux/master/geolocation/constants";
 import constant from "redux/networkCall/constant";
-import { Button, Form, FormGroup, Input, Spinner } from "reactstrap";
+import { Button, Form, FormGroup, Spinner } from "reactstrap";
 import DeleteRoleModal from "../masterModals/deleteModal";
 import AddRoleModal from "../masterModals/addOrUpdateModal";
 import { useFormik } from "formik";
@@ -72,7 +72,7 @@ const City = (props) => {
         type: Geolocationconstants.DELETE_CITY,
       });
     }
-  }, [selected.district, popselected.district]);
+  }, [selected.district, popselected.district]);// eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (selected && selected.state !== "" && showResult) {
       dispatch(GeolocationActions.getDistrict(selected.state));
@@ -89,7 +89,7 @@ const City = (props) => {
         });
       })();
     }
-  }, [selected.state, popselected.state]);
+  }, [selected.state, popselected.state]);// eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     dispatch(GeolocationActions.getStates());
     return () => {
@@ -97,7 +97,7 @@ const City = (props) => {
         type: Geolocationconstants.DELETE_CITY,
       });
     };
-  }, []);
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
   const deleteClick = useCallback(
     (data) => {
       // Here you can view the data and delete through API calling
@@ -171,7 +171,7 @@ const City = (props) => {
         },
       },
     ],
-    [deleteClick]
+    [deleteClick]// eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const {

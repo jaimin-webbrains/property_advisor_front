@@ -12,7 +12,6 @@ import constants from "redux/property/constants";
 import ModalExample from "./ModalView";
 import { Button, Card, CardBody, Col, Row, Spinner } from "reactstrap";
 import constant from "redux/networkCall/constant";
-import PageTitle from "components/common/PageTitle";
 import GeolocationActions from "redux/master/geolocation/action";
 
 const ProjectEntery = (props) => {
@@ -22,10 +21,10 @@ const ProjectEntery = (props) => {
   const networkCalls = useSelector((store) => store.NetworkCall.NETWORK_CALLS);
   const [isSubmitButtonDisables, setIsSubmitButtonDisables] = useState(false);
   const [bool, setBool] = useState({ num: false, modal: false });
-  const buttonBack = {
-    backgroundColor: "#563c91",
-    color: "white",
-  };
+  // const buttonBack = {
+  //   backgroundColor: "#563c91",
+  //   color: "white",
+  // };
   const formik = useFormik({
     initialValues: {
       state: "Telangana",
@@ -68,7 +67,7 @@ const ProjectEntery = (props) => {
       formik.resetForm();
     },
     validate: (values) => {
-      const URLregex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+      const URLregex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;//eslint-disable-line
       let errors = {};
       if (!values.state) {
         errors.state = "Required!";
@@ -105,7 +104,7 @@ const ProjectEntery = (props) => {
   });
   useEffect(() => {
     dispatch(GeolocationActions.getStates());
-  }, []);
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
   const handleIsExistByReraNumber = () => {
     if (formik.values.reraNumber !== "") {
       dispatch(
@@ -117,7 +116,7 @@ const ProjectEntery = (props) => {
     if (propertyData.tracks_data.length > 0) {
       setBool({ ...bool, num: true, modal: true });
     }
-  }, [propertyData.tracks_data]);
+  }, [propertyData.tracks_data]);// eslint-disable-line react-hooks/exhaustive-deps
 
   const handleModalChange = (e) => {
     setBool({ ...bool, num: e, modal: e });

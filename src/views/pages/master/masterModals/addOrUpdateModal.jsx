@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
-import Sublocation from "../geolocation/subLocation";
 const AddRoleModal = ({
   modal,
   setModal,
@@ -102,6 +101,8 @@ const AddRoleModal = ({
                         </div>
                       </div>
                     );
+                  }else{
+                    return null
                   }
                 })
               : ""}

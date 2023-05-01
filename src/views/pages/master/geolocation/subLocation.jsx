@@ -57,7 +57,6 @@ const Sublocation = (props) => {
     zone: [],
     location: [],
     district: [],
-    location: [],
   });
   const sublocations = useSelector(
     (store) => store.master.geolocation.subLocation
@@ -106,7 +105,7 @@ const Sublocation = (props) => {
         type: Geolocationconstants.DELETE_SUB_LOCATION,
       });
     };
-  }, []);
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (selected.state.name && selected.state.name !== "" && showResult) {
@@ -135,7 +134,7 @@ const Sublocation = (props) => {
         setpopLockData({ ...popLocData, district: [], city: [], zone: [] });
       }
     }
-  }, [selected.state.name, popselected.state]);
+  }, [selected.state.name, popselected.state]);// eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (
       selected.state.name !== "" &&
@@ -167,7 +166,7 @@ const Sublocation = (props) => {
         setpopLockData({ ...popLocData, city: [], zone: [] });
       }
     }
-  }, [selected.district.name, popselected.district]);
+  }, [selected.district.name, popselected.district]);// eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (
       selected.state.name !== "" &&
@@ -199,7 +198,7 @@ const Sublocation = (props) => {
         setpopLockData({ ...popLocData, zone: [] });
       }
     }
-  }, [selected.city.name, popselected.city]);
+  }, [selected.city.name, popselected.city]);// eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (
@@ -236,7 +235,7 @@ const Sublocation = (props) => {
         setpopLockData({ ...popLocData, location: [] });
       }
     }
-  }, [selected.zone.name, popselected.zone]);
+  }, [selected.zone.name, popselected.zone]);// eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (
       selected.state !== "" &&
@@ -253,7 +252,7 @@ const Sublocation = (props) => {
         type: Geolocationconstants.DELETE_SUB_LOCATION,
       });
     }
-  }, [selected.location.name]);
+  }, [selected.location.name]);// eslint-disable-line react-hooks/exhaustive-deps
 
   const deleteClick = useCallback(
     (data) => {
@@ -328,7 +327,7 @@ const Sublocation = (props) => {
         },
       },
     ],
-    [deleteClick]
+    [deleteClick]// eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const {

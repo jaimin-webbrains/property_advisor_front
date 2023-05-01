@@ -1,6 +1,5 @@
-import { format } from "date-fns";
-import React, { useState } from "react";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import React from "react";
+import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
 const DeleteRoleModal = ({ modal, setModal,handleAddClick,name }) => {
     return (
         <div>

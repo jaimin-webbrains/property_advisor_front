@@ -1,5 +1,5 @@
-import { components } from "react-select/dist/react-select.cjs.prod";
-import Intro from "views/Intro";
+// import { components } from "react-select/dist/react-select.cjs.prod";
+// import Intro from "views/Intro";
 import ResetPassword from "views/pages/authentication/ResetPassword";
 import ProjectEntry from "views/pages/property/projectEntry";
 import ProjectListing from "views/pages/property/projectListing";

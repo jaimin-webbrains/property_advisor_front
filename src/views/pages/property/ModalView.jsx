@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { push } from "react-router-redux";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";

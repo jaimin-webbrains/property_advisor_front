@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { loginBack, ForgotIcon } from "helper/constant";
+import { loginBack } from "helper/constant";
 import { useDispatch } from "react-redux";
 import authActions from "redux/auth/actions";
 import { push } from "react-router-redux";
@@ -41,7 +41,7 @@ const ForgotPassword = () => {
     if (isOtpSent && isOtpSent === "false") {
       dispatch(push(`/login`));
     }
-  }, []);
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="container-fluid" style={loginContainer}>

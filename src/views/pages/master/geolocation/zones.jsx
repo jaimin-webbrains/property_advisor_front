@@ -81,7 +81,7 @@ const Zone = (props) => {
         type: Geolocationconstants.DELETE_ZONE,
       });
     };
-  }, []);
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   const deleteClick = useCallback(
     (data) => {
@@ -155,7 +155,7 @@ const Zone = (props) => {
         },
       },
     ],
-    [deleteClick]
+    [deleteClick]// eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const {
@@ -270,7 +270,7 @@ const Zone = (props) => {
         });
       })();
     }
-  }, [selected.state, popselected.state]);
+  }, [selected.state, popselected.state]);// eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (
       selected.city.name !== "" &&
@@ -284,7 +284,7 @@ const Zone = (props) => {
         type: Geolocationconstants.DELETE_ZONE,
       });
     }
-  }, [selected.city]);
+  }, [selected.city]);// eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (selected.district.name !== "" && selected.district.name !== undefined) {
       dispatch(GeolocationActions.getCities(selected.district.name));
@@ -306,7 +306,7 @@ const Zone = (props) => {
         );
       })();
     }
-  }, [selected.district, popselected.district]);
+  }, [selected.district, popselected.district]);// eslint-disable-line react-hooks/exhaustive-deps
   return (
     <div className="container-fluid">
       <div className="row title-sec">

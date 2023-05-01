@@ -6,7 +6,7 @@ import enhancer from "./enhancer/RegisterFormEnhancer";
 
 const Register = props => {
     const handleRegister = e => {
-        let { values, isValid, handleSubmit } = props;
+        let {  isValid, handleSubmit } = props; //values,
         e.preventDefault();
         if (isValid) {
             props.history.push("/login");

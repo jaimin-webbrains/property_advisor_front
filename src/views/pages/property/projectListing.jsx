@@ -10,9 +10,8 @@ import moment from "moment";
 import { useHistory } from "react-router-dom";
 import Button from "components/button/Button";
 import constants from "redux/property/constants";
-import { Form, FormGroup, Input, Label, Spinner } from "reactstrap";
+import { Form, FormGroup, Input, Spinner } from "reactstrap"; //Label,
 import constant from "redux/networkCall/constant";
-import PageTitle from "components/common/PageTitle";
 import { toast } from "react-toastify";
 import io from "socket.io-client";
 import { Progress } from "reactstrap";
@@ -212,18 +211,18 @@ const ProjectListing = (props) => {
         disableFilters: true,
       },
     ],
-    [deleteClick]
+    [deleteClick] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
-  const viewClick = (data) => {
-    // Here you can view the data and make forward action for view data
-    alert(JSON.stringify(data));
-  };
+  // const viewClick = (data) => {
+  //   // Here you can view the data and make forward action for view data
+  //   alert(JSON.stringify(data));
+  // };
 
-  const editClick = (data) => {
-    // Here you can view the data and make forward action for edit data
-    alert(JSON.stringify(data));
-  };
+  // const editClick = (data) => {
+  //   // Here you can view the data and make forward action for edit data
+  //   alert(JSON.stringify(data));
+  // };
 
   const {
     getTableProps,
@@ -260,7 +259,7 @@ const ProjectListing = (props) => {
         payload: [],
       });
     };
-  }, []);
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="container-fluid">

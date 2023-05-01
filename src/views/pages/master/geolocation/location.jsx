@@ -98,7 +98,7 @@ const Location = (props) => {
         type: Geolocationconstants.DELETE_LOCATION,
       });
     };
-  }, []);
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (selected.state !== "" && showResult) {
       dispatch(GeolocationActions.getDistrict(selected.state));
@@ -126,7 +126,7 @@ const Location = (props) => {
         setPopLocData({ ...popLocData, district: [], city: [], zone: [] });
       }
     }
-  }, [selected.state, popselected.state]);
+  }, [selected.state, popselected.state]);// eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (selected.state !== "" && selected.district !== "" && showResult) {
       dispatch(GeolocationActions.getCities(selected.district));
@@ -153,7 +153,7 @@ const Location = (props) => {
         setPopLocData({ ...popLocData, city: [], zone: [] });
       }
     }
-  }, [selected.district, popselected.district]);
+  }, [selected.district, popselected.district]);// eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (
       selected.state !== "" &&
@@ -184,7 +184,7 @@ const Location = (props) => {
         setPopLocData({ ...popLocData, zone: [] });
       }
     }
-  }, [selected.city, popselected.city]);
+  }, [selected.city, popselected.city]);// eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (
@@ -201,7 +201,7 @@ const Location = (props) => {
         type: Geolocationconstants.DELETE_LOCATION,
       });
     }
-  }, [selected.zone]);
+  }, [selected.zone]);// eslint-disable-line react-hooks/exhaustive-deps
 
   const deleteClick = useCallback(
     (data) => {
@@ -290,7 +290,7 @@ const Location = (props) => {
         },
       },
     ],
-    [deleteClick]
+    [deleteClick]// eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const {

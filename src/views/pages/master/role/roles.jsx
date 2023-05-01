@@ -48,7 +48,7 @@ const Roles = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(RoleActios.getRoles());
-  }, []);
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   const deleteClick = useCallback(
     (data) => {
@@ -125,7 +125,7 @@ const Roles = (props) => {
         },
       },
     ],
-    [deleteClick]
+    [deleteClick]// eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const {

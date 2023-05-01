@@ -10,7 +10,6 @@ import constant from "redux/networkCall/constant";
 import { Button, Spinner } from "reactstrap";
 import DeleteRoleModal from "../masterModals/deleteModal";
 import AddRoleModal from "../masterModals/addOrUpdateModal";
-import RoleActions from "redux/master/Role/action";
 import { useFormik } from "formik";
 import GeolocationActions from "redux/master/geolocation/action";
 
@@ -53,7 +52,7 @@ const State = (props) => {
         type: Geolocationconstants.DELETE_STATE,
       });
     };
-  }, []);
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   const deleteClick = useCallback(
     (data) => {
@@ -128,7 +127,7 @@ const State = (props) => {
         },
       },
     ],
-    [deleteClick]
+    [deleteClick]// eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const {

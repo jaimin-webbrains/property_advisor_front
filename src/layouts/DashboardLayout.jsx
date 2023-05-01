@@ -8,7 +8,7 @@ import Footer from "components/footer/Footer";
 import themeActions from "redux/themeChanger/actions.js";
 import settingactions from "redux/themeSettings/actions";
 import AppLocale from "languageProvider";
-import { Button } from "reactstrap";
+// import { Button } from "reactstrap";
 import {
     drawerWidth,
     miniDrawerWidth,

@@ -112,7 +112,7 @@ const Landmark = (props) => {
         type: Geolocationconstants.DELETE_LANDMARK,
       });
     };
-  }, []);
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (selected.state && selected.state.name !== "" && showResult) {
       dispatch(GeolocationActions.getDistrict(selected.state.name));
@@ -140,7 +140,7 @@ const Landmark = (props) => {
         setpopLockData({ ...popLocData, district: [], city: [], zone: [] });
       }
     }
-  }, [selected.state.name, popselected.state]);
+  }, [selected.state.name, popselected.state]);// eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (
       selected.state.name !== "" &&
@@ -172,7 +172,7 @@ const Landmark = (props) => {
         setpopLockData({ ...popLocData, city: [], zone: [] });
       }
     }
-  }, [selected.district.name, popselected.district]);
+  }, [selected.district.name, popselected.district]);// eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (
       selected.state.name !== "" &&
@@ -204,7 +204,7 @@ const Landmark = (props) => {
         setpopLockData({ ...popLocData, zone: [] });
       }
     }
-  }, [selected.city.name, popselected.city]);
+  }, [selected.city.name, popselected.city]);// eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (
@@ -241,7 +241,7 @@ const Landmark = (props) => {
         setpopLockData({ ...popLocData, location: [] });
       }
     }
-  }, [selected.zone.name, popselected.zone]);
+  }, [selected.zone.name, popselected.zone]);// eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (
       selected.state !== "" &&
@@ -278,7 +278,7 @@ const Landmark = (props) => {
         setpopLockData({ ...popLocData, subLocation: [] });
       }
     }
-  }, [selected.location, popselected.location]);
+  }, [selected.location, popselected.location]);// eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (
@@ -298,7 +298,7 @@ const Landmark = (props) => {
         type: Geolocationconstants.DELETE_LANDMARK,
       });
     }
-  }, [selected.subLocation.name]);
+  }, [selected.subLocation.name]);// eslint-disable-line react-hooks/exhaustive-deps
 
   const deleteClick = useCallback(
     (data) => {
@@ -373,7 +373,7 @@ const Landmark = (props) => {
         },
       },
     ],
-    [deleteClick]
+    [deleteClick]// eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const {

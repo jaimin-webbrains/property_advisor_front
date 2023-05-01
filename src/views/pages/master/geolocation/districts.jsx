@@ -10,7 +10,6 @@ import constant from "redux/networkCall/constant";
 import { Button, Form, FormGroup, Spinner } from "reactstrap";
 import DeleteRoleModal from "../masterModals/deleteModal";
 import AddRoleModal from "../masterModals/addOrUpdateModal";
-import RoleActions from "redux/master/Role/action";
 import { useFormik } from "formik";
 import GeolocationActions from "redux/master/geolocation/action";
 
@@ -59,7 +58,7 @@ const District = (props) => {
         type: Geolocationconstants.DELETE_DISTRICT,
       });
     }
-  }, [selected.state]);
+  }, [selected.state]);// eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     dispatch(GeolocationActions.getStates());
@@ -68,7 +67,7 @@ const District = (props) => {
         type: Geolocationconstants.DELETE_DISTRICT,
       });
     };
-  }, []);
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   const deleteClick = useCallback(
     (data) => {
@@ -143,7 +142,7 @@ const District = (props) => {
         },
       },
     ],
-    [deleteClick]
+    [deleteClick]// eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const {

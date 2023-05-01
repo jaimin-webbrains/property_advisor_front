@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { loginBack, ForgotIcon } from "helper/constant";
 import { useDispatch, useSelector } from "react-redux";
 import authActions from "redux/auth/actions";
-import constant from "redux/auth/constants";
 import constants from "redux/auth/constants";
 import { Spinner } from "reactstrap";
 
