@@ -57,7 +57,7 @@ const Landmark = (props) => {
     district: "",
     subLocation: "",
   });
-  const [popLocData, setPopLockData] = useState({
+  const [popLocData, setpopLockData] = useState({
     city: [],
     zone: [],
     location: [],
@@ -107,78 +107,19 @@ const Landmark = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GeolocationActions.getStates());
-    if (selected.state !== "" && showResult) {
+    return () => {
+      dispatch({
+        type: Geolocationconstants.DELETE_LANDMARK,
+      });
+    };
+  }, []);
+  useEffect(() => {
+    if (selected.state && selected.state.name !== "" && showResult) {
       dispatch(GeolocationActions.getDistrict(selected.state.name));
-    }
-    if (selected.state !== "" && selected.district !== "" && showResult) {
-      dispatch(GeolocationActions.getCities(selected.district.name));
-    }
-    if (
-      selected.state !== "" &&
-      selected.district !== "" &&
-      selected.city !== "" &&
-      showResult
-    ) {
-      dispatch(GeolocationActions.getZones(selected.city.name));
-    }
-    if (
-      selected.state !== "" &&
-      selected.district !== "" &&
-      selected.city !== "" &&
-      selected.zone !== "" &&
-      showResult
-    ) {
-      dispatch(GeolocationActions.getLocation(selected.zone.name));
-    }
-    if (
-      selected.state !== "" &&
-      selected.district !== "" &&
-      selected.city !== "" &&
-      selected.zone !== "" &&
-      selected.location !== "" &&
-      showResult
-    ) {
-      dispatch(GeolocationActions.getSubLocation(selected.location.name));
-    }
-    if (
-      selected.state !== "" &&
-      selected.district !== "" &&
-      selected.city !== "" &&
-      selected.zone !== "" &&
-      selected.location !== "" &&
-      selected.subLocation !== "" &&
-      showResult
-    ) {
-      dispatch(GeolocationActions.getLandmark(selected.subLocation.name));
     }
     if (selected.state === "" && showResult) {
       dispatch({
-        type: Geolocationconstants.DELETE_CITY,
-      });
-    }
-    if (selected.district === "" && showResult) {
-      dispatch({
         type: Geolocationconstants.DELETE_DISTRICT,
-      });
-    }
-    if (selected.city === "" && showResult) {
-      dispatch({
-        type: Geolocationconstants.DELETE_ZONE,
-      });
-    }
-    if (selected.zone === "" && showResult) {
-      dispatch({
-        type: Geolocationconstants.DELETE_LOCATION,
-      });
-    }
-    if (selected.location === "" && showResult) {
-      dispatch({
-        type: Geolocationconstants.DELETE_SUB_LOCATION,
-      });
-    }
-    if (selected.subLocation === "" && showResult) {
-      dispatch({
-        type: Geolocationconstants.DELETE_LANDMARK,
       });
     }
     if (popselected.state) {
@@ -186,52 +127,66 @@ const Landmark = (props) => {
         (async () => {
           await GeolocationService.GET_DISTRICT(popselected.state).then(
             (res) => {
-              setPopLockData({
+              setpopLockData({
                 ...popLocData,
                 district: res.data.data,
                 city: [],
                 zone: [],
-                location: [],
-                subLocation: [],
               });
             }
           );
         })();
       } else {
-        setPopLockData({
-          ...popLocData,
-          district: [],
-          city: [],
-          zone: [],
-          location: [],
-          subLocation: [],
-        });
+        setpopLockData({ ...popLocData, district: [], city: [], zone: [] });
       }
     }
+  }, [selected.state.name, popselected.state]);
+  useEffect(() => {
+    if (
+      selected.state.name !== "" &&
+      selected.district &&
+      selected.district.name !== "" &&
+      showResult
+    ) {
+      dispatch(GeolocationActions.getCities(selected.district.name));
+    }
+    if (selected.district === "" && showResult) {
+      dispatch({
+        type: Geolocationconstants.DELETE_CITY,
+      });
+    }
     if (popselected.district) {
-      if (popselected.state !== "" && popselected.district && !showResult) {
+      if (
+        popselected.state !== "" &&
+        popselected.district !== "" &&
+        !showResult
+      ) {
         (async () => {
           await GeolocationService.GET_CITIES(popselected.district).then(
             (res) => {
-              setPopLockData({
-                ...popLocData,
-                city: res.data.data,
-                zone: [],
-                location: [],
-                subLocation: [],
-              });
+              setpopLockData({ ...popLocData, city: res.data.data, zone: [] });
             }
           );
         })();
       } else {
-        setPopLockData({
-          ...popLocData,
-          city: [],
-          zone: [],
-          location: [],
-          subLocation: [],
-        });
+        setpopLockData({ ...popLocData, city: [], zone: [] });
       }
+    }
+  }, [selected.district.name, popselected.district]);
+  useEffect(() => {
+    if (
+      selected.state.name !== "" &&
+      selected.district.name !== "" &&
+      selected.city &&
+      selected.city.name !== "" &&
+      showResult
+    ) {
+      dispatch(GeolocationActions.getZones(selected.city.name));
+    }
+    if (selected.city === "" && showResult) {
+      dispatch({
+        type: Geolocationconstants.DELETE_ZONE,
+      });
     }
     if (popselected.city) {
       if (
@@ -242,22 +197,30 @@ const Landmark = (props) => {
       ) {
         (async () => {
           await GeolocationService.GET_ZONE(popselected.city).then((res) => {
-            setPopLockData({
-              ...popLocData,
-              zone: res.data.data,
-              location: [],
-              subLocation: [],
-            });
+            setpopLockData({ ...popLocData, zone: res.data.data });
           });
         })();
       } else {
-        setPopLockData({
-          ...popLocData,
-          zone: [],
-          location: [],
-          subLocation: [],
-        });
+        setpopLockData({ ...popLocData, zone: [] });
       }
+    }
+  }, [selected.city.name, popselected.city]);
+
+  useEffect(() => {
+    if (
+      selected.state.name !== "" &&
+      selected.district.name !== "" &&
+      selected.city.name !== "" &&
+      selected.zone &&
+      selected.zone.name !== "" &&
+      showResult
+    ) {
+      dispatch(GeolocationActions.getLocation(selected.zone.name));
+    }
+    if (selected.zone === "" && showResult) {
+      dispatch({
+        type: Geolocationconstants.DELETE_LOCATION,
+      });
     }
     if (popselected.zone) {
       if (
@@ -270,17 +233,30 @@ const Landmark = (props) => {
         (async () => {
           await GeolocationService.GET_LOCATION(popselected.zone).then(
             (res) => {
-              setPopLockData({
-                ...popLocData,
-                location: res.data.data,
-                subLocation: [],
-              });
+              setpopLockData({ ...popLocData, location: res.data.data });
             }
           );
         })();
       } else {
-        setPopLockData({ ...popLocData, location: [], subLocation: [] });
+        setpopLockData({ ...popLocData, location: [] });
       }
+    }
+  }, [selected.zone.name, popselected.zone]);
+  useEffect(() => {
+    if (
+      selected.state !== "" &&
+      selected.city !== "" &&
+      selected.zone !== "" &&
+      selected.location &&
+      selected.location.name !== "" &&
+      showResult
+    ) {
+      dispatch(GeolocationActions.getSubLocation(selected.location.name));
+    }
+    if (selected.location === "" && showResult) {
+      dispatch({
+        type: Geolocationconstants.DELETE_SUB_LOCATION,
+      });
     }
     if (popselected.location) {
       if (
@@ -294,35 +270,36 @@ const Landmark = (props) => {
         (async () => {
           await GeolocationService.GET_SUB_LOCATION(popselected.location).then(
             (res) => {
-              setPopLockData({ ...popLocData, subLocation: res.data.data });
+              setpopLockData({ ...popLocData, subLocation: res.data.data });
             }
           );
         })();
       } else {
-        setPopLockData({ ...popLocData, subLocation: [] });
+        setpopLockData({ ...popLocData, subLocation: [] });
       }
     }
-  }, [
-    selected.city,
-    selected.state,
-    selected.zone,
-    selected.location,
-    selected.district,
-    selected.subLocation,
-    popselected.state,
-    popselected.district,
-    popselected.city,
-    popselected.zone,
-    popselected.location,
-    popselected.subLocation,
-  ]);
+  }, [selected.location,popselected.location]);
+
   useEffect(() => {
-    return () => {
+    if (
+      selected.state !== "" &&
+      selected.district !== "" &&
+      selected.city !== "" &&
+      selected.zone !== "" &&
+      selected.location !== "" &&
+      selected.subLocation &&
+      selected.subLocation.name !== "" &&
+      showResult
+    ) {
+      dispatch(GeolocationActions.getLandmark(selected.subLocation.name));
+    }
+    if (selected.subLocation === "" && showResult) {
       dispatch({
         type: Geolocationconstants.DELETE_LANDMARK,
       });
-    };
-  }, []);
+    }
+  }, [selected.subLocation.name])
+  
 
   const deleteClick = useCallback(
     (data) => {

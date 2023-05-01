@@ -101,55 +101,20 @@ const Sublocation = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GeolocationActions.getStates());
-    if (selected.state !== "" && showResult) {
-      dispatch(GeolocationActions.getDistrict(selected.state.name));
-    }
-    if (selected.state !== "" && selected.district !== "" && showResult) {
-      dispatch(GeolocationActions.getCities(selected.district.name));
-    }
-    if (selected.state !== "" && selected.city !== "" && showResult) {
-      dispatch(GeolocationActions.getZones(selected.city.name));
-    }
-    if (
-      selected.state !== "" &&
-      selected.city !== "" &&
-      selected.zone !== "" &&
-      showResult
-    ) {
-      dispatch(GeolocationActions.getLocation(selected.zone.name));
-    }
-    if (
-      selected.state !== "" &&
-      selected.city !== "" &&
-      selected.zone !== "" &&
-      selected.location !== "" &&
-      showResult
-    ) {
-      dispatch(GeolocationActions.getSubLocation(selected.location.name));
-    }
-    if (selected.state === "" && showResult) {
-      dispatch({
-        type: Geolocationconstants.DELETE_CITY,
-      });
-    }
-    if (selected.district === "" && showResult) {
-      dispatch({
-        type: Geolocationconstants.DELETE_DISTRICT,
-      });
-    }
-    if (selected.city === "" && showResult) {
-      dispatch({
-        type: Geolocationconstants.DELETE_ZONE,
-      });
-    }
-    if (selected.zone === "" && showResult) {
-      dispatch({
-        type: Geolocationconstants.DELETE_LOCATION,
-      });
-    }
-    if (selected.location === "" && showResult) {
+    return () => {
       dispatch({
         type: Geolocationconstants.DELETE_SUB_LOCATION,
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    if (selected.state.name && selected.state.name !== "" && showResult) {
+      dispatch(GeolocationActions.getDistrict(selected.state.name));
+    }
+    if ( selected.state === "" && showResult) {
+      dispatch({
+        type: Geolocationconstants.DELETE_DISTRICT,
       });
     }
     if (popselected.state) {
@@ -162,20 +127,28 @@ const Sublocation = (props) => {
                 district: res.data.data,
                 city: [],
                 zone: [],
-                location: [],
               });
             }
           );
         })();
       } else {
-        setpopLockData({
-          ...popLocData,
-          district: [],
-          city: [],
-          zone: [],
-          location: [],
-        });
+        setpopLockData({ ...popLocData, district: [], city: [], zone: [] });
       }
+    }
+  }, [selected.state.name, popselected.state]);
+  useEffect(() => {
+    if (
+      selected.state.name !== "" &&
+      selected.district.name &&
+      selected.district.name !== "" &&
+      showResult
+    ) {
+      dispatch(GeolocationActions.getCities(selected.district.name));
+    }
+    if (selected.district === "" && showResult) {
+      dispatch({
+        type: Geolocationconstants.DELETE_CITY,
+      });
     }
     if (popselected.district) {
       if (
@@ -186,18 +159,29 @@ const Sublocation = (props) => {
         (async () => {
           await GeolocationService.GET_CITIES(popselected.district).then(
             (res) => {
-              setpopLockData({
-                ...popLocData,
-                city: res.data.data,
-                zone: [],
-                location: [],
-              });
+              setpopLockData({ ...popLocData, city: res.data.data, zone: [] });
             }
           );
         })();
       } else {
-        setpopLockData({ ...popLocData, city: [], zone: [], location: [] });
+        setpopLockData({ ...popLocData, city: [], zone: [] });
       }
+    }
+  }, [selected.district.name, popselected.district]);
+  useEffect(() => {
+    if (
+      selected.state.name !== "" &&
+      selected.district.name !== "" &&
+      selected.city.name && 
+      selected.city.name !== "" &&
+      showResult
+    ) {
+      dispatch(GeolocationActions.getZones(selected.city.name));
+    }
+    if (selected.city === "" && showResult) {
+      dispatch({
+        type: Geolocationconstants.DELETE_ZONE,
+      });
     }
     if (popselected.city) {
       if (
@@ -208,16 +192,30 @@ const Sublocation = (props) => {
       ) {
         (async () => {
           await GeolocationService.GET_ZONE(popselected.city).then((res) => {
-            setpopLockData({
-              ...popLocData,
-              zone: res.data.data,
-              location: [],
-            });
+            setpopLockData({ ...popLocData, zone: res.data.data });
           });
         })();
       } else {
-        setpopLockData({ ...popLocData, zone: [], location: [] });
+        setpopLockData({ ...popLocData, zone: [] });
       }
+    }
+  }, [selected.city.name, popselected.city]);
+
+  useEffect(() => {
+    if (
+      selected.state.name !== "" &&
+      selected.district.name !== "" &&
+      selected.city.name !== "" &&
+      selected.zone.name &&
+      selected.zone.name !== "" &&
+      showResult
+    ) {
+      dispatch(GeolocationActions.getLocation(selected.zone.name));
+    }
+    if (selected.zone === "" && showResult) {
+      dispatch({
+        type: Geolocationconstants.DELETE_LOCATION,
+      });
     }
     if (popselected.zone) {
       if (
@@ -238,25 +236,24 @@ const Sublocation = (props) => {
         setpopLockData({ ...popLocData, location: [] });
       }
     }
-  }, [
-    selected.city,
-    selected.state,
-    selected.zone,
-    selected.location,
-    selected.district,
-    popselected.state,
-    popselected.district,
-    popselected.city,
-    popselected.zone,
-    popselected.location,
-  ]);
+  }, [selected.zone.name, popselected.zone]);
   useEffect(() => {
-    return () => {
+    if (
+      selected.state !== "" &&
+      selected.city !== "" &&
+      selected.zone !== "" &&
+      selected.location.name &&
+      selected.location !== "" &&
+      showResult
+    ) {
+      dispatch(GeolocationActions.getSubLocation(selected.location.name));
+    }
+    if (selected.location === "" && showResult) {
       dispatch({
         type: Geolocationconstants.DELETE_SUB_LOCATION,
       });
-    };
-  }, []);
+    }
+  }, [selected.location.name]);
 
   const deleteClick = useCallback(
     (data) => {

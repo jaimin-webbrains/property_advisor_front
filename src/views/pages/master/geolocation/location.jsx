@@ -93,47 +93,19 @@ const Location = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GeolocationActions.getStates());
+    return () => {
+      dispatch({
+        type: Geolocationconstants.DELETE_LOCATION,
+      });
+    };
+  }, []);
+  useEffect(() => {
     if (selected.state !== "" && showResult) {
       dispatch(GeolocationActions.getDistrict(selected.state));
-    }
-    if (selected.state !== "" && selected.district !== "" && showResult) {
-      dispatch(GeolocationActions.getCities(selected.district));
-    }
-    if (
-      selected.state !== "" &&
-      selected.district !== "" &&
-      selected.city !== "" &&
-      showResult
-    ) {
-      dispatch(GeolocationActions.getZones(selected.city));
-    }
-    if (
-      selected.state !== "" &&
-      selected.district !== "" &&
-      selected.city !== "" &&
-      selected.zone !== "" &&
-      showResult
-    ) {
-      dispatch(GeolocationActions.getLocation(selected.zone));
     }
     if (selected.state === "" && showResult) {
       dispatch({
         type: Geolocationconstants.DELETE_DISTRICT,
-      });
-    }
-    if (selected.district === "" && showResult) {
-      dispatch({
-        type: Geolocationconstants.DELETE_CITY,
-      });
-    }
-    if (selected.city === "" && showResult) {
-      dispatch({
-        type: Geolocationconstants.DELETE_ZONE,
-      });
-    }
-    if (selected.zone === "" && showResult) {
-      dispatch({
-        type: Geolocationconstants.DELETE_LOCATION,
       });
     }
     if (popselected.state) {
@@ -154,6 +126,16 @@ const Location = (props) => {
         setPopLocData({ ...popLocData, district: [], city: [], zone: [] });
       }
     }
+  }, [selected.state, popselected.state]);
+  useEffect(() => {
+    if (selected.state !== "" && selected.district !== "" && showResult) {
+      dispatch(GeolocationActions.getCities(selected.district));
+    }
+    if (selected.district === "" && showResult) {
+      dispatch({
+        type: Geolocationconstants.DELETE_CITY,
+      });
+    }
     if (popselected.district) {
       if (
         popselected.state !== "" &&
@@ -171,6 +153,21 @@ const Location = (props) => {
         setPopLocData({ ...popLocData, city: [], zone: [] });
       }
     }
+  }, [selected.district, popselected.district]);
+  useEffect(() => {
+    if (
+      selected.state !== "" &&
+      selected.district !== "" &&
+      selected.city !== "" &&
+      showResult
+    ) {
+      dispatch(GeolocationActions.getZones(selected.city));
+    }
+    if (selected.city === "" && showResult) {
+      dispatch({
+        type: Geolocationconstants.DELETE_ZONE,
+      });
+    }
     if (popselected.city) {
       if (
         popselected.state !== "" &&
@@ -187,22 +184,24 @@ const Location = (props) => {
         setPopLocData({ ...popLocData, zone: [] });
       }
     }
-  }, [
-    selected.city,
-    selected.state,
-    selected.zone,
-    selected.district,
-    popselected.city,
-    popselected.district,
-    popselected.state,
-  ]);
+  }, [selected.city, popselected.city]);
+
   useEffect(() => {
-    return () => {
+    if (
+      selected.state !== "" &&
+      selected.district !== "" &&
+      selected.city !== "" &&
+      selected.zone !== "" &&
+      showResult
+    ) {
+      dispatch(GeolocationActions.getLocation(selected.zone));
+    }
+    if (selected.zone === "" && showResult) {
       dispatch({
         type: Geolocationconstants.DELETE_LOCATION,
       });
-    };
-  }, []);
+    }
+  }, [selected.zone]);
 
   const deleteClick = useCallback(
     (data) => {
