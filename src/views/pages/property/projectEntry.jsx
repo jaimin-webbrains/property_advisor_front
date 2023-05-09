@@ -70,31 +70,31 @@ const ProjectEntery = (props) => {
       const URLregex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;//eslint-disable-line
       let errors = {};
       if (!values.state) {
-        errors.state = "Required!";
+        errors.state = "State required!";
       }
       if (!values.reraNumber) {
-        errors.reraNumber = "Required!";
+        errors.reraNumber = "Rera no required!";
       }
       if (!values.certFileName) {
-        errors.certFileName = "Required!";
+        errors.certFileName = "Cert file required!";
       }
       if (!values.detailsFileName) {
-        errors.detailsFileName = "Required!";
+        errors.detailsFileName = "Details file required!";
       }
       if (!values.lastModifiedDate) {
-        errors.lastModifiedDate = "Required!";
+        errors.lastModifiedDate = "Modified date required!";
       }
       if (!values.reraApprovedDate) {
-        errors.reraApprovedDate = "Required!";
+        errors.reraApprovedDate = "Approved data required!";
       }
       if (!values.reraProjectStartDate) {
-        errors.reraProjectStartDate = "Required!";
+        errors.reraProjectStartDate = "Start date required!";
       }
       if (!values.projectEndDate) {
-        errors.projectEndDate = "Required!";
+        errors.projectEndDate = "End date required!";
       }
       if (!values.detailsURL) {
-        errors.detailsURL = "Required!";
+        errors.detailsURL = "URL required!";
       } else if (!URLregex.test(values.detailsURL)) {
         errors.detailsURL = "Invalid URL!";
       }
