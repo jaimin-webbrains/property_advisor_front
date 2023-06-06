@@ -39,6 +39,41 @@ const PropertyActions = {
         });
     };
   },
+  addNewTsData: data => {
+    return (dispatch, getState) => {
+      dispatch({
+          type:NETWORK_CONSTANTS.ADD_PROPERTY_NETWORK_CALL,
+          payload:NETWORK_CONSTANTS.ADD_PROPERTY_NETWORK_CALL
+      })
+      PropertyServices.ADD_NEW_TS_DATA(data)
+        .then(res => {
+          dispatch({
+            type:NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
+            payload:NETWORK_CONSTANTS.ADD_PROPERTY_NETWORK_CALL
+          })
+          if (res.status === 201) {
+            dispatch({
+              type: constants.UPDATE_TS_DATA,
+              payload: res.data.data.track_data
+            });
+            toast.success(res.data.message)
+            // window.location.href = "/project_listing";
+          }
+        })
+        .catch(e => {
+          dispatch({
+            type:NETWORK_CONSTANTS.REMOVE_PROPERTY_NETWORK_CALL,
+            payload:NETWORK_CONSTANTS.ADD_PROPERTY_NETWORK_CALL
+          })
+          if(e?.response?.data?.message){
+            toast.error(e?.response?.data?.message);
+
+          }else{
+            toast.error(e.message);
+          }
+        });
+    };
+  },
 
   getAllTSData: () => {
     return (dispatch, getState) => {

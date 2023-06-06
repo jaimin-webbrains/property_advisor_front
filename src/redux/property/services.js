@@ -15,6 +15,19 @@ const PropertyServices = {
     );
     return response;
   },
+  ADD_NEW_TS_DATA: async (data) => {
+    const response = await axios.post(
+      `${process.env.REACT_APP_BASE_URL}/property/add_all_new_ts_data`,
+      data,
+      {
+        headers: {
+          Authorization: getToken(),
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response;
+  },
 
   GET_ALL_TS_DATA: async () => {
     const response = await axios.get(
