@@ -53,7 +53,7 @@ const ProjectEntery = (props) => {
       surveyBy : "",
       surveyDate : "",
       occupencyDate : "",
-      properySpoc : "",
+      propertySpoc : "",
       gatedCommunityType : "",
       propertyStatus2 : "",
       loanBanks : "",
@@ -86,13 +86,71 @@ const ProjectEntery = (props) => {
       mainImage : ""
     },
     onSubmit: (values) => {
+      // let formData = new FormData();
+      // let keys = Object.keys(values)
+      // if(keys.length > 0){
+      //   for(let key of keys){
+      //     formData.append(key,values[key])
+      //   }
+      // }
       let formData = new FormData();
-      let keys = Object.keys(values)
-      if(keys.length > 0){
-        for(let key of keys){
-          formData.append(key,values[key])
-        }
-      }
+      formData.append("state", values.state);
+      formData.append("reraNumber", values.reraNumber);
+      formData.append("lastModifiedDate", values.lastModifiedDate);
+      formData.append("reraApprovedDate", values.reraApprovedDate);
+      formData.append("reraProjectStartDate", values.reraProjectStartDate);
+      formData.append("projectEndDate", values.projectEndDate);
+      formData.append("detailsURL", values.detailsURL);
+      formData.append("certFileName", values.certFileName);
+      formData.append("certExtFileName", values.certExtFileName);
+      formData.append("detailsFileName", values.detailsFileName);
+      formData.append("paId", values.paId);
+      formData.append("city", values.city);
+      formData.append("location", values.location);
+      formData.append("subAreaName", values.subAreaName);
+      formData.append("propertyType", values.propertyType);
+      formData.append("colonyName", values.colonyName);
+      formData.append("sellerMobile",values.sellerMobile)
+      formData.append("propertyInsert",values.propertyInsert)
+      formData.append("propertyStatus",values.propertyStatus)
+      formData.append("propertyFor",values.propertyFor)
+      formData.append("propertyCategory",values.propertyCategory)
+      formData.append("propertyName",values.propertyName)
+      formData.append("newsPaperName",values.newsPaperName)
+      formData.append("surveyBy",values.surveyBy)
+      formData.append("surveyDate",values.surveyDate)
+      formData.append("occupencyDate",values.occupencyDate)
+      formData.append("propertySpoc",values.propertySpoc)
+      formData.append("gatedCommunityType",values.gatedCommunityType)
+      formData.append("propertyStatus2",values.propertyStatus2)
+      formData.append("loanBanks",values.loanBanks)
+      formData.append("totalFloors",values.totalFloors)
+      formData.append("openSpaceArea",values.openSpaceArea)
+      formData.append("commonArea",values.commonArea)
+      formData.append("dataEntryBy",values.dataEntryBy)
+      formData.append("newOrResale",values.newOrResale)
+      formData.append("reraStatus",values.reraStatus)
+      formData.append("price",values.price)
+      formData.append("projectGrade",values.projectGrade)
+      formData.append("propertyDescription",values.propertyDescription)
+      formData.append("propertySubType",values.propertySubType)
+      formData.append("facing",values.facing)
+      formData.append("sizePerUnit",values.sizePerUnit)
+      formData.append("amenitiesCharges",values.amenitiesCharges)
+      formData.append("otherCharges",values.otherCharges)
+      formData.append("totalUnits",values.totalUnits)
+      formData.append("totalAvailableUnits",values.totalAvailableUnits)
+      formData.append("plotLayoutDescription",values.plotLayoutDescription)
+      formData.append("dimensionsRooms",values.dimensionsRooms)
+      formData.append("description",values.description)
+      formData.append("length",values.length)
+      formData.append("width",values.width)
+      formData.append("nearByPlaces",values.nearByPlaces)
+      formData.append("amenities",values.amenities)
+      formData.append("selletComments",values.selletComments)
+      formData.append("advisorComments",values.selletComments)
+      formData.append("image",values.image)
+      formData.append("mainImage",values.mainImage)
       if(values.mainImage !== "" && values.image !== ""){
         dispatch(PropertyActions.addNewTsData(formData));
       }else{
@@ -564,6 +622,7 @@ const ProjectEntery = (props) => {
                             <label>Seller Mobile</label>
                             <input
                               id="sellerMobile"
+                              type="number"
                               name="sellerMobile"
                               onChange={formik.handleChange}
                               value={formik.values.sellerMobile}
@@ -705,10 +764,10 @@ const ProjectEntery = (props) => {
                           <div className="form-group">
                             <label>Property Spoc</label>
                             <input
-                              id="properySpoc"
-                              name="properySpoc"
+                              id="propertySpoc"
+                              name="propertySpoc"
                               onChange={formik.handleChange}
-                              value={formik.values.properySpoc}
+                              value={formik.values.propertySpoc}
                               className="form-control form-control-lg react-form-input"
                             />
                           </div>
@@ -803,7 +862,7 @@ const ProjectEntery = (props) => {
                         <Col sm={12} md={6} lg={4}>
                           <div className="form-group">
                             <label>
-                              New/Resale <span className="error-msg">*</span>
+                              New/Resale 
                             </label>
                             <select
                               id="newOrResale"
@@ -897,6 +956,7 @@ const ProjectEntery = (props) => {
                             <input
                               id="sizePerUnit"
                               name="sizePerUnit"
+                              type="number"
                               onChange={formik.handleChange}
                               value={formik.values.sizePerUnit}
                               className="form-control form-control-lg react-form-input"
@@ -912,6 +972,18 @@ const ProjectEntery = (props) => {
                               type="number"
                               onChange={formik.handleChange}
                               value={formik.values.amenitiesCharges}
+                              className="form-control form-control-lg react-form-input"
+                            />
+                          </div>
+                        </Col>
+                        <Col sm={12} md={6} lg={4}>
+                          <div className="form-group">
+                            <label>Amenities</label>
+                            <input
+                              id="amenities"
+                              name="amenities"
+                              onChange={formik.handleChange}
+                              value={formik.values.amenities}
                               className="form-control form-control-lg react-form-input"
                             />
                           </div>
