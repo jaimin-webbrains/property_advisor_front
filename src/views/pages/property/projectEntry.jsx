@@ -151,7 +151,7 @@ const ProjectEntery = (props) => {
       formData.append("advisorComments",values.selletComments)
       formData.append("image",values.image)
       formData.append("mainImage",values.mainImage)
-      if(values.mainImage !== "" && values.image !== ""){
+      if(values.paId === ""){
         dispatch(PropertyActions.addNewTsData(formData));
       }else{
         dispatch(PropertyActions.addTsData(formData));
@@ -184,6 +184,17 @@ const ProjectEntery = (props) => {
       }
       if (!values.projectEndDate) {
         errors.projectEndDate = "End date required!";
+      }
+      if( values.paId !== "" ){
+        if(values.newsPaperName === ""){
+          errors.newsPaperName = "Newspaper name is required!"
+        }
+        if(values.openSpaceArea === ""){
+          errors.openSpaceArea = "Open Space Area  is required!"
+        }
+        if(values.colonyName === ""){
+          errors.colonyName = "Colony name is required!"
+        }
       }
       if (!values.detailsURL) {
         errors.detailsURL = "URL required!";
@@ -582,6 +593,11 @@ const ProjectEntery = (props) => {
                               value={formik.values.colonyName}
                               className="form-control form-control-lg react-form-input"
                             />
+                            {formik.errors.colonyName && (
+                              <p style={{ color: "red" }}>
+                                {formik.errors.colonyName}
+                              </p>
+                            )}
                           </div>
                         </Col>
                         <Col sm={12} md={6} lg={4}>
@@ -700,6 +716,11 @@ const ProjectEntery = (props) => {
                               value={formik.values.newsPaperName}
                               className="form-control form-control-lg react-form-input"
                             />
+                            {formik.errors.newsPaperName && (
+                              <p style={{ color: "red" }}>
+                                {formik.errors.newsPaperName}
+                              </p>
+                            )}
                           </div>
                         </Col>
                         <Col sm={12} md={6} lg={4}>
@@ -832,6 +853,11 @@ const ProjectEntery = (props) => {
                               value={formik.values.openSpaceArea}
                               className="form-control form-control-lg react-form-input"
                             />
+                            {formik.errors.openSpaceArea && (
+                              <p style={{ color: "red" }}>
+                                {formik.errors.openSpaceArea}
+                              </p>
+                            )}
                           </div>
                         </Col>
                         <Col sm={12} md={6} lg={4}>
